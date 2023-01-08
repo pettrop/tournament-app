@@ -20,6 +20,12 @@ class SignUpView(CreateView):
             login(self.request, new_user)
         return result
 
+#Below for TEST purposes only!
+
 
 def signupsuccessful(request):
     return HttpResponse("Signup was successfull!")
+
+
+def loginsuccessful(request):
+    return HttpResponse("Login was successful!")
