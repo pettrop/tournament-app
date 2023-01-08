@@ -13,8 +13,5 @@ Application for administration tournament of PING-PONG
 5. ...
 6. ...
 
-
-kuba dva test olalala
-
 kuba změna 123
 
