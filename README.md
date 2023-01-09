@@ -2,9 +2,6 @@
 
 Application for administration tournament of PING-PONG
 
-
-
-
 ### TO DO:
 1. Martina 1. uprava znovu
 2. Kubo git s
@@ -12,6 +9,3 @@ Application for administration tournament of PING-PONG
 4. ...
 5. ...
 6. ...
-
-kuba změna 123
-
