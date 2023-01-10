@@ -1,13 +1,12 @@
-from django.contrib.auth import authenticate, login, get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
 from .forms import UserRegistrationForm
 from django.shortcuts import render, redirect
 
 
-def register(request):
+def signup(request):
     if request.user.is_authenticated:
         return redirect('fakemain') #má vrátit na hlavní stránku až bude
 
@@ -16,7 +15,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('signupsuccessful')
+            return redirect('signupsuccessful') #vrátit na hlavní stránku až bude
 
         else:
             for error in list(form.errors.values()):
@@ -31,26 +30,48 @@ def register(request):
         context={"form": form}
     )
 
-# class SignUpView(CreateView):
-#     template_name = 'accounts/signup.html'
-#     form_class = UserCreationForm
-#     success_url = reverse_lazy('signupsuccessful')  #TO BE changed to real main page after it's development
-#
-#     def form_valid(self, form):
-#         result = super().form_valid(form)
-#         cleaned_data = form.cleaned_data
-#         username = cleaned_data['username']
-#         password = cleaned_data['password1']
-#         new_user = authenticate(username=username, password=password)
-#         if new_user is not None:
-#             login(self.request, new_user)
-#         return result
+
+@login_required
+def custom_logout(request):
+    logout(request)
+    return redirect('fakemain')  # Main page - to be changed to real one!
+
+
+def custom_login(request):
+    if request.user.is_authenticated:
+        return redirect('fakemain')  # Main page - to be changed to real one!
+
+    if request.method == "POST":
+        form = AuthenticationForm(request=request, data=request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
+
+            if user is not None:
+                login(request, user)
+                return redirect('signupsuccessful')  # main page - to be changed
+
+        else:
+            for error in list(form.errors.values()):
+                print(request, error)
+
+    else:
+        form = AuthenticationForm()
+
+    return render(
+        request=request,
+        template_name="registration/login.html",
+        context={"form": form}
+    )
+
 
 #Below for TEST purposes only!
 
 
 def signupsuccessful(request):
-    return HttpResponse("Signup was successfull!")
+    return HttpResponse("Signup was successful!")
 
 
 def loginsuccessful(request):
