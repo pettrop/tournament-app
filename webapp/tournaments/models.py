@@ -1,91 +1,110 @@
 from django.db import models
+from django.db.models import Model, CharField
 
 # Create your models here.
-
-## nikde nedavam id / django je vytvori automaticky jako primary key
-# nejsou zde spojovaci tabulky - tournament_schedule, tournament_discipline, tournament_organizer, tournament_category
-# club_result_tournament a player_resount_tournament nejsou v modelech - to myslím, že uděláme jako funkce do forms.py?
-class Tournament(Model):
-    name = models.CharField(max_lenght=200, unique=True)
-    description = models.TextField(null=True, blank=True)
-    # season cizi klic z tabulky season pres id
-    # leage cizi klic z tabulky league pres id
-    # category cizi klic z tabulky category pres id
-    # event_location cizi klic z tabulky event_location pres id
-    # event_date cizi klic z tabulky event_date pres id
-    # tournament_order poradi ??? z ceho se bere - to bude muset být asi funkce ve forms?
-    # proposition cizi klic pres id - nebo proklik v vypsani proposic zadavanych v tabulce proposition
-    created = models.DataTimeField(auto_now_add=True)
-    updated = models.DataTimeField(auto_now=True)
+class Club(Model):
+    club_name: CharField = models.CharField(max_length=64)
 
     def __str__(self):
-        return self.name
+        return self.club_name
 
-    class Meta:
-        ordering = ['-created', 'name']
 
-class Proposition(Models):
-    # email cizi klic tabulky email pres id
-    # tel_number cizi klic tabulky tel_number pres id
-    start_fee = models.IntegerField(null=False, unique=False) #unique tady asi ani nemusi byt
-    prescription = models.CharField(max_lenght=400)
-    tournament_system = models.CharField(max_lenght=400)
-    notes = models.CharField(max_lenght=400)
-
-    # def __str__(self): nevím na co tuto metodu přetížit
-    #     return self.
-
-    class Meta:
-        ordering = ['-created']
-
-class Organizer(Models): #zvažit zda se neda zahrnout do tabulky Proposition
-    organizer_name = models.CharField(max_lenght=100)
-    # function cizi klic tabulky function pres id
+class Player(Model):
+    name = models.CharField(max_length=32)
+    lastname = models.CharField(max_length=32)
+    year_of_birth = models.PositiveSmallIntegerField()
+    license_validity = models.DateField(null=True)
+    club = models.ForeignKey(Club, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.organizer_name
+        return '{} {} ({})'.format(self.lastname, self.name, self.year_of_birth)
 
-class Function(Models): #zvažit zda se neda zahrnout do tabulky Proposiotin společně s Organizer - napřiklad jako dvě hodnoty organizator turnaje, ředitel turnaje
-    function_name = models.CharField(max_lenght=100)
+
+class Season(Model):
+    season_name = models.CharField(max_length=9, unique=True)
+
+    def __str__(self):
+        return self.season_name
+
+
+class League(Model):
+    league_name = models.CharField(max_length=32, unique=True)
+
+    def __str__(self):
+        return self.league_name
+
+class Category(Model):
+    category_name = models.CharField(max_length=32, unique=True)
+
+    def __str__(self):
+        return self.category_name
+
+
+class Discipline(Model):
+    discipline_name = models.CharField(max_length=32, unique=True)
+
+    def __str__(self):
+        return self.discipline_name
+
+
+class Function(Model):
+    function_name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
         return self.function_name
 
-
-# zvážit, zda tabulku schedule nezahrnout do Proposition jako:
-# registration time, start time, end time, pripadne ještě description, ale v Proposition už je prescription, to by mohlo obsáhnout oboje.
-# zvážit, zda tabulky season, league, category, event_location a event_date nezahrnout také do Proposition.
-
-class Discipline(Models):
-    name = name = models.CharField(max_lenght=200, unique=True)
+class Organizer(Model):
+    organizer_name = models.CharField(max_length=32)
+    organizer_lastname = models.CharField(max_length=32)
+    function = models.ForeignKey(Function, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['name']
+        return '{} {} - {}'.format(self.organizer_lastname, self.organizer_name, self.function)
 
 
-
-class Player(Model):
-    reg_number = models.IntegerField(null=False, unique=True)
-    name = models.CharField(max_lenght=200)
-    lastname = models.CharField(max_lenght=200)
-    year_of_birth = models.IntegerField(null=False, unique=True) # nevim, zda u DataTimeField jde zadat jen rok
-    licence_validity = models.DataTimeField(null=False, unique=True) #auto false?
-    # club cizi klic z tabulky club pres id
+class Schedule(Model):
+    start_time = models.TimeField()
+    end_time = models.TimeField(null=True)
+    task = models.TextField()
 
     def __str__(self):
-        return self.name
+        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'), self.task[:30] + "..." if len(self.task) > 30 else self.task)
 
-    # class Meta:
-    #     ordering = [???]
 
-class Club(Models):
-    name = models.CharField(max_lenght=200)
+class Propositions(Model):
+    prescription = models.TextField(null=True)
+    tournament_system = models.TextField(null=True)
+    notes = models.TextField(null=True)
+    category = models.ManyToManyField(Category)
+    league = models.ManyToManyField(League)
+    discipline = models.ManyToManyField(Discipline)
+    event_location = models.CharField(max_length=128, null=True)
+    event_date = models.DateField(null=True, blank=True)
+    schedule = models.ManyToManyField(Schedule, null=True)
+    season = models.ForeignKey(Season, null=True, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.name
+        return '{} - {} ({})'.format(self.season, str(self.league), self.category.name)
 
-    class Meta:
-        ordering = ['name']
+
+class Tournament(Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField(null=True, blank=True)
+    tournament_order = models.PositiveSmallIntegerField(null=True)
+    season = models.ForeignKey(Season, null=True, on_delete=models.DO_NOTHING)
+    propositions = models.ForeignKey(Propositions, on_delete=models.DO_NOTHING, blank=True, null=True)
+    players = models.ManyToManyField(Player)
+
+    def __str__(self):
+        return '{} - {}'.format(self.name, self.season)
+
+
+class Result(Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.DO_NOTHING)
+    player = models.ForeignKey(Player, on_delete=models.DO_NOTHING)
+    score = models.PositiveSmallIntegerField()
+    ranking = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return '{} - {} ({}b)'.format(self.player, self.tournament, self.score)
+

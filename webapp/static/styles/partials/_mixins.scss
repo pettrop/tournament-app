@@ -1,0 +1,92 @@
+// GENERAL
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// FONTS
+@mixin h1-page {
+    font: {
+        size: em(60);
+        weight: bold;
+    }
+    text-transform: uppercase;
+    margin: em(15) 0 em(10);
+    @include headline-shadow;
+}
+
+@mixin h2-page {
+    font: {
+        size: em(40);
+        weight: bold;
+    }
+    text-transform: uppercase;
+    margin-bottom: em(10);
+    @include headline-shadow;
+}
+
+@mixin p-page {
+    font: {
+        size: em(18);
+    }
+    line-height: 1.2;
+}
+
+
+// SHADOWS
+@mixin headline-shadow {
+    text-shadow: em(1) em(1) em(0) #000;
+}
+
+@mixin box-shadow {
+    box-shadow: em(6) em(6) em(8) $secondary-color;
+}
+
+
+//BUTTONS
+@mixin btn-log {
+    padding: em(10) em(15);
+    border-radius: 5px;
+    font-weight: bold;
+    position: relative;
+}
+
+@mixin log-out {
+    background-color: $fifth-color;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    transition-duration: 0.4s;
+    &:hover {
+        background-color: $primary-color;
+        color: $fifth-color;
+        border-color: $fifth-color;
+    }
+}
+
+@mixin log-in {
+    background-color: $fourth-color;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    transition-duration: 0.4s;
+    &:hover {
+        background-color: $primary-color;
+        color: $fourth-color;
+        border-color: $fourth-color;
+    }
+}
+
+@mixin li-clickable ($line-height){
+    display: block;
+    width: 100%;
+    line-height: $line-height;
+}
+
+
+// ANIMATIONS
+@mixin anim-show {
+    animation-name: show;
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}

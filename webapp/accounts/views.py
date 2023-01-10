@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from django.shortcuts import render
 
 
 class SignUpView(CreateView):
@@ -28,4 +29,6 @@ def signupsuccessful(request):
 
 
 def loginsuccessful(request):
-    return HttpResponse("Login was successful!")
+    template = "home.html"
+    context = {}
+    return render(request, template, context)

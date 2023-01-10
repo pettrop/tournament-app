@@ -1,0 +1,3 @@
+@function em($target, $content: 16) {
+    @return ($target / $content) + em;
+}
