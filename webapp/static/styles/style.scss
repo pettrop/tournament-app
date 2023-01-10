@@ -1,0 +1,212 @@
+@import "./partials/variables";
+@import "./partials/functions";
+@import "./partials/mixins";
+@import "./partials/animations";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #E6E8E7;
+    color: #111;
+    font: {
+       family: 'Montserrat', sans-serif;
+    }
+}
+
+.page-container {
+    margin: em(120) auto;
+    width: 90%;
+    border: 5px solid lighten($secondary-color, 10%);
+    background-color: $primary-color;
+    overflow: hidden;
+    @include box-shadow;
+    h1 {
+        @include h1-page;
+        @include anim-show;
+    }
+    h2 {
+        @include h2-page;
+        @include anim-show;
+        animation-delay: .5s;
+    }
+    p {
+        @include p-page;
+    }
+    .page-header {
+        padding: em(40) em(20);
+        width: 100%;
+        background-color: #005043;
+        color: $primary-color;
+        @include flex-center;
+        flex-direction: column;
+        border-bottom: 5px solid lighten($secondary-color, 10%);
+    }
+    .page-tables {
+        width: 80%;
+        padding: em(40);
+        text-align: center;
+        margin: 0 auto;
+        & > * {
+            table {
+                margin: 0 auto;
+            }
+        }
+    }
+}
+
+
+
+/***************************** NAVBAR ********************************/
+nav {
+    padding: em(10) em(20);
+    display: flex;
+    height: em(100);
+    background-color: #111;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+
+    font: {
+        weight: bold;
+    }
+
+    .logo-part {
+        width: 17%;
+        color: $primary-color;
+        @include flex-center;
+
+        .img-wrapper {
+            width: em(50);
+            height: em(50);
+            border-radius: 50%;
+            @include flex-center;
+
+            img {
+                width: 100%;
+                display: block;
+            }
+        }
+    }
+
+    .menu {
+        width: 66%;
+        ul {
+            display: flex;
+            justify-content: center;
+            gap: 0.5%;
+            li {
+                width: 15%;
+                background-color: $fourth-color;
+                border: 2px solid $primary-color;
+                text-align: center;
+                text-transform: uppercase;
+                transition-duration: 0.3s;
+                overflow: hidden;
+                position: relative;
+                font: {
+                    size: em(20);
+                }
+                a {
+                    display: inline-block;
+                    text-decoration: none;
+                    color: $primary-color;
+                    padding: em(10) 0;
+                    @include li-clickable($line-height: em(18));
+                }
+                &.active {
+                    background-color: $primary-color;
+                    border: 2px solid $fourth-color;
+                    a {
+                        color: $fourth-color;
+                    }
+                }
+                &:hover {
+                    background-color: $primary-color;
+                    border: 2px solid $fourth-color;
+                    top: 5px;
+                    a {
+                        color: $fourth-color;
+                    }
+                }
+            }
+        }
+    }
+
+    .user {
+        width: 17%;
+        ul {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            li.user {
+                width: 25%;
+                p {
+                    font-size: em(12,16);
+                    color: $primary-color;
+                }
+            }
+
+            li.button {
+                width: 50%;
+            }
+
+            li {
+                text-align: center;
+                a {
+                    text-decoration: none;
+                    color: $primary-color;
+                    @include li-clickable($line-height: em(25));
+                    @include btn-log;
+                }
+
+                .log-out {
+                    @include log-out;
+                }
+
+                .log-in {
+                    @include log-in;
+                }
+
+                .user-avatar {
+                    display: flex;
+                    flex-direction: column;
+                    gap: em(5);
+                    .img-wrapper {
+                        width: em(50);
+                        height: em(50);
+                        border-radius: 50%;
+                        margin: 0 auto;
+                    }
+
+                    .avatar-in {
+                        background-color: $fourth-color;
+                    }
+
+                    .avatar-out {
+                        background-color: $fifth-color;
+                    }
+
+                    img {
+                        width: 100%;
+                        display: block;
+                    }
+                }    
+                
+            }
+        }
+    }
+
+}
+
+
+
+
+
+/***************************** DOMOV ********************************/

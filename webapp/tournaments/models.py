@@ -18,7 +18,7 @@ class Player(Model):
     club = models.ForeignKey(Club, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return '{} - {}'.format(self.lastname, self.year_of_birth)
+        return '{} {} ({})'.format(self.lastname, self.name, self.year_of_birth)
 
 
 class Season(Model):
@@ -71,7 +71,7 @@ class Schedule(Model):
     task = models.TextField()
 
     def __str__(self):
-        return str(self.start_time)
+        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'), self.task[:30] + "..." if len(self.task) > 30 else self.task)
 
 
 class Propositions(Model):
@@ -87,7 +87,7 @@ class Propositions(Model):
     season = models.ForeignKey(Season, null=True, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return '{} - {} ({})'.format(self.season, self.league, self.category)
+        return '{} - {} ({})'.format(self.season, str(self.league), self.category.name)
 
 
 class Tournament(Model):
@@ -95,12 +95,18 @@ class Tournament(Model):
     description = models.TextField(null=True, blank=True)
     tournament_order = models.PositiveSmallIntegerField(null=True)
     season = models.ForeignKey(Season, null=True, on_delete=models.DO_NOTHING)
-    propositions = models.ForeignKey(Propositions, null=True, on_delete=models.DO_NOTHING)
+    propositions = models.ForeignKey(Propositions, on_delete=models.DO_NOTHING, blank=True, null=True)
     players = models.ManyToManyField(Player)
 
+    def __str__(self):
+        return '{} - {}'.format(self.name, self.season)
 
-class Results(Model):
+
+class Result(Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.DO_NOTHING)
     player = models.ForeignKey(Player, on_delete=models.DO_NOTHING)
     score = models.PositiveSmallIntegerField()
     ranking = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return '{} - {} ({}b)'.format(self.player, self.tournament, self.score)
