@@ -1,11 +1,8 @@
 # Tournament APP
 
-Application for administration tournament of PING-PONG
+Application for administration of PING-PONG tournament.
 
-### TO DO:
-1. Martina 1. uprava znovu
-2. Kubo git s
-3. Milan merge
-4. ...
-5. ...
-6. ...
+### Installation of requirements
+Requirements for the project are in "requirements.txt". Install to your virtual environment:
+
+    pip install -r requirements.txt
