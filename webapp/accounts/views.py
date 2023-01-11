@@ -8,14 +8,14 @@ from django.shortcuts import render, redirect
 
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('fakemain') #má vrátit na hlavní stránku až bude
+        return redirect('homepage')
 
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('signupsuccessful') #vrátit na hlavní stránku až bude
+            return redirect('homepage')
 
         else:
             for error in list(form.errors.values()):
@@ -34,12 +34,12 @@ def signup(request):
 @login_required
 def custom_logout(request):
     logout(request)
-    return redirect('fakemain')  # Main page - to be changed to real one!
+    return redirect('login')
 
 
 def custom_login(request):
     if request.user.is_authenticated:
-        return redirect('fakemain')  # Main page - to be changed to real one!
+        return redirect('homepage')
 
     if request.method == "POST":
         form = AuthenticationForm(request=request, data=request.POST)
@@ -51,7 +51,7 @@ def custom_login(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('signupsuccessful')  # main page - to be changed
+                return redirect('homepage')
 
         else:
             for error in list(form.errors.values()):
@@ -65,18 +65,3 @@ def custom_login(request):
         template_name="registration/login.html",
         context={"form": form}
     )
-
-
-#Below for TEST purposes only!
-
-
-def signupsuccessful(request):
-    return HttpResponse("Signup was successful!")
-
-
-def loginsuccessful(request):
-    return HttpResponse("Login was successful!")
-
-
-def mainpage(request):
-    return HttpResponse("Main page!")

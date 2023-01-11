@@ -18,10 +18,12 @@ from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.urls import path
 
 import accounts.views
+import tournaments.views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', tournaments.views.main_view, name='homepage'),
 
     path('accounts/signup/', accounts.views.signup, name='signup'),
     path('accounts/login/', accounts.views.custom_login, name='login'),
@@ -29,7 +31,4 @@ urlpatterns = [
     path('accounts/password_change/', PasswordChangeView.as_view(template_name="registration/password_change.html"), name='password_change'),
     path('accounts/password_change/done', PasswordChangeDoneView.as_view(template_name="registration/password_change_done.html"), name='password_change_done'),
 
-    path('accounts/signup_successful/', accounts.views.signupsuccessful, name='signupsuccessful'),  #For TEST purposes only! To be deleted after main page implementation.
-    path('accounts/login_successful/', accounts.views.loginsuccessful, name='loginsuccessful'), #For TEST purposes only! To be deleted after main page implementation.
-    path('accounts/fake_main_page/', accounts.views.mainpage, name='fakemain'), #For TEST purposes only! To be deleted after main page implementation.
 ]
