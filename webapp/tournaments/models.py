@@ -1,24 +1,33 @@
 from django.db import models
-from django.db.models import Model, CharField
+from django.db.models import (
+    CharField, DateTimeField, ForeignKey, IntegerField, TextField, DO_NOTHING, Model)
+from django.template.defaultfilters import truncatechars
+from django.template import defaulttags
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Club(Model):
     club_name: CharField = models.CharField(max_length=64)
-
+    # created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.club_name
-
+    class Meta:
+        ordering = ['club_name']
 
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
-    year_of_birth = models.PositiveSmallIntegerField()
-    license_validity = models.DateField(null=True)
+    year_of_birth = models.IntegerField()
+    # year_of_birth = models.PositiveSmallIntegerField()
+    license_validity = models.DateField()
     club = models.ForeignKey(Club, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return '{} {} ({})'.format(self.lastname, self.name, self.year_of_birth)
 
+    class Meta:
+        ordering = ['lastname']
 
 class Season(Model):
     season_name = models.CharField(max_length=9, unique=True)

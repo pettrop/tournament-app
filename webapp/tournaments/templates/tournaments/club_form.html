@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+    <h3>{{  title }}</h3>
+
+    <form method="post">
+        {% csrf_token %}
+{#        <table>{{ form }}</table>#}
+{#        pokud chceme neco upravovat, musime udelat formular cely sami / nejde vyuzivat form a pak upravovat rozlozeni#}
+
+        <div class="box">
+            <label for="{{  form.name.id_for_label }}">Club name:</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        <div class="box">
+            <label for="{{ form.description.id_for_label }}" style="vertical-align: top;">Room description:</label>
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+
+        <button typeof="submit">Submit</button>
+        {{ form.non_field_errors }}
+
+
+    </form>
+{% endblock %}

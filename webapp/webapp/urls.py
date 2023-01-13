@@ -14,11 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView, TemplateView
 from django.urls import path
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.template import defaulttags
 
 import accounts.views
 import tournaments.views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,5 +39,16 @@ urlpatterns = [
     path('accounts/signup_successful/', accounts.views.signupsuccessful, name='signupsuccessful'),
     # For TEST purposes only! To be deleted after main page implementation.
     path('', accounts.views.loginsuccessful, name='loginsuccessful'),  # Kubo
+
+
+    path('club/create', tournaments.views.ClubCreateView.as_view(), name='club_create'),
+    path('club/detail/<pk>', tournaments.views.club, name='club'),
+
+    path('player/detail/<pk>', tournaments.views.player, name='player'),
+    path('player/create', tournaments.views.PlayerCreateView.as_view(), name='player_create'),
+    path('player/update/<pk>', tournaments.views.PlayerUpdateView.as_view(), name='player_update'),
+    path('player/delete/<pk>', tournaments.views.PlayerDeleteView.as_view(), name='player_delete'),
+    path('players/', tournaments.views.PlayersView.as_view(), name='players'),
+
 
 ]

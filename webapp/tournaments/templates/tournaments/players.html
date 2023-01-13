@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h1>Players</h1>
+    <br/>
+    <ul>
+        {% for player in object_list %}
+            <li>{{ player.name }} {{ player.lastname }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
