@@ -69,7 +69,6 @@ class PlayerDeleteView(DeleteView):
 # odobny problem jako u Player
 def club(request, pk):
     club = Club.objects.get(id=pk)
-
     if request.method == "POST":
         return redirect('club', pk)
 
