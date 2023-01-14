@@ -1,0 +1,48 @@
+{% load static %}
+<nav>
+    <div class="logo-part">
+        <p>Stolný Tenis Slovensko</p>
+        <div class="img-wrapper">
+            <img src="{% static 'images/slovakia.png' %}" alt="slovakia erb">
+        </div>
+    </div>
+    <div class="menu">
+        <ul>
+            <li class="active"><a href="{% url 'home' %}">Domov</a></li>
+            <li><a href="{% url 'results' %}">Výsledky</a></li>
+            <li><a href="#">Turnaje</a></li>
+            {% if request.user.is_authenticated  %}
+            <li><a href="#">Hráči</a></li>
+            <li><a href="#">Kluby</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="user">
+        <ul>
+            {% if request.user.is_authenticated  %}
+            <li class="user">
+                <div class="user-avatar">
+                    <div class="img-wrapper avatar-in">
+                        <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
+                    </div>
+                    <p>{{ request.user }}</p>
+                </div>
+            </li>
+            <li class="button">
+                <a href="{% url 'logout' %}" class="btn-log log-out">Odhlásiť sa</a>
+            </li>
+            {% else %}
+            <li class="user">
+                <div class="user-avatar">
+                    <div class="img-wrapper avatar-out">
+                        <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
+                    </div>
+                </div>
+            </li>
+            <li class="button">
+                <a href="{% url 'login' %}" class="btn-log log-in">Prihlásiť sa</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

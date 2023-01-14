@@ -1,13 +1,12 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="page-header">
-    <h1>Zmena hesla</h1>
+    <h1>Výsledky turnajov</h1>
 </div>
 <div class="page-tables">
     <form class="page-form" method="post">
         {% csrf_token %}
         <table> {{ form.as_table }} </table>
-        <button type="submit">Signup</button>
     </form>
 </div>
 {% endblock %}
