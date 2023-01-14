@@ -97,13 +97,99 @@ body {
   border-bottom: 5px solid #2b2b2b;
 }
 .page-container .page-tables {
-  width: 80%;
-  padding: 2.5em;
+  width: 95%;
+  min-height: 30vh;
+  padding: 1.875em;
+  margin-left: 1.25em;
+}
+.page-container .page-tables p.succes-notice {
+  font-weight: bold;
+  color: #fff;
+  width: 60%;
+  margin: 0 auto;
+  font-size: 1.625em;
   text-align: center;
+  border: 2px solid #111;
+  padding: 0.625em 1.875em;
+  background-color: #006a58;
+  border-radius: 0.3125em;
+  box-shadow: 0.125em 0.125em 0.25em #111;
+}
+.page-container .page-tables .list {
+  width: 90%;
   margin: 0 auto;
 }
+.page-container .page-tables .list .list-item {
+  border: 2px solid #111;
+  margin-bottom: 0.1875em;
+  box-shadow: 0.0625em 0.0625em #111;
+  border-radius: 0.1875em;
+  position: relative;
+  transition: all 0.5s;
+}
+.page-container .page-tables .list .list-item:hover {
+  transform: translate(2%, 0);
+  padding: 0.3125em;
+  margin-top: 0.3125em;
+  margin-bottom: 0.3125em;
+  background-color: #005043;
+  border-color: black;
+  box-shadow: 0.125em 0.125em 0.0625em #111;
+}
+.page-container .page-tables .list .list-item:hover a {
+  color: #fff;
+}
+.page-container .page-tables .list .list-item a {
+  text-decoration: none;
+  color: #111;
+  font-weight: bold;
+  display: block;
+  padding: 0.625em;
+}
 .page-container .page-tables > * table {
-  margin: 0 auto;
+  text-align: left;
+}
+.page-container .page-tables > * table label {
+  margin-right: 0.625em;
+  font-weight: bold;
+}
+.page-container .page-tables > * table input, .page-container .page-tables > * table select {
+  border: 2px solid #005043;
+  border-radius: 0.3125em;
+  padding: 0.625em;
+  margin: 0.625em 0;
+  box-shadow: 0.125em 0.125em 0.0625em #333;
+  transition: all 0.3s;
+}
+.page-container .page-tables > * table input:active, .page-container .page-tables > * table select:active {
+  background-color: #005043;
+}
+.page-container .page-tables > * table input:focus, .page-container .page-tables > * table select:focus {
+  background-color: #ededed;
+  transform: scale(1.03);
+  border-width: 3px;
+}
+.page-container .page-tables > * input.btn, .page-container .page-tables > * button.btn {
+  border: 2px solid black;
+  border-radius: 0.3125em;
+  padding: 0.625em 1.25em;
+  margin-top: 0.625em;
+  background-color: #005043;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0.125em 0.125em 0.0625em #333;
+  transition: all 0.3s;
+}
+.page-container .page-tables > * input.btn:hover, .page-container .page-tables > * button.btn:hover {
+  border-color: #005043;
+  color: #005043;
+  background-color: #fff;
+  transform: scale(1.05);
+}
+.page-container .notice-tbl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /***************************** NAVBAR ********************************/
@@ -143,23 +229,22 @@ nav .logo-part .img-wrapper img {
 nav .menu {
   width: 66%;
 }
-nav .menu ul {
+nav .menu .main-menu {
   display: flex;
   justify-content: center;
   gap: 0.5%;
 }
-nav .menu ul li {
+nav .menu .main-menu .menu-item {
   width: 15%;
   background-color: #005043;
   border: 2px solid #fff;
   text-align: center;
   text-transform: uppercase;
   transition-duration: 0.3s;
-  overflow: hidden;
   position: relative;
-  font-size: 1.25em;
+  font-size: 1em;
 }
-nav .menu ul li a {
+nav .menu .main-menu .menu-item a {
   display: inline-block;
   text-decoration: none;
   color: #fff;
@@ -168,20 +253,51 @@ nav .menu ul li a {
   width: 100%;
   line-height: 1.125em;
 }
-nav .menu ul li.active {
+nav .menu .main-menu .menu-item.active {
   background-color: #fff;
   border: 2px solid #005043;
 }
-nav .menu ul li.active a {
+nav .menu .main-menu .menu-item.active a {
   color: #005043;
 }
-nav .menu ul li:hover {
+nav .menu .main-menu .menu-item:hover {
   background-color: #fff;
   border: 2px solid #005043;
-  top: 5px;
 }
-nav .menu ul li:hover a {
+nav .menu .main-menu .menu-item:hover a {
   color: #005043;
+}
+nav .menu .main-menu .menu-item .dropdown {
+  display: none;
+}
+nav .menu .main-menu li:hover .dropdown {
+  position: absolute;
+  display: block;
+  color: #005043;
+  background-color: #fff;
+  border: 2px solid #001d18;
+  left: 0;
+  top: 100%;
+  width: 100%;
+}
+nav .menu .main-menu li:hover .dropdown ul {
+  display: block;
+  width: 100%;
+}
+nav .menu .main-menu li:hover .dropdown ul li {
+  width: 100%;
+  padding: 0.625pxem;
+}
+nav .menu .main-menu li:hover .dropdown ul li:hover {
+  background-color: #00372e;
+}
+nav .menu .main-menu li:hover .dropdown ul li a {
+  color: #005043;
+  padding: 0.625em;
+  font-size: 0.875em;
+}
+nav .menu .main-menu li:hover .dropdown ul li a:hover {
+  color: #fff;
 }
 nav .user {
   width: 17%;

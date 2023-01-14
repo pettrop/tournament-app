@@ -1,11 +1,14 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h1>Players</h1>
-    <br/>
-    <ul>
+<div class="page-header">
+    <h1>Zoznam hráčov</h1>
+</div>
+<div class="page-tables">
+    <ul class="list">
         {% for player in players %}
-            <li><a href="{% url 'player' player.id %}">{{ player.name }} {{ player.lastname }}</a></li>
+            <li class="list-item"><a href="{% url 'player' player.id %}">{{ player.name }} {{ player.lastname }}</a></li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}

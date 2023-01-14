@@ -1,5 +1,5 @@
 {% load static %}
-<nav>
+<nav role="navigation">
     <div class="logo-part">
         <p>Stolný Tenis Slovensko</p>
         <div class="img-wrapper">
@@ -7,13 +7,37 @@
         </div>
     </div>
     <div class="menu">
-        <ul>
-            <li class="active"><a href="{% url 'home' %}">Domov</a></li>
-            <li><a href="{% url 'results' %}">Výsledky</a></li>
-            <li><a href="#">Turnaje</a></li>
+        <ul class="main-menu">
+            <li class="menu-item"><a href="{% url 'home' %}">Domov</a></li>
+            <li class="menu-item"><a href="{% url 'results' %}">Výsledky</a></li>
+            <li class="menu-item"><a href="#">Turnaje <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="#">Vytvor propozície</a></li>
+                        <li><a href="#">Zadaj výsledky</a></li>
+                        <li><a href="#">Export výsledkov</a></li>
+                    </ul>
+                </div>
+            </li>
             {% if request.user.is_authenticated  %}
-            <li><a href="#">Hráči</a></li>
-            <li><a href="#">Kluby</a></li>
+            <li class="menu-item"><a href="#">Hráči <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="{% url 'player_create' %}">Vytvor hráča</a></li>
+                        <li><a href="#">Uprav hráča</a></li>
+                        <li><a href="{% url 'players' %}">Zoznam hráčov</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="menu-item"><a href="#">Kluby <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="{% url 'club_create' %}">Vytvor klub</a></li>
+                        <li><a href="#">Uprav klub</a></li>
+                        <li><a href="{% url 'clubs' %}">Zoznam klubov</a></li>
+                    </ul>
+                </div>
+            </li>
             {% endif %}
         </ul>
     </div>
