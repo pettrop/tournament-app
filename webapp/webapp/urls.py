@@ -28,7 +28,7 @@ import tournaments.views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', tournaments.views.main_view, name='homepage'),
+    path('', tournaments.views.home, name='home'),
     
     path('results/', tournaments.views.results, name="results"),
     

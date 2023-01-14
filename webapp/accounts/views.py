@@ -8,14 +8,14 @@ from django.shortcuts import render, redirect
 
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('homepage')
+        return redirect('home')
 
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('homepage')
+            return redirect('home')
 
         else:
             for error in list(form.errors.values()):
@@ -39,7 +39,7 @@ def custom_logout(request):
 
 def custom_login(request):
     if request.user.is_authenticated:
-        return redirect('homepage')
+        return redirect('home')
 
     if request.method == "POST":
         form = AuthenticationForm(request=request, data=request.POST)
@@ -51,7 +51,7 @@ def custom_login(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('homepage')
+                return redirect('home')
 
         else:
             for error in list(form.errors.values()):
