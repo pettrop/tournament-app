@@ -37,7 +37,6 @@ urlpatterns = [
     path('accounts/logout/', accounts.views.custom_logout, name='logout'),
     path('accounts/password_change/', PasswordChangeView.as_view(template_name="registration/password_change.html"), name='password_change'),
     path('accounts/password_change/done', PasswordChangeDoneView.as_view(template_name="registration/password_change_done.html"), name='password_change_done'),
-    path('accounts/signup_successful/', accounts.views.signupsuccessful, name='signupsuccessful'),
 
     path('club/create', tournaments.views.ClubCreateView.as_view(), name='club_create'),
     path('club/update/<pk>', tournaments.views.ClubUpdateView.as_view(), name='club_update'),
