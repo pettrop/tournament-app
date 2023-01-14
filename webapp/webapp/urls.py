@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView, TemplateView
 from django.urls import path
 from django.db.models.signals import post_save
@@ -26,20 +27,17 @@ import tournaments.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', tournaments.views.home, name="home"),
-    path('results/', tournaments.views.results, name="results"),
-    path('accounts/signup/', accounts.views.SignUpView.as_view(), name='signup'),
-    path('accounts/login/', LoginView.as_view(), name='login'),
-    path('accounts/logout/', LogoutView.as_view(), name='logout'),
-    path('accounts/password_change/', PasswordChangeView.as_view(template_name="registration/password_change.html"),
-         name='password_change'),
-    path('accounts/password_change/done',
-         PasswordChangeDoneView.as_view(template_name="registration/password_change_done.html"),
-         name='password_change_done'),
-    path('accounts/signup_successful/', accounts.views.signupsuccessful, name='signupsuccessful'),
-    # For TEST purposes only! To be deleted after main page implementation.
-    path('', accounts.views.loginsuccessful, name='loginsuccessful'),  # Kubo
 
+    path('', tournaments.views.main_view, name='homepage'),
+    
+    path('results/', tournaments.views.results, name="results"),
+    
+    path('accounts/signup/', accounts.views.signup, name='signup'),
+    path('accounts/login/', accounts.views.custom_login, name='login'),
+    path('accounts/logout/', accounts.views.custom_logout, name='logout'),
+    path('accounts/password_change/', PasswordChangeView.as_view(template_name="registration/password_change.html"), name='password_change'),
+    path('accounts/password_change/done', PasswordChangeDoneView.as_view(template_name="registration/password_change_done.html"), name='password_change_done'),
+    path('accounts/signup_successful/', accounts.views.signupsuccessful, name='signupsuccessful'),
 
     path('club/create', tournaments.views.ClubCreateView.as_view(), name='club_create'),
     path('club/update/<pk>', tournaments.views.ClubUpdateView.as_view(), name='club_update'),
@@ -52,6 +50,5 @@ urlpatterns = [
     path('player/update/<pk>', tournaments.views.PlayerUpdateView.as_view(), name='player_update'),
     path('player/delete/<pk>', tournaments.views.PlayerDeleteView.as_view(), name='player_delete'),
     path('players/', tournaments.views.PlayersView.as_view(), name='players'),
-
 
 ]
