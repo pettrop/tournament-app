@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table tennis tournaments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/css/reset.css' %}"/>
+    <link rel="stylesheet" href="{% static 'styles/css/style.css' %}"/>
+</head>
+<body>
+        {% include 'navbar.html' %}
+        <div class="page-container">
+                {% block content %}
+                {% endblock %}
+        </div>    
+</body>
+</html>
