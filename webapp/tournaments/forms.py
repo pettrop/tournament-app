@@ -3,7 +3,7 @@ from django.forms import (
     Form, Textarea, ModelForm, CharField, DateField, IntegerField, ModelChoiceField)
 from django.template import defaulttags
 
-from tournaments.models import Club, Player, Season, League
+from tournaments.models import Club, Player, Season, League, Category
 
 
 # class PlayerForm(Form):
@@ -76,6 +76,22 @@ class LeagueForm(ModelForm):
     def clean_league_name(self):
             league_name = self.cleaned_data['league_name']
             return league_name.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
+
+
+class CategoryForm(ModelForm):
+    class Meta:
+            model = Category
+            fields = '__all__'
+
+    category_name = CharField(max_length=32) # odstranila jsem unique=True / TypeError: __init__() got an unexpected keyword argument 'unique'
+
+    def clean_category_name(self):
+            category_name = self.cleaned_data['category_name']
+            return category_name.capitalize()
 
     def clean(self):
             result = super().clean()

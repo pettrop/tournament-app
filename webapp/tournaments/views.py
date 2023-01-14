@@ -8,8 +8,8 @@ from django.views import View
 
 from logging import getLogger, Logger
 
-from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm
-from tournaments.models import Club, Player, Season, League
+from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm
+from tournaments.models import Club, Player, Season, League, Category
 
 LOGGER = getLogger()
 
@@ -186,3 +186,45 @@ class LeagueDeleteView(DeleteView):
     template_name = 'tournaments/league_delete.html'
     model = League
     success_url = reverse_lazy('leagues')
+
+# Category / Categories
+
+def category(request, pk):
+    category = Category.objects.get(pk=pk)
+    context = {'category': category}
+    return render(request, template_name='tournaments/category.html', context=context)
+
+
+class CategoriesView(ListView):
+    template_name = 'tournaments/categories.html'
+    model = Category
+
+
+class CategoryCreateView(CreateView):
+    template_name = 'tournaments/category_form.html'
+    extra_context = {'title': 'Create new category'}
+    model = Category
+    form_class = CategoryForm
+    success_url = reverse_lazy('categories')
+
+    def form_invalid(self, form):
+        Logger.warning('Invalid data provided')
+        return super().form_invalid(form)
+
+
+class CategoryUpdateView(UpdateView):
+    template_name = 'tournaments/category_form.html'
+    extra_context = {'title': 'Update category {{ category.category_name}}'}
+    model = Category
+    form_class = CategoryForm
+    success_url = reverse_lazy('categories')
+
+    def form_invalid(self, form):
+        LOGGER.warning('invalid data provided while updating')
+        return super().form_invalid(form)
+
+
+class CategoryDeleteView(DeleteView):
+    template_name = 'tournaments/category_delete.html'
+    model = Category
+    success_url = reverse_lazy('categories')
