@@ -4,8 +4,8 @@
 <h1>Players</h1>
     <br/>
     <ul>
-        {% for player in players %}
-            <li><a href="{% url 'player' player.id %}">{{ player.name }} {{ player.lastname }}</a></li>
+        {% for player in object_list %}
+            <li><a href="{% url 'player' player.id %}">{{ player.name|capfirst }} {{ player.lastname|capfirst }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

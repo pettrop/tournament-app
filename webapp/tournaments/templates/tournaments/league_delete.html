@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <p>
+          Are you sure you want to delete league "{{ object.league_name}}" from database?
+        </p>
+        <button type="submit">YES</button>
+        <a href="{% url 'leagues' %}">Cancel</a>
+    </form>
+{% endblock %}

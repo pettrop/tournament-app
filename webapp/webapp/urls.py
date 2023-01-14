@@ -56,4 +56,9 @@ urlpatterns = [
     path('season/delete/<pk>', tournaments.views.SeasonDeleteView.as_view(), name='season_delete'),
     path('seasons/', tournaments.views.SeasonsView.as_view(), name='seasons'),
 
+    path('league/detail/<pk>', tournaments.views.league, name='league'),
+    path('league/create', tournaments.views.LeagueCreateView.as_view(), name='league_create'),
+    path('league/update/<pk>', tournaments.views.LeagueUpdateView.as_view(), name='league_update'),
+    path('league/delete/<pk>', tournaments.views.LeagueDeleteView.as_view(), name='league_delete'),
+    path('leagues/', tournaments.views.LeaguesView.as_view(), name='leagues'),
 ]

@@ -8,8 +8,8 @@ from django.views import View
 
 from logging import getLogger, Logger
 
-from tournaments.forms import ClubForm, PlayerForm, SeasonForm
-from tournaments.models import Club, Player, Season
+from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm
+from tournaments.models import Club, Player, Season, League
 
 LOGGER = getLogger()
 
@@ -29,10 +29,11 @@ def results(request):
     context = {}
     return render(request, template, context)
 
-#Player / Players
-class PlayersView(TemplateView):
+
+# Player / Players
+class PlayersView(ListView):
     template_name = 'tournaments/players.html'
-    extra_context = {'players': Player.objects.all()}
+    model = Player
 
 
 def player(request, pk):
@@ -40,15 +41,17 @@ def player(request, pk):
     context = {'player': player}
     return render(request, template_name='tournaments/player.html', context=context)
 
+
 class PlayerCreateView(CreateView):
     template_name = 'tournaments/player_form.html'
-    extra_context = {'title':'Create new player'}
+    # extra_context = {'title':'Create new player'}
     form_class = PlayerForm
     success_url = reverse_lazy('players')
 
     def form_invalid(self, form):
         Logger.warning('Invalid data provided')
         return super().form_invalid(form)
+
 
 class PlayerUpdateView(UpdateView):
     template_name = 'tournaments/player_form.html'
@@ -59,6 +62,7 @@ class PlayerUpdateView(UpdateView):
     def form_invalid(self, form):
         LOGGER.warning('invalid data provided while updating')
         return super().form_invalid(form)
+
 
 class PlayerDeleteView(DeleteView):
     template_name = 'tournaments/player_delete.html'
@@ -98,9 +102,9 @@ class ClubDeleteView(DeleteView):
     model = Club
     success_url = reverse_lazy('clubs')
 
-class ClubsView(TemplateView):
+class ClubsView(ListView):
     template_name = 'tournaments/clubs.html'
-    extra_context = {'clubs': Club.objects.all()}
+    model = Club
 
 # Season / Seasons
 
@@ -108,9 +112,10 @@ def season(request, pk):
     season = Season.objects.get(pk=pk)
     context = {'season': season}
     return render(request, template_name='tournaments/season.html', context=context)
-class SeasonsView(TemplateView):
+
+class SeasonsView(ListView):
     template_name = 'tournaments/seasons.html'
-    extra_context = {'seasons': Season.objects.all()}
+    model = Season
 
 class SeasonCreateView(CreateView):
     template_name = 'tournaments/season_form.html'
@@ -125,6 +130,7 @@ class SeasonCreateView(CreateView):
 
 class SeasonUpdateView(UpdateView):
     template_name = 'tournaments/season_form.html'
+    extra_context = {'title': 'Update season'}
     model = Season
     form_class = SeasonForm
     success_url = reverse_lazy('seasons')
@@ -132,7 +138,51 @@ class SeasonUpdateView(UpdateView):
     def form_invalid(self, form):
         LOGGER.warning('invalid data provided while updating')
         return super().form_invalid(form)
+
 class SeasonDeleteView(DeleteView):
     template_name = 'tournaments/season_delete.html'
     model = Season
     success_url = reverse_lazy('seasons')
+
+
+# League / Leagues
+
+def league(request, pk):
+    league = League.objects.get(pk=pk)
+    context = {'league': league}
+    return render(request, template_name='tournaments/league.html', context=context)
+
+
+class LeaguesView(ListView):
+    template_name = 'tournaments/leagues.html'
+    model = League
+
+
+class LeagueCreateView(CreateView):
+    template_name = 'tournaments/league_form.html'
+    extra_context = {'title': 'Create new league'}
+    model = League
+    form_class = LeagueForm
+    success_url = reverse_lazy('leagues')
+
+    def form_invalid(self, form):
+        Logger.warning('Invalid data provided')
+        return super().form_invalid(form)
+
+
+class LeagueUpdateView(UpdateView):
+    template_name = 'tournaments/league_form.html'
+    extra_context = {'title': 'Update league {{ league.league_name}}'}
+    model = League
+    form_class = LeagueForm
+    success_url = reverse_lazy('leagues')
+
+    def form_invalid(self, form):
+        LOGGER.warning('invalid data provided while updating')
+        return super().form_invalid(form)
+
+
+class LeagueDeleteView(DeleteView):
+    template_name = 'tournaments/league_delete.html'
+    model = League
+    success_url = reverse_lazy('leagues')

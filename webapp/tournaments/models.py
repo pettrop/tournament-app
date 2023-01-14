@@ -5,15 +5,18 @@ from django.template.defaultfilters import truncatechars
 from django.template import defaulttags
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 class Club(Model):
     club_name = models.CharField(max_length=64)
     # # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.club_name
     # class Meta:
     #     ordering = ['club_name']
+
 
 class Player(Model):
     name = models.CharField(max_length=32)
@@ -29,18 +32,19 @@ class Player(Model):
     class Meta:
         ordering = ['lastname']
 
+
 class Season(Model):
     season_name = models.CharField(max_length=9, unique=True)
 
     def __str__(self):
         return self.season_name
 
-
 class League(Model):
     league_name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
         return self.league_name
+
 
 class Category(Model):
     category_name = models.CharField(max_length=32, unique=True)

@@ -4,7 +4,7 @@
 <h1>Clubs</h1>
     <br/>
     <ul>
-        {% for club in clubs %}
+        {% for club in object_list %}
             <li><a href="{% url 'club' club.id %}">{{ club.club_name }} </a></li>
         {% endfor %}
     </ul>
