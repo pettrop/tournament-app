@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+
+{% block content %}
+<!--<h1>Propozície</h1>-->
+<!--<h2>PODTATRANSKÝ STOLNOTENISOVÝ ZVAZ</h2>-->
+<p>Vás pozýva na {{ proposition.tournament_order }}. turnaj
+    {% for league in leagues %}
+            {{ league }}. ligy{% if not forloop.last %},{% endif %}
+        {% endfor %} žiakov a dorastencov PSTZ sezóny {{ proposition.season }}</p>
+<p>Usporiadateľ: {{ proposition.organizer_club }}</p>
+<p>Dátum usporiadania: {{ proposition.event_date }}</p>
+<p>Miesto: {{ proposition.event_location }}</p>
+<p>Vedenie turnaja: {% for organizer in organizers %}
+{{ organizer.organizer_name }} {{ organizer.organizer_lastname }} - {{ organizer.function }}{% if not forloop.last %}, <br>{% endif %}
+{% endfor %}</p>
+Prihlášky: {% for organizer in organizers %}
+{{ organizer.organizer_name }} {{ organizer.organizer_lastname }} - email: {{ organizer.organizer_mail }}, tel: {{ organizer.organizer_phone }}{% if not forloop.last %}, <br>{% endif %}
+{% endfor %}</p>
+<p>Štartovné: {{ proposition.start_fee }}€</p>
+<h3>TECHNICKÉ USTANOVENIA:</h3>
+<p>Predpis: {{ proposition.prescription }}</p>
+<p>Súťažné disciplíny:
+    {% for discipline in disciplines %}
+            {{ discipline }}{% if not forloop.last %},{% endif %}
+    {% endfor %}</p>
+<p>Systém turnaja: {{ proposition.tournament_system }}</p>
+<p>Vekové kategória platné pre sezónu {{ proposition.season }}:</p>
+<p>{% for category in categories %}
+            {{ category }}{% if not forloop.last %},{% endif %}
+    {% endfor %}</p>
+
+<p>Časový rozpis:</p>
+<p>{% for schedule in schedules %}
+            {{ schedule }} <br>
+    {% endfor %}</p>
+
+<p>{{ proposition.notes }}</p>
+
+{% endblock %}

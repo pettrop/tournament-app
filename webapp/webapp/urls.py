@@ -50,4 +50,9 @@ urlpatterns = [
     path('player/delete/<pk>', tournaments.views.PlayerDeleteView.as_view(), name='player_delete'),
     path('players/', tournaments.views.PlayersView.as_view(), name='players'),
 
+    path('proposition/detail/<pk>', tournaments.views.proposition_detail, name='proposition'),
+    path('proposition/create', tournaments.views.PropositionCreateView.as_view(), name='proposition_create'),
+    path('propositions/', tournaments.views.PropositionsView.as_view(), name='propositions'),
+
+
 ]

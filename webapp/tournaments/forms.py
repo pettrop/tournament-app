@@ -1,9 +1,8 @@
-from django.core.exceptions import ValidationError
 from django.forms import (
-    Form, Textarea, ModelForm, CharField, DateField, IntegerField, ModelChoiceField)
-from django.template import defaulttags
+    ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField, SelectDateWidget)
 
-from tournaments.models import Club, Player
+from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer
+
 
 # class PlayerForm(Form):
 #     name = CharField(max_length=32)
@@ -12,9 +11,7 @@ from tournaments.models import Club, Player
 #     license_validity = DateField()
 
 
-
 class PlayerForm(ModelForm):
-
     class Meta:
         model = Player
         fields = '__all__'
@@ -51,3 +48,20 @@ class ClubForm(ModelForm):
     def clean(self):
         result = super().clean()
         return result
+
+
+class PropositionForm(ModelForm):
+    class Meta:
+        model = Propositions
+        fields = ['prescription', 'tournament_system', 'notes', 'category', 'league', 'discipline', 'event_location',
+                  'event_date', 'schedule', 'season', 'organizer', 'tournament_order', 'organizer_club']
+        widgets = {
+            'event_date': SelectDateWidget()
+        }
+
+    category = ModelMultipleChoiceField(queryset=Category.objects.all())
+    league = ModelMultipleChoiceField(queryset=League.objects.all())
+    discipline = ModelMultipleChoiceField(queryset=Discipline.objects.all())
+    schedule = ModelMultipleChoiceField(queryset=Schedule.objects.all())
+    season = ModelChoiceField(queryset=Season.objects.all())
+    organizer = ModelMultipleChoiceField(queryset=Organizer.objects.all())

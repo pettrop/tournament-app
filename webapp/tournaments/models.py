@@ -5,15 +5,18 @@ from django.template.defaultfilters import truncatechars
 from django.template import defaulttags
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 class Club(Model):
     club_name = models.CharField(max_length=64)
+
     # # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.club_name
     # class Meta:
     #     ordering = ['club_name']
+
 
 class Player(Model):
     name = models.CharField(max_length=32)
@@ -29,6 +32,7 @@ class Player(Model):
     class Meta:
         ordering = ['lastname']
 
+
 class Season(Model):
     season_name = models.CharField(max_length=9, unique=True)
 
@@ -41,6 +45,7 @@ class League(Model):
 
     def __str__(self):
         return self.league_name
+
 
 class Category(Model):
     category_name = models.CharField(max_length=32, unique=True)
@@ -62,13 +67,17 @@ class Function(Model):
     def __str__(self):
         return self.function_name
 
+
 class Organizer(Model):
     organizer_name = models.CharField(max_length=32)
     organizer_lastname = models.CharField(max_length=32)
-    function = models.ForeignKey(Function, on_delete=models.DO_NOTHING)
+    organizer_mail = models.EmailField(null=True)
+    organizer_phone = models.CharField(max_length=14, null=True)
+    function = models.ForeignKey(Function, on_delete=models.PROTECT)
 
     def __str__(self):
-        return '{} {} - {}'.format(self.organizer_lastname, self.organizer_name, self.function)
+        return '{} {} - {} ({})'.format(self.organizer_lastname, self.organizer_name, self.function,
+                                        self.organizer_mail)
 
 
 class Schedule(Model):
@@ -77,31 +86,35 @@ class Schedule(Model):
     task = models.TextField()
 
     def __str__(self):
-        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'), self.task[:30] + "..." if len(self.task) > 30 else self.task)
+        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'),
+                                    self.task[:30] + "..." if len(self.task) > 30 else self.task)
 
 
 class Propositions(Model):
     prescription = models.TextField(null=True)
-    tournament_system = models.TextField(null=True)
-    notes = models.TextField(null=True)
-    category = models.ManyToManyField(Category)
-    league = models.ManyToManyField(League)
-    discipline = models.ManyToManyField(Discipline)
+    tournament_system = models.TextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    category = models.ManyToManyField(Category, blank=True)
+    league = models.ManyToManyField(League, blank=True)
+    discipline = models.ManyToManyField(Discipline, blank=True)
     event_location = models.CharField(max_length=128, null=True)
-    event_date = models.DateField(null=True, blank=True)
-    schedule = models.ManyToManyField(Schedule, null=True)
-    season = models.ForeignKey(Season, null=True, on_delete=models.DO_NOTHING)
+    event_date = models.DateField(null=True)
+    schedule = models.ManyToManyField(Schedule, blank=True)
+    season = models.ForeignKey(Season, null=True, on_delete=models.PROTECT)
+    organizer = models.ManyToManyField(Organizer, blank=True)
+    tournament_order = models.PositiveSmallIntegerField(null=True, blank=True)
+    organizer_club = models.ForeignKey(Club, null=True, on_delete=models.PROTECT)
+    start_fee = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return '{} - {} ({})'.format(self.season, str(self.league), self.category.name)
+        return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
 
 
 class Tournament(Model):
     name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
-    tournament_order = models.PositiveSmallIntegerField(null=True)
-    season = models.ForeignKey(Season, null=True, on_delete=models.DO_NOTHING)
-    propositions = models.ForeignKey(Propositions, on_delete=models.DO_NOTHING, blank=True, null=True)
+    season = models.ForeignKey(Season, null=True, on_delete=models.PROTECT)
+    propositions = models.ForeignKey(Propositions, on_delete=models.PROTECT, blank=True, null=True)
     players = models.ManyToManyField(Player)
 
     def __str__(self):
@@ -109,11 +122,10 @@ class Tournament(Model):
 
 
 class Result(Model):
-    tournament = models.ForeignKey(Tournament, on_delete=models.DO_NOTHING)
-    player = models.ForeignKey(Player, on_delete=models.DO_NOTHING)
+    tournament = models.ForeignKey(Tournament, on_delete=models.PROTECT)
+    player = models.ForeignKey(Player, on_delete=models.PROTECT)
     score = models.PositiveSmallIntegerField()
     ranking = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return '{} - {} ({}b)'.format(self.player, self.tournament, self.score)
-

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Tournament, Propositions, Schedule, Organizer, Function, Discipline, Category, League, Season, Player, Club, Result
+from .models import Tournament, Propositions, Schedule, Organizer, Function, Discipline, Category, League, Season, \
+    Player, Club, Result
 
 # Register your models here.
 admin.site.register(Tournament)
