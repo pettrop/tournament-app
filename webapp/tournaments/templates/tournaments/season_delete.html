@@ -4,9 +4,9 @@
     <form method="post">
         {% csrf_token %}
         <p>
-          Are you sure you want to delete club "{{ object.club_name}}" from database?
+          Are you sure you want to delete season "{{ object.season_name}}" from database?
         </p>
         <button type="submit">YES</button>
-        <a href="{% url 'clubs' %}">Cancel</a>
+        <a href="{% url 'seasons' %}">Cancel</a>
     </form>
 {% endblock %}

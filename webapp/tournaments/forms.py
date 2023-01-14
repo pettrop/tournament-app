@@ -3,7 +3,8 @@ from django.forms import (
     Form, Textarea, ModelForm, CharField, DateField, IntegerField, ModelChoiceField)
 from django.template import defaulttags
 
-from tournaments.models import Club, Player
+from tournaments.models import Club, Player, Season
+
 
 # class PlayerForm(Form):
 #     name = CharField(max_length=32)
@@ -51,3 +52,19 @@ class ClubForm(ModelForm):
     def clean(self):
         result = super().clean()
         return result
+
+class SeasonForm(ModelForm):
+    class Meta:
+            model = Season
+            fields = '__all__'
+
+    season_name = CharField(max_length=64)
+
+    def clean_season_name(self):
+            season_name = self.cleaned_data['season_name']
+            return season_name.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
+

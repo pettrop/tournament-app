@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h1>Seasons</h1>
+    <br/>
+    <ul>
+        {% for season in seasons %}
+            <li><a href="{% url 'season' season.id %}">{{ season.season_name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
