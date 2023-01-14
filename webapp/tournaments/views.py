@@ -8,8 +8,8 @@ from django.views import View
 
 from logging import getLogger, Logger
 
-from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm
-from tournaments.models import Club, Player, Season, League, Category
+from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm
+from tournaments.models import Club, Player, Season, League, Category, Discipline
 
 LOGGER = getLogger()
 
@@ -228,3 +228,47 @@ class CategoryDeleteView(DeleteView):
     template_name = 'tournaments/category_delete.html'
     model = Category
     success_url = reverse_lazy('categories')
+
+
+# Discipline / Disciplines asi neni spravne anglicky, ale potrebuji odlisit mnozne cislo
+
+def discipline(request, pk):
+    discipline = Discipline.objects.get(pk=pk)
+    context = {'discipline': discipline}
+    return render(request, template_name='tournaments/discipline.html', context=context)
+
+
+class DisciplinesView(ListView):
+    template_name = 'tournaments/disciplines.html'
+    model = Discipline
+
+
+class DisciplineCreateView(CreateView):
+    template_name = 'tournaments/discipline_form.html'
+    extra_context = {'title': 'Create new discipline'}
+    model = Discipline
+    form_class = DisciplineForm
+    success_url = reverse_lazy('disciplines')
+
+    def form_invalid(self, form):
+        Logger.warning('Invalid data provided')
+        return super().form_invalid(form)
+
+
+class DisciplineUpdateView(UpdateView):
+    template_name = 'tournaments/discipline_form.html'
+    extra_context = {'title': 'Update category {{ discipline.discipline_name}}'}
+    model = Discipline
+    form_class = DisciplineForm
+    success_url = reverse_lazy('disciplines')
+
+    def form_invalid(self, form):
+        LOGGER.warning('invalid data provided while updating')
+        return super().form_invalid(form)
+
+
+class DisciplineDeleteView(DeleteView):
+    template_name = 'tournaments/discipline_delete.html'
+    model = Discipline
+    success_url = reverse_lazy('disciplines')
+

@@ -67,4 +67,10 @@ urlpatterns = [
     path('category/update/<pk>', tournaments.views.CategoryUpdateView.as_view(), name='category_update'),
     path('category/delete/<pk>', tournaments.views.CategoryDeleteView.as_view(), name='category_delete'),
     path('categories/', tournaments.views.CategoriesView.as_view(), name='categories'),
+
+    path('discipline/detail/<pk>', tournaments.views.discipline, name='discipline'),
+    path('discipline/create', tournaments.views.DisciplineCreateView.as_view(), name='discipline_create'),
+    path('discipline/update/<pk>', tournaments.views.DisciplineUpdateView.as_view(), name='discipline_update'),
+    path('discipline/delete/<pk>', tournaments.views.DisciplineDeleteView.as_view(), name='discipline_delete'),
+    path('disciplines/', tournaments.views.DisciplinesView.as_view(), name='disciplines'),
 ]
