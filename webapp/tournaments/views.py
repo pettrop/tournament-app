@@ -36,8 +36,8 @@ class PlayersView(TemplateView):
 
 # Tady mam problem dostat tam context, nemuzu spravne zalozit hrace / zobrazit
 def player(request, pk):
-    player = Player.objects.all()
-    context = {}
+    player = Player.objects.get(pk=pk)
+    context = {'player': player}
     return render(request, template_name='tournaments/player.html', context=context)
 
 class PlayerCreateView(CreateView):
@@ -51,7 +51,7 @@ class PlayerCreateView(CreateView):
         return super().form_invalid(form)
 
 class PlayerUpdateView(UpdateView):
-    template_name = 'tournaments/playe_form.html'
+    template_name = 'tournaments/player_form.html'
     model = Player
     form_class = PlayerForm
     success_url = reverse_lazy('players')
@@ -68,28 +68,36 @@ class PlayerDeleteView(DeleteView):
 
 # odobny problem jako u Player
 def club(request, pk):
-    club = Club.objects.get(id=pk)
-    if request.method == "POST":
-        return redirect('club', pk)
-
-    return render(request, template_name='tournament/club.html', context=context)
-
-    clubs = club_set.all()
-
-    context = {'clubs': clubs}
-    return render(request, template_name='tournaments/club.html', context=context)
+        club = Club.objects.get(pk=pk)
+        context = {'club': club}
+        return render(request, template_name='tournaments/club.html', context=context)
 
 
 class ClubCreateView(CreateView):
-    template_name = 'tournament/club_form.html'
+    template_name = 'tournaments/club_form.html'
     extra_context = {'title' : 'Create new club'}
-    form_class = Club
+    model = Club
+    form_class = ClubForm
     success_url = reverse_lazy('clubs')
 
-    def form_valid(self, form):
-        result = super().form_valid(form)
-        return result
+    def form_invalid(self, form):
+        Logger.warning('Invalid data provided')
+        return super().form_invalid(form)
 
-class ClubsView(ListView):
-    template_name = 'tournaments/clubs.html'
+class ClubUpdateView(UpdateView):
+    template_name = 'tournaments/club_form.html'
     model = Club
+    form_class = ClubForm
+    success_url = reverse_lazy('clubs')
+
+    def form_invalid(self, form):
+        LOGGER.warning('invalid data provided while updating')
+        return super().form_invalid(form)
+class ClubDeleteView(DeleteView):
+    template_name = 'tournaments/club_delete.html'
+    model = Club
+    success_url = reverse_lazy('clubs')
+
+class ClubsView(TemplateView):
+    template_name = 'tournaments/clubs.html'
+    extra_context = {'clubs': Club.objects.all()}

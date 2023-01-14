@@ -7,21 +7,21 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Club(Model):
-    club_name: CharField = models.CharField(max_length=64)
-    # created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    club_name = models.CharField(max_length=64)
+    # # created = models.DateTimeField(auto_now_add=True)
+    # updated = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.club_name
-    class Meta:
-        ordering = ['club_name']
+    # class Meta:
+    #     ordering = ['club_name']
 
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
-    year_of_birth = models.IntegerField()
-    # year_of_birth = models.PositiveSmallIntegerField()
+    # year_of_birth = models.IntegerField()
+    year_of_birth = models.PositiveSmallIntegerField()
     license_validity = models.DateField()
-    club = models.ForeignKey(Club, on_delete=models.DO_NOTHING)
+    club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return '{} {} ({})'.format(self.lastname, self.name, self.year_of_birth)

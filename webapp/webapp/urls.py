@@ -42,7 +42,10 @@ urlpatterns = [
 
 
     path('club/create', tournaments.views.ClubCreateView.as_view(), name='club_create'),
+    path('club/update/<pk>', tournaments.views.ClubUpdateView.as_view(), name='club_update'),
+    path('club/delete/<pk>', tournaments.views.ClubDeleteView.as_view(), name='club_delete'),
     path('club/detail/<pk>', tournaments.views.club, name='club'),
+    path('clubs/', tournaments.views.ClubsView.as_view(), name='clubs'),
 
     path('player/detail/<pk>', tournaments.views.player, name='player'),
     path('player/create', tournaments.views.PlayerCreateView.as_view(), name='player_create'),

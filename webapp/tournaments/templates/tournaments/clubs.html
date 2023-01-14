@@ -1,13 +1,11 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 
 {% block content %}
-
-    <h1>Clubs</h1>
+<h1>Clubs</h1>
     <br/>
-    <div>
-      {% for club in clubs %}
-      vypis klubu
-      {% endfor%}
-    </div>
-
+    <ul>
+        {% for club in clubs %}
+            <li><a href="{% url 'club' club.id %}">{{ club.club_name }} </a></li>
+        {% endfor %}
+    </ul>
 {% endblock %}

@@ -42,7 +42,12 @@ class ClubForm(ModelForm):
         model = Club
         fields = '__all__'
 
-    def clean_name(self):
-        club_name = self.clean_name()
+    club_name = CharField(max_length=64)
+
+    def clean_club_name(self):
+        club_name = self.cleaned_data['club_name']
         return club_name.capitalize()
 
+    def clean(self):
+        result = super().clean()
+        return result
