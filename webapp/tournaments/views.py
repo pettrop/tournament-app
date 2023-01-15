@@ -14,6 +14,14 @@ from tournaments.models import Club, Player, Season, League, Category, Disciplin
 LOGGER = getLogger()
 
 # Create your views here.
+
+# class ExtraContext(object):
+#     extra_context = {}
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(ExtraContext, self).get_context_data(**kwargs)
+#         context.update(self.extra_context)
+#         return context
 def main_view(request):
     return HttpResponse('Tournament APP!')
 
@@ -44,7 +52,7 @@ def player(request, pk):
 
 class PlayerCreateView(CreateView):
     template_name = 'tournaments/player_form.html'
-    # extra_context = {'title':'Create new player'}
+    extra_context = {'title':'Vytvoř hráče'}
     form_class = PlayerForm
     success_url = reverse_lazy('players')
 
@@ -55,6 +63,7 @@ class PlayerCreateView(CreateView):
 
 class PlayerUpdateView(UpdateView):
     template_name = 'tournaments/player_form.html'
+    extra_context = {'title': 'Uprav hráče'}
     model = Player
     form_class = PlayerForm
     success_url = reverse_lazy('players')
@@ -79,7 +88,7 @@ def club(request, pk):
 
 class ClubCreateView(CreateView):
     template_name = 'tournaments/club_form.html'
-    extra_context = {'title' : 'Create new club'}
+    extra_context = {'title' : 'Vytvoř nový klub'}
     model = Club
     form_class = ClubForm
     success_url = reverse_lazy('clubs')
@@ -90,6 +99,7 @@ class ClubCreateView(CreateView):
 
 class ClubUpdateView(UpdateView):
     template_name = 'tournaments/club_form.html'
+    extra_context = {'title': 'Uprav klub'}
     model = Club
     form_class = ClubForm
     success_url = reverse_lazy('clubs')
@@ -119,7 +129,7 @@ class SeasonsView(ListView):
 
 class SeasonCreateView(CreateView):
     template_name = 'tournaments/season_form.html'
-    extra_context = {'title': 'Create new season'}
+    extra_context = {'title': 'Vytvoř sezonu'}
     model = Season
     form_class = SeasonForm
     success_url = reverse_lazy('seasons')
@@ -130,7 +140,7 @@ class SeasonCreateView(CreateView):
 
 class SeasonUpdateView(UpdateView):
     template_name = 'tournaments/season_form.html'
-    extra_context = {'title': 'Update season'}
+    extra_context = {'title': 'Uprav sezonu'}
     model = Season
     form_class = SeasonForm
     success_url = reverse_lazy('seasons')
@@ -160,7 +170,7 @@ class LeaguesView(ListView):
 
 class LeagueCreateView(CreateView):
     template_name = 'tournaments/league_form.html'
-    extra_context = {'title': 'Create new league'}
+    extra_context = {'title': 'Vytvoř novou ligu'}
     model = League
     form_class = LeagueForm
     success_url = reverse_lazy('leagues')
@@ -172,7 +182,7 @@ class LeagueCreateView(CreateView):
 
 class LeagueUpdateView(UpdateView):
     template_name = 'tournaments/league_form.html'
-    extra_context = {'title': 'Update league {{ league.league_name}}'}
+    extra_context = {'title': 'Uprav ligu'}
     model = League
     form_class = LeagueForm
     success_url = reverse_lazy('leagues')
@@ -202,7 +212,7 @@ class CategoriesView(ListView):
 
 class CategoryCreateView(CreateView):
     template_name = 'tournaments/category_form.html'
-    extra_context = {'title': 'Create new category'}
+    extra_context = {'title': 'Vytvoř novou kategorii'}
     model = Category
     form_class = CategoryForm
     success_url = reverse_lazy('categories')
@@ -214,7 +224,7 @@ class CategoryCreateView(CreateView):
 
 class CategoryUpdateView(UpdateView):
     template_name = 'tournaments/category_form.html'
-    extra_context = {'title': 'Update category {{ category.category_name}}'}
+    extra_context = {'title': 'Uprav kategorii'}
     model = Category
     form_class = CategoryForm
     success_url = reverse_lazy('categories')
@@ -245,7 +255,7 @@ class DisciplinesView(ListView):
 
 class DisciplineCreateView(CreateView):
     template_name = 'tournaments/discipline_form.html'
-    extra_context = {'title': 'Create new discipline'}
+    extra_context = {'title': 'Vytvoř novou disciplínu'}
     model = Discipline
     form_class = DisciplineForm
     success_url = reverse_lazy('disciplines')
@@ -257,7 +267,7 @@ class DisciplineCreateView(CreateView):
 
 class DisciplineUpdateView(UpdateView):
     template_name = 'tournaments/discipline_form.html'
-    extra_context = {'title': 'Update category {{ discipline.discipline_name}}'}
+    extra_context = {'title': 'Uprav disciplínu'}
     model = Discipline
     form_class = DisciplineForm
     success_url = reverse_lazy('disciplines')

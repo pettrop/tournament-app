@@ -4,7 +4,7 @@
     <form method="post">
         {% csrf_token %}
         <p>
-          Are you sure you want to delete player "{{ object.lastname}}" from database?
+          Are you sure you want to delete player "{{ object.name}} {{ object.lastname}}" from database?
         </p>
         <button type="submit">YES</button>
         <a href="{% url 'players' %}">Cancel</a>
