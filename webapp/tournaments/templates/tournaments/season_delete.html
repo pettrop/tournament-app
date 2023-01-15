@@ -4,7 +4,7 @@
     <form method="post">
         {% csrf_token %}
         <p>
-          Are you sure you want to delete season "{{ object.season_name}}" from database?
+          Jste si jistí, že chcete vymazat sezonu "{{ object.season_name}}" z databaze?
         </p>
         <button type="submit">YES</button>
         <a href="{% url 'seasons' %}">Cancel</a>
