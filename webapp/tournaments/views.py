@@ -47,7 +47,7 @@ class PlayerCreateView(CreateView):
     success_url = reverse_lazy('players')
 
     def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
+        LOGGER.warning('Invalid data provided')
         return super().form_invalid(form)
 
 class PlayerUpdateView(UpdateView):

@@ -44,16 +44,114 @@ body {
         border-bottom: 5px solid lighten($secondary-color, 10%);
     }
     .page-tables {
-        width: 80%;
-        padding: em(40);
-        text-align: center;
-        margin: 0 auto;
+        width: 95%;
+        min-height: 30vh;
+        padding: em(30);
+        margin-left: em(20);
+        
+        p.succes-notice {
+            font-weight: bold;
+            color: $primary-color;
+            width: 60%;
+            margin: 0 auto;
+            font-size: em(26);
+            text-align: center;
+            border: 2px solid $secondary-color;
+            padding: em(10) em(30);
+            background-color: lighten($fourth-color, 5%);
+            border-radius: em(5);
+            box-shadow: em(2) em(2) em(4) $secondary-color;
+        }
+
+        .list {
+            width: 90%;
+            margin: 0 auto;
+            .list-item {
+                border: 2px solid $secondary-color;
+                margin-bottom: em(3);
+                box-shadow: em(1) em(1) $secondary-color;
+                border-radius: em(3);
+                position: relative;
+                transition: all .5s;
+                &:hover {
+                    transform: translate(2%, 0);
+                    padding: em(5);
+                    margin-top: em(5);
+                    margin-bottom: em(5);
+                    background-color: $fourth-color;
+                    border-color: darken($fourth-color, 20%);
+                    box-shadow: em(2) em(2) em(1) $secondary-color;
+                    & a {
+                        color: $primary-color;
+                    }
+                }
+
+                a {
+                    text-decoration: none;
+                    color: $secondary-color;
+                    font-weight: bold;
+                    display: block;
+                    padding: em(10);
+                }
+            }
+        }
+
+        //STYLES FOR DJANGO FORMS!
         & > * {
             table {
-                margin: 0 auto;
+                text-align: left;
+                label {
+                    margin-right: em(10);
+                    font: {
+                        weight: bold;
+                    }
+                }
+                input, select {
+                    border: 2px solid $fourth-color;
+                    border-radius: em(5);
+                    padding: em(10);
+                    margin: em(10) 0;
+                    box-shadow: em(2) em(2) em(1) #333;
+                    transition: all 0.3s;
+                }
+
+                input:active, select:active {
+                    background-color: $fourth-color;
+                }
+
+                input:focus, select:focus {
+                    background-color: #ededed;
+                    transform: scale(1.03);
+                    border-width: 3px;
+                }
+
+            }
+            input.btn, button.btn {
+                border: 2px solid darken($fourth-color, 20%);
+                border-radius: em(5);
+                padding: em(10) em(20);
+                margin-top: em(10);
+                background-color: $fourth-color;
+                color: $primary-color;
+                font-weight: bold;
+                box-shadow: em(2) em(2) em(1) #333;
+                transition: all 0.3s;
+                &:hover {
+                    border-color: $fourth-color;
+                    color: $fourth-color;
+                    background-color: $primary-color;
+                    transform: scale(1.05)
+                }
             }
         }
     }
+
+    .notice-tbl {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
 }
 
 
@@ -96,22 +194,22 @@ nav {
 
     .menu {
         width: 66%;
-        ul {
+        .main-menu {
             display: flex;
             justify-content: center;
             gap: 0.5%;
-            li {
+            .menu-item {
                 width: 15%;
                 background-color: $fourth-color;
                 border: 2px solid $primary-color;
                 text-align: center;
                 text-transform: uppercase;
                 transition-duration: 0.3s;
-                overflow: hidden;
                 position: relative;
                 font: {
-                    size: em(20);
+                    size: em(16);
                 }
+
                 a {
                     display: inline-block;
                     text-decoration: none;
@@ -129,9 +227,42 @@ nav {
                 &:hover {
                     background-color: $primary-color;
                     border: 2px solid $fourth-color;
-                    top: 5px;
                     a {
                         color: $fourth-color;
+                    }
+                }
+
+                .dropdown {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .menu .main-menu li:hover .dropdown {
+        position: absolute;
+        display: block;
+        color: $fourth-color;
+        background-color: $primary-color;
+        border: 2px solid darken($fourth-color, 10%);
+        left: 0;
+        top: 100%;
+        width: 100%;
+        ul {
+            display: block;
+            width: 100%;
+            li {
+                width: 100%;
+                padding: em(10px);
+                &:hover {
+                    background-color: darken($fourth-color, 5%);
+                }
+                a {
+                    color: $fourth-color;
+                    padding: em(10);
+                    font-size: em(14);
+                    &:hover {
+                        color: $primary-color;
                     }
                 }
             }
