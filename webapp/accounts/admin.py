@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import User
+from .models import User, Profile
 from django.contrib.admin import ModelAdmin
 
 
 class UserAdmin(ModelAdmin):
     ordering = ['-last_name']
-    list_display = ['last_name', 'first_name', 'email']
+    list_display = ['last_name', 'first_name', 'email', 'pk']
     list_display_links = ['last_name', 'first_name', 'email']
     list_per_page = 20
     search_fields = ['last_name', 'first_name', 'email']
@@ -17,3 +17,4 @@ class UserAdmin(ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Profile)

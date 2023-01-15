@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<p>Profile page for {{ user.first_name }} {{ user.last_name }}</p>
+<div>
+    <p>
+                        <label>First name:</label>
+                            {{ user.first_name }}
+    </p>
+    <p>
+                        <label>Last name:</label>
+                            {{ user.last_name }}
+    </p>
+    <p>
+                        <label>Email:</label>
+                            {{ user.email }}
+    </p>
+    <p>
+                        <label>Phone:</label>
+                            {{ profile.phone }}
+    </p>
+    <p>
+                        <a href="{% url 'profile_update' %}"> <button type="button">Profile info change</button> </a>
+    </p>
+    <p>
+                        <a href="{% url 'password_change' %}"> <button type="button">Password change</button> </a>
+
+    </p>
+    Doplnit: <br>
+    - odkaz na žádost o práva
+    - vypsání skupin/práv
+</div>
+{% endblock %}

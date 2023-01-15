@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<p>Profile edit page for {{ user.first_name }} {{ user.last_name }}</p>
+<form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+    <p>
+                        <label>First name:</label>
+                            {{ user_form.first_name }}
+    </p>
+    <p>
+                        <label>Last name:</label>
+                            {{ user_form.last_name }}
+    </p>
+    <p>
+                        <label>Email:</label>
+                            {{ user_form.email }}
+    </p>
+    <p>
+                        <label>Phone:</label>
+                            {{ profile_form.phone }}
+    </p>
+            <br><br>
+            <button type="submit" >Save Changes</button>
+            <button type="reset" >Reset</button>
+        </form>
+{% endblock %}
