@@ -73,4 +73,11 @@ urlpatterns = [
     path('discipline/update/<pk>', tournaments.views.DisciplineUpdateView.as_view(), name='discipline_update'),
     path('discipline/delete/<pk>', tournaments.views.DisciplineDeleteView.as_view(), name='discipline_delete'),
     path('disciplines/', tournaments.views.DisciplinesView.as_view(), name='disciplines'),
+
+    path('organizer/detail/<pk>', tournaments.views.organizer, name='organizer'),
+    path('organizer/create', tournaments.views.OrganizerCreateView.as_view(), name='organizer_create'),
+    path('organizer/update/<pk>', tournaments.views.OrganizerUpdateView.as_view(), name='organizer_update'),
+    path('organizer/delete/<pk>', tournaments.views.OrganizerDeleteView.as_view(), name='organizer_delete'),
+    path('organizers/', tournaments.views.OrganizersView.as_view(), name='organizers'),
+
 ]

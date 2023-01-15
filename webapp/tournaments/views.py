@@ -8,8 +8,8 @@ from django.views import View
 
 from logging import getLogger, Logger
 
-from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm
-from tournaments.models import Club, Player, Season, League, Category, Discipline
+from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm
+from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer
 
 LOGGER = getLogger()
 
@@ -282,3 +282,43 @@ class DisciplineDeleteView(DeleteView):
     model = Discipline
     success_url = reverse_lazy('disciplines')
 
+# Organizer / Organizers
+
+def organizer(request, pk):
+    organizer = Organizer.objects.get(pk=pk)
+    context = {'organizer': organizer}
+    return render(request, template_name='tournaments/organizer.html', context=context)
+
+
+class OrganizersView(ListView):
+    template_name = 'tournaments/organizers.html'
+    model = Organizer
+
+
+class OrganizerCreateView(CreateView):
+    template_name = 'tournaments/organizer_form.html'
+    extra_context = {'title': 'Vytvoř organizátora'}
+    model = Organizer
+    form_class = OrganizerForm
+    success_url = reverse_lazy('organizers')
+
+    def form_invalid(self, form):
+        Logger.warning('Invalid data provided')
+        return super().form_invalid(form)
+
+
+class OrganizerUpdateView(UpdateView):
+    template_name = 'tournaments/organizer_form.html'
+    extra_context = {'title': 'Uprav organizátora'}
+    model = Organizer
+    form_class = OrganizerForm
+    success_url = reverse_lazy('organizers')
+
+    def form_invalid(self, form):
+        LOGGER.warning('invalid data provided while updating')
+        return super().form_invalid(form)
+
+class OrganizerDeleteView(DeleteView):
+    template_name = 'tournaments/organizer_delete.html'
+    model = Organizer
+    success_url = reverse_lazy('organizers')

@@ -1,9 +1,10 @@
+import required as required
 from django.core.exceptions import ValidationError
 from django.forms import (
-    Form, Textarea, ModelForm, CharField, DateField, IntegerField, ModelChoiceField)
+    Form, Textarea, ModelForm, CharField, DateField, IntegerField, ModelChoiceField, EmailField)
 from django.template import defaulttags
-
-from tournaments.models import Club, Player, Season, League, Category, Discipline
+from django.db import models
+from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer
 
 
 # class PlayerForm(Form):
@@ -108,6 +109,29 @@ class DisciplineForm(ModelForm):
     def clean_discipline_name(self):
             discipline_name = self.cleaned_data['discipline_name']
             return discipline_name.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
+
+
+class OrganizerForm(ModelForm):
+    class Meta:
+            model = Organizer
+            fields = '__all__'
+
+    organizer_name = CharField(max_length=32)
+    organizer_lastname = CharField(max_length=32)
+    organizer_mail = EmailField() # null=True
+    organizer_phone = CharField(max_length=14) # null=True
+
+    def clean_organizer_name(self):
+            organizer_name = self.cleaned_data['organizer_name']
+            return organizer_name.capitalize()
+
+    def clean_organizer_lastname(self):
+            organizer_lastname = self.cleaned_data['organizer_lastname']
+            return organizer_lastname.capitalize()
 
     def clean(self):
             result = super().clean()

@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <p>
+          Jste si jistí, že chcete vymazat organizatora "{{ object.organizer_name}} {{ object.organizer_lastname}}" z databaze?
+        </p>
+        <button type="submit">YES</button>
+        <a href="{% url 'organizers' %}">Cancel</a>
+    </form>
+{% endblock %}
