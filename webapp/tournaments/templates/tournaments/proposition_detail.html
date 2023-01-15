@@ -10,13 +10,11 @@
 <p>Usporiadateľ: {{ proposition.organizer_club }}</p>
 <p>Dátum usporiadania: {{ proposition.event_date }}</p>
 <p>Miesto: {{ proposition.event_location }}</p>
-<p>Vedenie turnaja: {% for organizer in organizers %}
-{{ organizer.organizer_name }} {{ organizer.organizer_lastname }} - {{ organizer.function }}{% if not forloop.last %}, <br>{% endif %}
-{% endfor %}</p>
-Prihlášky: {% for organizer in organizers %}
-{{ organizer.organizer_name }} {{ organizer.organizer_lastname }} - email: {{ organizer.organizer_mail }}, tel: {{ organizer.organizer_phone }}{% if not forloop.last %}, <br>{% endif %}
-{% endfor %}</p>
-<p>Štartovné: {{ proposition.start_fee }}€</p>
+<p>Vedenie turnaja: {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }} - riaditeľ <br>
+    {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }} - hlavný rozhodca
+</p>
+Prihlášky: {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }}, email: {{ proposition.registration.organizer_mail}}, tel.: {{ proposition.registration.organizer_phone }}</p>
+<p>Štartovné: štartovné je {{ proposition.start_fee }},-€ za hráča/hráčku</p>
 <h3>TECHNICKÉ USTANOVENIA:</h3>
 <p>Predpis: {{ proposition.prescription }}</p>
 <p>Súťažné disciplíny:

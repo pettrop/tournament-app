@@ -54,7 +54,7 @@ class PropositionForm(ModelForm):
     class Meta:
         model = Propositions
         fields = ['prescription', 'tournament_system', 'notes', 'category', 'league', 'discipline', 'event_location',
-                  'event_date', 'schedule', 'season', 'organizer', 'tournament_order', 'organizer_club']
+                  'event_date', 'schedule', 'season', 'tournament_order', 'organizer_club', 'director', 'judge', 'registration']
         widgets = {
             'event_date': SelectDateWidget()
         }
@@ -64,4 +64,3 @@ class PropositionForm(ModelForm):
     discipline = ModelMultipleChoiceField(queryset=Discipline.objects.all())
     schedule = ModelMultipleChoiceField(queryset=Schedule.objects.all())
     season = ModelChoiceField(queryset=Season.objects.all())
-    organizer = ModelMultipleChoiceField(queryset=Organizer.objects.all())

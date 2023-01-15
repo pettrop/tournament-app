@@ -137,6 +137,7 @@ class PropositionCreateView(CreateView):
     form_class = PropositionForm
     template_name = 'tournaments/proposition_create.html'
     success_url = reverse_lazy('propositions')
+    extra_context = {'title': 'Create proposition'}
 
     def form_valid(self, form):
         form.save()
@@ -149,14 +150,14 @@ def proposition_detail(request, pk):
     disciplines = proposition.discipline.all()
     categories = proposition.category.all()
     schedules = proposition.schedule.all()
-    organizers = proposition.organizer.all()
+
     context = {
         'proposition': proposition,
         'leagues': league_prop,
         'disciplines': disciplines,
         'categories': categories,
         'schedules': schedules,
-        'organizers': organizers,
+
                }
 
     return render(request, template_name='tournaments/proposition_detail.html', context=context)

@@ -61,32 +61,23 @@ class Discipline(Model):
         return self.discipline_name
 
 
-class Function(Model):
-    function_name = models.CharField(max_length=32, unique=True)
-
-    def __str__(self):
-        return self.function_name
-
-
 class Organizer(Model):
     organizer_name = models.CharField(max_length=32)
     organizer_lastname = models.CharField(max_length=32)
     organizer_mail = models.EmailField(null=True)
     organizer_phone = models.CharField(max_length=14, null=True)
-    function = models.ForeignKey(Function, on_delete=models.PROTECT)
 
     def __str__(self):
-        return '{} {} - {} ({})'.format(self.organizer_lastname, self.organizer_name, self.function,
-                                        self.organizer_mail)
+        return '{} {} ({})'.format(self.organizer_lastname, self.organizer_name, self.organizer_mail)
 
 
 class Schedule(Model):
     start_time = models.TimeField()
-    end_time = models.TimeField(null=True)
+    end_time = models.TimeField(blank=True, null=True)
     task = models.TextField()
 
     def __str__(self):
-        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'),
+        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M')if self.end_time else '',
                                     self.task[:30] + "..." if len(self.task) > 30 else self.task)
 
 
@@ -101,10 +92,12 @@ class Propositions(Model):
     event_date = models.DateField(null=True)
     schedule = models.ManyToManyField(Schedule, blank=True)
     season = models.ForeignKey(Season, null=True, on_delete=models.PROTECT)
-    organizer = models.ManyToManyField(Organizer, blank=True)
     tournament_order = models.PositiveSmallIntegerField(null=True, blank=True)
     organizer_club = models.ForeignKey(Club, null=True, on_delete=models.PROTECT)
     start_fee = models.PositiveSmallIntegerField(null=True, blank=True)
+    director = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='director')
+    judge = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='judge')
+    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='registration')
 
     def __str__(self):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
@@ -113,7 +106,6 @@ class Propositions(Model):
 class Tournament(Model):
     name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
-    season = models.ForeignKey(Season, null=True, on_delete=models.PROTECT)
     propositions = models.ForeignKey(Propositions, on_delete=models.PROTECT, blank=True, null=True)
     players = models.ManyToManyField(Player)
 
