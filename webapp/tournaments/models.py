@@ -103,6 +103,14 @@ class Propositions(Model):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
 
 
+class Scoreboard(Model):
+    ranking = models.PositiveSmallIntegerField(unique=True)
+    points = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return '{}.miest - {}bodov'.format(self.ranking, self.points)
+
+
 class Tournament(Model):
     name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
@@ -114,10 +122,9 @@ class Tournament(Model):
 
 
 class Result(Model):
-    tournament = models.ForeignKey(Tournament, on_delete=models.PROTECT)
     player = models.ForeignKey(Player, on_delete=models.PROTECT)
-    score = models.PositiveSmallIntegerField()
-    ranking = models.PositiveSmallIntegerField()
-
+    #score = models.PositiveSmallIntegerField()
+    ranking = models.ForeignKey(Scoreboard, on_delete=models.PROTECT)
+    tournament = models.ForeignKey(Tournament, on_delete=models.PROTECT)
     def __str__(self):
-        return '{} - {} ({}b)'.format(self.player, self.tournament, self.score)
+        return '{} ({}b)'.format(self.player, self.score)

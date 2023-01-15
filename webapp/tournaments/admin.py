@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Tournament, Propositions, Schedule, Organizer, Discipline, Category, League, Season, \
-    Player, Club, Result
+    Player, Club, Result, Scoreboard
 
 # Register your models here.
 admin.site.register(Tournament)
@@ -14,3 +14,4 @@ admin.site.register(Season)
 admin.site.register(Player)
 admin.site.register(Club)
 admin.site.register(Result)
+admin.site.register(Scoreboard)

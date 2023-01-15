@@ -1,16 +1,13 @@
-from django.core.checks import messages
-from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, request
+from django.shortcuts import render
+from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
-from django.template import defaulttags
-from django.views import View
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+
 
 from logging import getLogger, Logger
 
 from tournaments.forms import ClubForm, PlayerForm, PropositionForm
-from tournaments.models import Club, Player, Propositions, Tournament
+from tournaments.models import Club, Player, Propositions
 
 LOGGER = getLogger()
 
@@ -38,7 +35,6 @@ class PlayersView(TemplateView):
     extra_context = {'players': Player.objects.all()}
 
 
-# Tady mam problem dostat tam context, nemuzu spravne zalozit hrace / zobrazit
 def player(request, pk):
     player = Player.objects.get(pk=pk)
     context = {'player': player}
@@ -116,14 +112,6 @@ class ClubsView(ListView):
     #ordering = ['-name']
 
 
-# def proposition_create(request):
-#     form = PropositionForm(request.POST or None)
-#     context = {'form': form}
-#     if form.is_valid():
-#         form.save()
-#         form.save_m2m()
-#     return render(request, "tournaments/proposition_create.html", context=context)
-
 class PropositionsView(ListView):
     model = Propositions
     template_name = 'tournaments/propositions.html'
@@ -157,7 +145,5 @@ def proposition_detail(request, pk):
         'disciplines': disciplines,
         'categories': categories,
         'schedules': schedules,
-
                }
-
     return render(request, template_name='tournaments/proposition_detail.html', context=context)
