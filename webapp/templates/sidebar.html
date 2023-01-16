@@ -1,0 +1,63 @@
+{% load static %}
+<nav role="navigation" class="side-bar">
+    <i class="fa-solid fa-xmark side-bar-cancel"></i>
+    <div class="logo">
+        <p>Stolný tenis</p>
+        <img src="{% static 'images/slovakia.png' %}" alt="slovakia erb">
+    </div>
+    <div class="side-user-avatar">
+        {% if request.user.is_authenticated  %}
+        <div class="img-wrapper avatar-in">
+            <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
+        </div>
+        <p class="user-name">{{ request.user }}</p>
+        {% else %}
+        <div class="img-wrapper avatar-out">
+            <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
+        </div>
+        <p class="user-name">offline@</p>
+        {% endif %}      
+    </div>
+    <div class="side-menu">
+    <ul>
+        <li><a href="{% url 'home' %}">Domov</a></li>
+        <li><a href="{% url 'results' %}">Výsledky</a></li>
+        <li><a href="#" onclick="dropdownToggle('.tournaments-dropdown')">Turnaje <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown hidden tournaments-dropdown">
+                <ul class="drop-list">
+                    <li class="drop-item"><a href="#">Vytvor propozície</a></li>
+                    <li class="drop-item"><a href="#">Zadaj výsledky</a></li>
+                    <li class="drop-item"><a href="#">Export výsledkov</a></li>
+                </ul>
+            </div>
+        </li>
+        {% if request.user.is_authenticated  %}
+        <li><a href="#" onclick="dropdownToggle('.players-dropdown')">Hráči <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown hidden players-dropdown">
+                <ul class="drop-list">
+                    <li class="drop-item"><a href="{% url 'player_create' %}">Vytvor hráča</a></li>
+                    <li class="drop-item"><a href="#">Uprav hráča</a></li>
+                    <li class="drop-item"><a href="{% url 'players' %}">Zoznam hráčov</a></li>
+                </ul>
+            </div>
+        </li>
+        <li><a href="#" onclick="dropdownToggle('.clubs-dropdown')">Kluby <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown hidden clubs-dropdown">
+                <ul class="drop-list">
+                    <li class="drop-item"><a href="{% url 'club_create' %}">Vytvor klub</a></li>
+                    <li class="drop-item"><a href="#">Uprav klub</a></li>
+                    <li class="drop-item"><a href="{% url 'clubs' %}">Zoznam klubov</a></li>
+                </ul>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+    </div>
+    <div class="side-logout">
+        {% if request.user.is_authenticated  %}
+        <a href="{% url 'logout' %}" class="btn-log log-out"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn-log log-in">Prihlásiť sa</i></i></a>
+        {% endif %}
+    </div>
+</nav>

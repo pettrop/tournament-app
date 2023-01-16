@@ -86,7 +86,7 @@
 // ANIMATIONS
 @mixin anim-show {
     animation-name: show;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: both;
 }
