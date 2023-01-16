@@ -1,7 +1,7 @@
 {% load static %}
 <nav role="navigation">
     <div class="logo-part">
-        <p>Stolný Tenis Slovensko</p>
+        <p>Stolný Tenis</p>
         <div class="img-wrapper">
             <img src="{% static 'images/slovakia.png' %}" alt="slovakia erb">
         </div>
@@ -44,19 +44,20 @@
     <div class="user">
         <ul>
             {% if request.user.is_authenticated  %}
-            <li class="user">
+            <li class="user-item">
                 <div class="user-avatar">
                     <div class="img-wrapper avatar-in">
                         <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
                     </div>
-                    <p>{{ request.user }}</p>
+                    <p class="user-name">{{ request.user }}</p>
                 </div>
             </li>
             <li class="button">
-                <a href="{% url 'logout' %}" class="btn-log log-out">Odhlásiť sa</a>
+                <a href="{% url 'logout' %}" class="btn-log log-out text">Odhlásiť&nbsp;sa</a>
+                <a href="{% url 'logout' %}" class="btn-log log-out logo"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             </li>
             {% else %}
-            <li class="user">
+            <li class="user-item">
                 <div class="user-avatar">
                     <div class="img-wrapper avatar-out">
                         <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
@@ -64,7 +65,7 @@
                 </div>
             </li>
             <li class="button">
-                <a href="{% url 'login' %}" class="btn-log log-in">Prihlásiť sa</a>
+                <a href="{% url 'login' %}" class="btn-log log-in">Prihlásiť&nbsp;sa</a>
             </li>
             {% endif %}
         </ul>
