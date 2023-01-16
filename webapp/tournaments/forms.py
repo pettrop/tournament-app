@@ -1,17 +1,17 @@
+import required as required
 from django.core.exceptions import ValidationError
 from django.forms import (
-    Form, Textarea, ModelForm, CharField, DateField, IntegerField, ModelChoiceField)
+    Form, Textarea, ModelForm, CharField, DateField, IntegerField, ModelChoiceField, EmailField)
 from django.template import defaulttags
+from django.db import models
+from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer
 
-from tournaments.models import Club, Player
 
 # class PlayerForm(Form):
 #     name = CharField(max_length=32)
 #     lastname = CharField(max_length=32)
 #     year_of_birth = IntegerField()
 #     license_validity = DateField()
-
-
 
 class PlayerForm(ModelForm):
 
@@ -51,3 +51,88 @@ class ClubForm(ModelForm):
     def clean(self):
         result = super().clean()
         return result
+
+class SeasonForm(ModelForm):
+    class Meta:
+            model = Season
+            fields = '__all__'
+
+    season_name = CharField(max_length=64)
+
+    def clean_season_name(self):
+            season_name = self.cleaned_data['season_name']
+            return season_name.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
+
+class LeagueForm(ModelForm):
+    class Meta:
+            model = League
+            fields = '__all__'
+
+    league_name = CharField(max_length=32) # odstranila jsem unique=True / TypeError: __init__() got an unexpected keyword argument 'unique'
+
+    def clean_league_name(self):
+            league_name = self.cleaned_data['league_name']
+            return league_name.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
+
+
+class CategoryForm(ModelForm):
+    class Meta:
+            model = Category
+            fields = '__all__'
+
+    category_name = CharField(max_length=32) # odstranila jsem unique=True / TypeError: __init__() got an unexpected keyword argument 'unique'
+
+    def clean_category_name(self):
+            category_name = self.cleaned_data['category_name']
+            return category_name.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
+
+
+class DisciplineForm(ModelForm):
+    class Meta:
+            model = Discipline
+            fields = '__all__'
+
+    discipline_name = CharField(max_length=32) # odstranila jsem unique=True / TypeError: __init__() got an unexpected keyword argument 'unique'
+
+    def clean_discipline_name(self):
+            discipline_name = self.cleaned_data['discipline_name']
+            return discipline_name.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
+
+
+class OrganizerForm(ModelForm):
+    class Meta:
+            model = Organizer
+            fields = '__all__'
+
+    organizer_name = CharField(max_length=32)
+    organizer_lastname = CharField(max_length=32)
+    organizer_mail = EmailField() # null=True
+    organizer_phone = CharField(max_length=14) # null=True
+
+    def clean_organizer_name(self):
+            organizer_name = self.cleaned_data['organizer_name']
+            return organizer_name.capitalize()
+
+    def clean_organizer_lastname(self):
+            organizer_lastname = self.cleaned_data['organizer_lastname']
+            return organizer_lastname.capitalize()
+
+    def clean(self):
+            result = super().clean()
+            return result
