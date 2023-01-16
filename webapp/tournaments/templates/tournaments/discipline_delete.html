@@ -4,9 +4,9 @@
     <form method="post">
         {% csrf_token %}
         <p>
-          Jste si jistí, že chcete vymazat klub "{{ object.club_name}}" z databáze?
+          Jste si jistí, že chcete vymazat disciplínu "{{ object.discipline_name}}" z databáze?
         </p>
         <button type="submit">YES</button>
-        <a href="{% url 'clubs' %}">Cancel</a>
+        <a href="{% url 'disciplines' %}">Cancel</a>
     </form>
 {% endblock %}

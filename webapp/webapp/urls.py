@@ -50,4 +50,34 @@ urlpatterns = [
     path('player/delete/<pk>', tournaments.views.PlayerDeleteView.as_view(), name='player_delete'),
     path('players/', tournaments.views.PlayersView.as_view(), name='players'),
 
+    path('season/detail/<pk>', tournaments.views.season, name='season'),
+    path('season/create', tournaments.views.SeasonCreateView.as_view(), name='season_create'),
+    path('season/update/<pk>', tournaments.views.SeasonUpdateView.as_view(), name='season_update'),
+    path('season/delete/<pk>', tournaments.views.SeasonDeleteView.as_view(), name='season_delete'),
+    path('seasons/', tournaments.views.SeasonsView.as_view(), name='seasons'),
+
+    path('league/detail/<pk>', tournaments.views.league, name='league'),
+    path('league/create', tournaments.views.LeagueCreateView.as_view(), name='league_create'),
+    path('league/update/<pk>', tournaments.views.LeagueUpdateView.as_view(), name='league_update'),
+    path('league/delete/<pk>', tournaments.views.LeagueDeleteView.as_view(), name='league_delete'),
+    path('leagues/', tournaments.views.LeaguesView.as_view(), name='leagues'),
+
+    path('category/detail/<pk>', tournaments.views.category, name='category'),
+    path('category/create', tournaments.views.CategoryCreateView.as_view(), name='category_create'),
+    path('category/update/<pk>', tournaments.views.CategoryUpdateView.as_view(), name='category_update'),
+    path('category/delete/<pk>', tournaments.views.CategoryDeleteView.as_view(), name='category_delete'),
+    path('categories/', tournaments.views.CategoriesView.as_view(), name='categories'),
+
+    path('discipline/detail/<pk>', tournaments.views.discipline, name='discipline'),
+    path('discipline/create', tournaments.views.DisciplineCreateView.as_view(), name='discipline_create'),
+    path('discipline/update/<pk>', tournaments.views.DisciplineUpdateView.as_view(), name='discipline_update'),
+    path('discipline/delete/<pk>', tournaments.views.DisciplineDeleteView.as_view(), name='discipline_delete'),
+    path('disciplines/', tournaments.views.DisciplinesView.as_view(), name='disciplines'),
+
+    path('organizer/detail/<pk>', tournaments.views.organizer, name='organizer'),
+    path('organizer/create', tournaments.views.OrganizerCreateView.as_view(), name='organizer_create'),
+    path('organizer/update/<pk>', tournaments.views.OrganizerUpdateView.as_view(), name='organizer_update'),
+    path('organizer/delete/<pk>', tournaments.views.OrganizerDeleteView.as_view(), name='organizer_delete'),
+    path('organizers/', tournaments.views.OrganizersView.as_view(), name='organizers'),
+
 ]
