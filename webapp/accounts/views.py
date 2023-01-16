@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group
+from django.contrib import messages
 from django.http import HttpResponse
 from django.views.generic import DetailView
 
@@ -19,11 +20,12 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, f"Nový užívateľ úspešne vytvorený!")
             return redirect('home')
 
         else:
             for error in list(form.errors.values()):
-                print(request, error)
+                messages.error(request, error)
 
     else:
         form = UserRegistrationForm()
@@ -38,6 +40,7 @@ def signup(request):
 @login_required
 def custom_logout(request):
     logout(request)
+    messages.success(request, "Užívateľ úspešne odhlásený!")
     return redirect('login')
 
 
@@ -55,11 +58,12 @@ def custom_login(request):
 
             if user is not None:
                 login(request, user)
+                messages.success(request, f"Užívateľ {user.first_name} {user.last_name} prihlásený!")
                 return redirect('home')
 
         else:
             for error in list(form.errors.values()):
-                print(request, error)
+                messages.error(request, error)
 
     else:
         form = AuthenticationForm()
@@ -93,14 +97,15 @@ def profile_update(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.success(request, "Zmeny profilu uložené!")
             return redirect('profile')
 
         else:
             for error in list(user_form.errors.values()):
-                print(request, error)
+                messages.error(request, error)
 
             for error in list(profile_form.errors.values()):
-                print(request, error)
+                messages.error(request, error)
 
     else:
         user_form = UserUpdateForm(instance=request.user)

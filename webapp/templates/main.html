@@ -10,7 +10,13 @@
 </head>
 <body>
         {% include 'navbar.html' %}
+        <!--Messaging - to be modified by Kubo-->
+        <div style="position: relative; top: 105px; text-align: center;">
+            {% include 'messages.html' %}
+        </div>
+        <!--End of messaging-->
         <div class="page-container">
+
                 {% block content %}
                 {% endblock %}
         </div>    

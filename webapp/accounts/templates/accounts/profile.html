@@ -1,14 +1,14 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-<p>Profile page for {{ user.first_name }} {{ user.last_name }}</p>
+<p> Profil užívateľa {{ user.first_name }} {{ user.last_name }}</p>
 <div>
     <p>
-                        <label>First name:</label>
+                        <label>Meno:</label>
                             {{ user.first_name }}
     </p>
     <p>
-                        <label>Last name:</label>
+                        <label>Priezvisko:</label>
                             {{ user.last_name }}
     </p>
     <p>
@@ -16,20 +16,20 @@
                             {{ user.email }}
     </p>
     <p>
-                        <label>Phone:</label>
+                        <label>Telefón:</label>
                             {{ profile.phone }}
     </p>
     <p>
-                        <a href="{% url 'profile_update' %}"> <button type="button">Profile info change</button> </a>
+                        <a href="{% url 'profile_update' %}"> <button type="button">Zmena údajov profilu</button> </a>
     </p>
     <p>
-                        <a href="{% url 'password_change' %}"> <button type="button">Password change</button> </a>
+                        <a href="{% url 'password_change' %}"> <button type="button">Zmena hesla</button> </a>
     </p>
-    <p>Uživatelské skupiny:</p>
+    <p>Užívateľské skupiny:</p>
     {% for g in group %}
         <p>{{ g }}</p>
     {% endfor %}
-    Jste organizátor turnaje nebo zástupce klubu? Požádejte si o práva <a href="{% url 'permission_request' %}"> zde </a>!
+    Ste organizátor turnaja alebo zástupca klubu? Požiadajte si o práva <a href="{% url 'permission_request' %}">tu</a>!
 
 </div>
 {% endblock %}

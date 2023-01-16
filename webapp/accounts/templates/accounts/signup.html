@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'main.html' %}
+{% block content %}
 <form method="post">
-            {% csrf_token %}
+    {% csrf_token %}
             <table> {{ form.as_table }} </table>
-            <button type="submit">Signup</button>
+            <button type="submit">Sign up</button>
 
-        </form>
-</body>
-</html>
+</form>
+{% endblock %}
