@@ -6,8 +6,10 @@ from django.views.generic import TemplateView, ListView, CreateView, UpdateView,
 
 from logging import getLogger, Logger
 
-from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm
-from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer
+from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm, \
+    PropositionForm
+from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer, Propositions, Tournament, \
+    Result
 
 LOGGER = getLogger()
 
@@ -403,6 +405,7 @@ def tournament_results(request, tournament_id):
         #'clubs_points': top_three_clubs
     }
     return render(request, 'tournaments/tournament_results.html', context=context)
+
 
 class TournamentsViews(ListView):
     model = Tournament

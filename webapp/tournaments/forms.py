@@ -1,9 +1,9 @@
-from django.core.exceptions import ValidationError
-from django.forms import (
-    ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField, SelectDateWidget)
+from django.forms import (ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField,
+                          SelectDateWidget, EmailField)
 
 from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer
-    ModelForm, CharField, DateField, IntegerField, EmailField)
+
+
 
 
 class PlayerForm(ModelForm):
@@ -132,7 +132,6 @@ class OrganizerForm(ModelForm):
         return result
 
 
-
 class PropositionForm(ModelForm):
     class Meta:
         model = Propositions
@@ -141,7 +140,6 @@ class PropositionForm(ModelForm):
         widgets = {
             'event_date': SelectDateWidget()
         }
-
     category = ModelMultipleChoiceField(queryset=Category.objects.all())
     league = ModelMultipleChoiceField(queryset=League.objects.all())
     discipline = ModelMultipleChoiceField(queryset=Discipline.objects.all())
