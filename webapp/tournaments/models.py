@@ -1,15 +1,12 @@
 from django.db import models
-from django.db.models import (
-    CharField, DateTimeField, ForeignKey, IntegerField, TextField, DO_NOTHING, Model)
-from django.template.defaultfilters import truncatechars
-from django.template import defaulttags
-from django.contrib.auth.models import User
+from django.db.models import Model
 
 
 # Create your models here.
 class Club(Model):
     club_name = models.CharField(max_length=64)
-    # # created = models.DateTimeField(auto_now_add=True)
+
+    # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -21,7 +18,6 @@ class Club(Model):
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
-    # year_of_birth = models.IntegerField()
     year_of_birth = models.PositiveSmallIntegerField()
     license_validity = models.DateField()
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
@@ -38,6 +34,7 @@ class Season(Model):
 
     def __str__(self):
         return self.season_name
+
 
 class League(Model):
     league_name = models.CharField(max_length=32, unique=True)
@@ -66,10 +63,9 @@ class Organizer(Model):
     organizer_mail = models.EmailField(null=True)
     organizer_phone = models.CharField(max_length=14, null=True)
 
-
     def __str__(self):
         return '{} {} - ({})'.format(self.organizer_lastname, self.organizer_name,
-                                        self.organizer_mail)
+                                     self.organizer_mail)
 
 
 class Schedule(Model):
@@ -78,7 +74,8 @@ class Schedule(Model):
     task = models.TextField()
 
     def __str__(self):
-        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'), self.task[:30] + "..." if len(self.task) > 30 else self.task)
+        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M'),
+                                    self.task[:30] + "..." if len(self.task) > 30 else self.task)
 
 
 class Propositions(Model):
@@ -117,4 +114,3 @@ class Result(Model):
 
     def __str__(self):
         return '{} - {} ({}b)'.format(self.player, self.tournament, self.score)
-

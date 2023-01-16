@@ -6,7 +6,7 @@
 </div>
 <div class="page-tables">
     <ul class="list">
-        {% for club in clubs %}
+        {% for club in object_list %}
             <li class="list-item"><a href="{% url 'club' club.id %}">{{ club.club_name }} </a></li>
         {% endfor %}
     </ul>
