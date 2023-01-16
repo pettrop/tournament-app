@@ -54,5 +54,8 @@ urlpatterns = [
     path('proposition/create', tournaments.views.PropositionCreateView.as_view(), name='proposition_create'),
     path('propositions/', tournaments.views.PropositionsView.as_view(), name='propositions'),
 
+    path('tournament/<int:tournament_id>/results/', tournaments.views.tournament_results, name='tournament_results'),
+    path('tournaments/', tournaments.views.TournamentsViews.as_view(), name='tournaments'),
+
 
 ]

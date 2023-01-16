@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -7,7 +8,7 @@ from django.views.generic import TemplateView, ListView, CreateView, UpdateView,
 from logging import getLogger, Logger
 
 from tournaments.forms import ClubForm, PlayerForm, PropositionForm
-from tournaments.models import Club, Player, Propositions
+from tournaments.models import Club, Player, Propositions, Tournament, Result
 
 LOGGER = getLogger()
 
@@ -147,3 +148,49 @@ def proposition_detail(request, pk):
         'schedules': schedules,
                }
     return render(request, template_name='tournaments/proposition_detail.html', context=context)
+
+
+# def tournament_results(request, tournament_id):
+#     tournament = Tournament.objects.get(id=tournament_id)
+#     results = Result.objects.filter(tournament_id=tournament_id)
+#     club_id = 2
+#     results_club = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(points=Sum('result')).filter(player__club_id=club_id)
+#     print(results_club)
+#     context = {
+#         'tournament': tournament,
+#         'results': results,
+#                }
+#     return render(request, 'tournaments/tournament_results.html', context)
+
+
+def tournament_results(request, tournament_id):
+    #tournament = Tournament.objects.get(id=tournament_id)
+    #results = Result.objects.filter(tournament_id=tournament_id)
+    #clubs_points = Result.objects.filter(tournament_id=tournament_id).values('player__club_id', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
+    #player_points = Result.objects.filter(tournament_id=tournament_id).values('player_id', 'player__name','player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
+
+    #player_points = Result.objects.filter(tournament_id=tournament_id).values('player_id', 'player__name', 'player__lastname').annotate(points=Sum('result')).order_by('-points')
+    #top_three_players = player_points[:3]
+    #top_three_clubs = Result.objects.filter(tournament_id=tournament_id, player_id__in=[player['player_id'] for player in top_three_players]).values('player__club_id', 'player__club__club_name').annotate(points=Sum('result')).distinct().order_by('-points')
+    # top_three_players = Result.objects.filter(tournament_id=tournament_id, player__club_id=club_id) \
+    #                         .values('player_id', 'player__name', 'player__lastname') \
+    #                         .annotate(points=Sum('result')) \
+    #                         .order_by('-points')[:3]
+    top_three_players = Result.objects.filter(tournament_id=tournament_id).values('player_id', 'player__name', 'player__lastname')
+    #sum_points = sum([player['points'] for player in top_three_players])
+
+
+    print(top_three_players)
+    context = {
+        #'tournament': tournament,
+        #'player_points': player_points,
+        #'clubs_points': top_three_clubs
+    }
+    return render(request, 'tournaments/tournament_results.html', context=context)
+
+class TournamentsViews(ListView):
+    model = Tournament
+    template_name = 'tournaments/tournaments.html'
+    context_object_name = 'tournaments'
+    paginate_by = 5
+    #ordering = ['']

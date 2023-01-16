@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.db.models import (
     CharField, DateTimeField, ForeignKey, IntegerField, TextField, DO_NOTHING, Model)
@@ -22,7 +24,7 @@ class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
     # year_of_birth = models.IntegerField()
-    year_of_birth = models.PositiveSmallIntegerField()
+    year_of_birth = models.PositiveSmallIntegerField(blank=True)
     license_validity = models.DateField()
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
 
@@ -77,7 +79,8 @@ class Schedule(Model):
     task = models.TextField()
 
     def __str__(self):
-        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'), self.end_time.strftime('%H:%M')if self.end_time else '',
+        return '{} - {}: {}'.format(self.start_time.strftime('%H:%M'),
+                                    self.end_time.strftime('%H:%M') if self.end_time else '',
                                     self.task[:30] + "..." if len(self.task) > 30 else self.task)
 
 
@@ -97,34 +100,47 @@ class Propositions(Model):
     start_fee = models.PositiveSmallIntegerField(null=True, blank=True)
     director = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='director')
     judge = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='judge')
-    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='registration')
+    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT,
+                                     related_name='registration')
 
     def __str__(self):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
 
 
 class Scoreboard(Model):
-    ranking = models.PositiveSmallIntegerField(unique=True)
-    points = models.PositiveSmallIntegerField()
+    ranking_points = models.JSONField()
 
     def __str__(self):
-        return '{}.miest - {}bodov'.format(self.ranking, self.points)
+        return 'Bodovacia tabuľka {}'.format(self.pk)
 
 
 class Tournament(Model):
     name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
     propositions = models.ForeignKey(Propositions, on_delete=models.PROTECT, blank=True, null=True)
-    players = models.ManyToManyField(Player)
 
     def __str__(self):
-        return '{} - {}'.format(self.name, self.season)
+        return '{}'.format(self.name)
 
 
 class Result(Model):
     player = models.ForeignKey(Player, on_delete=models.PROTECT)
-    #score = models.PositiveSmallIntegerField()
-    ranking = models.ForeignKey(Scoreboard, on_delete=models.PROTECT)
     tournament = models.ForeignKey(Tournament, on_delete=models.PROTECT)
+    # ranking = models.ForeignKey(Scoreboard, on_delete=models.PROTECT)
+    result = models.IntegerField()
+
     def __str__(self):
-        return '{} ({}b)'.format(self.player, self.score)
+        return '{}'.format(self.player)
+
+
+def points_for_player_in_season(player_id):
+    results = Result.objects.filter(player_id=player_id)
+    total_result = 0
+    for result in results:
+        total_result += result.result
+    return total_result
+
+
+def points_for_club_in_tournament(tournament_id, club_id):
+    results = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(points=Sum('result')).filter(player__club_id=club_id)
+    return results
