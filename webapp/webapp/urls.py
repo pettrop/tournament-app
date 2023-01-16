@@ -39,6 +39,7 @@ urlpatterns = [
     path('accounts/password_change/done', PasswordChangeDoneView.as_view(template_name="registration/password_change_done.html"), name='password_change_done'),
     path('accounts/profile/', accounts.views.profile, name='profile'),
     path('accounts/profile_update/', accounts.views.profile_update, name='profile_update'),
+    path('accounts/permission_request/', accounts.views.permission_request, name='permission_request'),
 
     path('club/create', tournaments.views.ClubCreateView.as_view(), name='club_create'),
     path('club/update/<pk>', tournaments.views.ClubUpdateView.as_view(), name='club_update'),

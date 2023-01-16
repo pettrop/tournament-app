@@ -24,10 +24,12 @@
     </p>
     <p>
                         <a href="{% url 'password_change' %}"> <button type="button">Password change</button> </a>
-
     </p>
-    Doplnit: <br>
-    - odkaz na žádost o práva
-    - vypsání skupin/práv
+    <p>Uživatelské skupiny:</p>
+    {% for g in group %}
+        <p>{{ g }}</p>
+    {% endfor %}
+    Jste organizátor turnaje nebo zástupce klubu? Požádejte si o práva <a href="{% url 'permission_request' %}"> zde </a>!
+
 </div>
 {% endblock %}

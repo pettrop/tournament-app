@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Group
 from django.http import HttpResponse
 from django.views.generic import DetailView
 
@@ -74,7 +75,8 @@ def custom_login(request):
 def profile(request):
     user = request.user
     profile = request.user.profile
-    context = {'user': user, 'profile': profile}
+    group = list(Group.objects.filter(user=user))
+    context = {'user': user, 'profile': profile, 'group': group}
     return render(
         request=request,
         template_name='accounts/profile.html',
@@ -105,3 +107,13 @@ def profile_update(request):
         profile_form = ProfileUpdateForm(instance=request.user.profile)
     context = {'user_form': user_form, 'profile_form': profile_form}
     return render(request=request, template_name='accounts/profile_update.html', context=context)
+
+
+@login_required
+def permission_request(request):
+    # žádost o práva - poslání emailu administrátorovi, formulář s výběrem funkce - organizátor/zástupce klubu
+    # u organizátora asi jen zajistit telefon
+    # u zástupce klubu přiřadit klub nebo ho založit
+    user = request.user
+    context = {'user': user}
+    return render(request=request, template_name='accounts/permission_request.html', context=context)
