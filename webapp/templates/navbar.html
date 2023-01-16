@@ -1,38 +1,63 @@
 {% load static %}
-<nav>
+<nav role="navigation">
     <div class="logo-part">
-        <p>Stolný Tenis Slovensko</p>
+        <p>Stolný Tenis</p>
         <div class="img-wrapper">
             <img src="{% static 'images/slovakia.png' %}" alt="slovakia erb">
         </div>
     </div>
     <div class="menu">
-        <ul>
-            <li class="active"><a href="{% url 'home' %}">Domov</a></li>
-            <li><a href="{% url 'results' %}">Výsledky</a></li>
-            <li><a href="#">Turnaje</a></li>
+        <ul class="main-menu">
+            <li class="menu-item"><a href="{% url 'home' %}">Domov</a></li>
+            <li class="menu-item"><a href="{% url 'results' %}">Výsledky</a></li>
+            <li class="menu-item"><a href="#">Turnaje <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="#">Vytvor propozície</a></li>
+                        <li><a href="#">Zadaj výsledky</a></li>
+                        <li><a href="#">Export výsledkov</a></li>
+                    </ul>
+                </div>
+            </li>
             {% if request.user.is_authenticated  %}
-            <li><a href="#">Hráči</a></li>
-            <li><a href="#">Kluby</a></li>
+            <li class="menu-item"><a href="#">Hráči <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="{% url 'player_create' %}">Vytvor hráča</a></li>
+                        <li><a href="#">Uprav hráča</a></li>
+                        <li><a href="{% url 'players' %}">Zoznam hráčov</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="menu-item"><a href="#">Kluby <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="{% url 'club_create' %}">Vytvor klub</a></li>
+                        <li><a href="#">Uprav klub</a></li>
+                        <li><a href="{% url 'clubs' %}">Zoznam klubov</a></li>
+                    </ul>
+                </div>
+            </li>
             {% endif %}
         </ul>
     </div>
     <div class="user">
         <ul>
             {% if request.user.is_authenticated  %}
-            <li class="user">
+            <li class="user-item">
                 <div class="user-avatar">
                     <div class="img-wrapper avatar-in">
                         <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
                     </div>
-                    <p>{{ request.user }}</p>
+                    <p class="user-name">{{ request.user }}</p>
                 </div>
             </li>
             <li class="button">
-                <a href="{% url 'logout' %}" class="btn-log log-out">Odhlásiť sa</a>
+                <a href="{% url 'logout' %}" class="btn-log log-out text">Odhlásiť&nbsp;sa</a>
+                <a href="{% url 'logout' %}" class="btn-log log-out logo"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             </li>
             {% else %}
-            <li class="user">
+            <li class="user-item">
                 <div class="user-avatar">
                     <div class="img-wrapper avatar-out">
                         <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
@@ -40,7 +65,7 @@
                 </div>
             </li>
             <li class="button">
-                <a href="{% url 'login' %}" class="btn-log log-in">Prihlásiť sa</a>
+                <a href="{% url 'login' %}" class="btn-log log-in">Prihlásiť&nbsp;sa</a>
             </li>
             {% endif %}
         </ul>

@@ -1,17 +1,12 @@
 import json
 
 from django.db import models
-from django.db.models import (
-    CharField, DateTimeField, ForeignKey, IntegerField, TextField, DO_NOTHING, Model)
-from django.template.defaultfilters import truncatechars
-from django.template import defaulttags
-from django.contrib.auth.models import User
+from django.db.models import Model
 
 
 # Create your models here.
 class Club(Model):
     club_name = models.CharField(max_length=64)
-
     # # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -19,12 +14,10 @@ class Club(Model):
     # class Meta:
     #     ordering = ['club_name']
 
-
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
-    # year_of_birth = models.IntegerField()
-    year_of_birth = models.PositiveSmallIntegerField(blank=True)
+    year_of_birth = models.PositiveSmallIntegerField()
     license_validity = models.DateField()
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
 
@@ -33,7 +26,6 @@ class Player(Model):
 
     class Meta:
         ordering = ['lastname']
-
 
 class Season(Model):
     season_name = models.CharField(max_length=9, unique=True)
@@ -47,7 +39,6 @@ class League(Model):
 
     def __str__(self):
         return self.league_name
-
 
 class Category(Model):
     category_name = models.CharField(max_length=32, unique=True)

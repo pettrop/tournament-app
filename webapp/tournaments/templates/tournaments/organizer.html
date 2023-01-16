@@ -1,0 +1,9 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <h1> {{ organizer.organizer_name }} {{ organizer.organizer_lastname }} </h1>
+    <ul>
+        {{ organizer.organizer_mail }}
+    {{ organizer.organizer_phone }}
+    </ul>
+{% endblock content %}
