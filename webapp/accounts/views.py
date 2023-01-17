@@ -1,14 +1,12 @@
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group
 from django.contrib import messages
-from django.http import HttpResponse
-from django.views.generic import DetailView
-
-from .models import User, Profile
-from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from django.shortcuts import render, redirect
+
+from tournaments.models import Club
+from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 
 
 def signup(request):
@@ -116,9 +114,9 @@ def profile_update(request):
 
 @login_required
 def permission_request(request):
-    # žádost o práva - poslání emailu administrátorovi, formulář s výběrem funkce - organizátor/zástupce klubu
-    # u organizátora asi jen zajistit telefon
-    # u zástupce klubu přiřadit klub nebo ho založit
     user = request.user
-    context = {'user': user}
+    profile = request.user.profile
+    permission_groups = ["Organizátor", "Zástupce klubu"]
+    clubs = Club.objects.all()
+    context = {'user': user, 'clubs': clubs, 'profile': profile, "groups": permission_groups}
     return render(request=request, template_name='accounts/permission_request.html', context=context)
