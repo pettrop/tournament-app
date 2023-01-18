@@ -33,6 +33,7 @@ urlpatterns = [
     path('results/', tournaments.views.results, name="results"),
     
     path('accounts/signup/', accounts.views.signup, name='signup'),
+    path('accounts/activate/<uidb64>/<token>/', accounts.views.activate, name='activate'),
     path('accounts/login/', accounts.views.custom_login, name='login'),
     path('accounts/logout/', accounts.views.custom_logout, name='logout'),
     path('accounts/password_change/', PasswordChangeView.as_view(template_name="registration/password_change.html"), name='password_change'),
