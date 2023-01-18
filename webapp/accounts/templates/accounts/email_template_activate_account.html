@@ -1,0 +1,9 @@
+{% autoescape off %}
+Ahoj {{ first_name }} {{ last_name }},
+kliknutím na odkaz nižšie aktivujte svoj účet.
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+S pozdravom,
+tým tournament app
+{% endautoescape %}

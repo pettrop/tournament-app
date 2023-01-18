@@ -5,11 +5,13 @@ from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+from .forms import SetPasswordForm, PasswordResetForm
 from .decorators import user_not_authenticated
 from .tokens import account_activation_token
 from tournaments.models import Club
@@ -22,23 +24,25 @@ def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
+
     except:
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-
         messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
         return redirect('login')
+
     else:
         messages.error(request, "Activation link is invalid!")
+
     return redirect('home')
 
 
 def activate_email(request, user, to_email):
     mail_subject = "Activate your account"
-    message = render_to_string(template_name='accounts/template_activate_account.html', context={
+    message = render_to_string(template_name='accounts/email_template_activate_account.html', context={
         'first_name': user.first_name,
         'last_name': user.last_name,
         'domain': get_current_site(request).domain,
@@ -75,6 +79,7 @@ def signup(request):
                 user.save()
                 activate_email(request, user, form.cleaned_data.get('email'))
                 return redirect('home')
+
         else:
             for error in list(form.errors.values()):
                 messages.error(request, error)
@@ -120,12 +125,107 @@ def custom_login(request):
     else:
         form = AuthenticationForm()
 
+    context = {"form": form}
     return render(
         request=request,
         template_name="registration/login.html",
-        context={"form": form}
+        context=context
     )
 
+
+@login_required
+def password_change(request):
+    user = request.user
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Vaše heslo bolo zmenené.")
+            return redirect('login')
+
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+
+    form = SetPasswordForm(user)
+    context = {'form': form}
+    return render(request=request,
+                  template_name='accounts/password_reset_confirm.html',
+                  context=context
+                  )
+
+
+@user_not_authenticated
+def password_reset_request(request):
+    if request.method == "POST":
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data['email']
+            associated_user = get_user_model().objects.filter(Q(email=user_email)).first()
+            if associated_user:
+                print('found')
+                mail_subject = "Žiadosť o obnovenie hesla"
+                message = render_to_string(template_name='accounts/email_template_password_reset.html', context={
+                    'user': associated_user,
+                    'domain': get_current_site(request).domain,
+                    'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                    'token': account_activation_token.make_token(associated_user),
+                    'protocol': "https" if request.is_secure() else "http"
+                })
+
+                email = EmailMessage(mail_subject, message, to={associated_user.email})
+                if email.send():
+                    messages.success(request, f"""E-mail na obnovenie hesla bol odoslaný. Ak ste e-mail nedostali, 
+                    skontrolujte, či ste zadali správnu e-mailovú adresu a zložku so spamom.""")
+
+                else:
+                    print('not found')
+                    messages.error(request, f'Problém pri odosielaní resetovacieho e-mailu.')
+
+            else:
+                return redirect('home')
+
+    form = PasswordResetForm()
+    context = {'form': form}
+    return render(request=request,
+                  template_name='accounts/password_reset.html',
+                  context=context
+                  )
+
+
+@user_not_authenticated
+def password_reset_confirm(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        if request.method == "POST":
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Heslo bolo úspešne resetované. Môžete sa prihlásiť.")
+                return redirect('login')
+
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+
+        form = SetPasswordForm(user)
+        context = {'form': form}
+        return render(request=request,
+                      template_name='accounts/password_reset_confirm.html',
+                      context=context
+                      )
+
+    else:
+        messages.error(request, "Platnosť odkazu na obnovenie vypršala!")
+
+    messages.error(request, "Vyskytol sa problém, presmerovanie späť na domovskú stránku.")
+    return redirect('home')
 
 @login_required
 def profile(request):
@@ -162,8 +262,12 @@ def profile_update(request):
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
+
     context = {'user_form': user_form, 'profile_form': profile_form}
-    return render(request=request, template_name='accounts/profile_update.html', context=context)
+    return render(request=request,
+                  template_name='accounts/profile_update.html',
+                  context=context
+                  )
 
 
 @login_required
@@ -173,4 +277,7 @@ def permission_request(request):
     permission_groups = ["Organizátor", "Zástupce klubu"]
     clubs = Club.objects.all()
     context = {'user': user, 'clubs': clubs, 'profile': profile, "groups": permission_groups}
-    return render(request=request, template_name='accounts/permission_request.html', context=context)
+    return render(request=request,
+                  template_name='accounts/permission_request.html',
+                  context=context
+                  )
