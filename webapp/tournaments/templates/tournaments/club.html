@@ -4,6 +4,10 @@
         <h1>{{club}}</h1> <!---{{Club.club_name}} - pôvodné -->
     </div>
     <div class="page-tables">
+        {% for player in players %}
+            {{ player.name }} {{ player.lastname }}
+        {% endfor %}
+
         <!-- ADD club info here-->
     </div>
 {% endblock %}

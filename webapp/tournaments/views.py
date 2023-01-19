@@ -75,7 +75,9 @@ class PlayerDeleteView(DeleteView):
 # Club/Clubs
 def club(request, pk):
     club = Club.objects.get(pk=pk)
-    context = {'club': club}
+    players = club.player_set.all()
+    context = {'club': club,
+               'players': players}
     return render(request, template_name='tournaments/club.html', context=context)
 
 

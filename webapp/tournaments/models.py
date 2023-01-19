@@ -3,16 +3,17 @@ from django.db.models import Model
 
 
 # Create your models here.
+
+
 class Club(Model):
     club_name = models.CharField(max_length=64)
-
     # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.club_name
-    # class Meta:
-    #     ordering = ['club_name']
+    class Meta:
+        ordering = ['club_name']
 
 
 class Player(Model):

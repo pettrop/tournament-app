@@ -1,10 +1,12 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div class="page-header">
-    <h1>{{ player.name }} {{ player.lastname }}</h1>
-</div>
-<div class="page-tables">
+    <div class="page-header">
+        <h1>{{ player.name }} {{ player.lastname }}</h1>
+    </div>
+    <div class="page-tables">
+        Hráč hraje v klubu:
+        {{ player.club }}
     <!-- ADD here info about player (turnaje, vysledky atd) -->
-</div>
+    </div>
 {% endblock content %}
