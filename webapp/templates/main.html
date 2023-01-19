@@ -3,22 +3,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table tennis tournaments</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="stylesheet" href="{% static 'styles/css/reset.css' %}"/>
     <link rel="stylesheet" href="{% static 'styles/css/style.css' %}"/>
 </head>
-<body>
+<body onresize="resizeControl()">
         {% include 'navbar.html' %}
+        
+        {% include 'sidebar.html' %}
+        <i class="fa-solid fa-bars side-bar-btn"></i>
+        
         <!--Messaging - to be modified by Kubo-->
         <div style="position: relative; top: 105px; text-align: center;">
             {% include 'messages.html' %}
         </div>
         <!--End of messaging-->
+
         <div class="page-container">
 
                 {% block content %}
                 {% endblock %}
-        </div>    
+        </div>
+        <script src="{% static 'scripts/scripts.js' %}"></script>    
 </body>
 </html>

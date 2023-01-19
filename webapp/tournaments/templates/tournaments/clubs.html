@@ -1,11 +1,14 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h1>Clubs</h1>
-    <br/>
-    <ul>
-        {% for club in clubs %}
-            <li><a href="{% url 'club' club.id %}">{{ club.club_name }} </a></li>
+<div class="page-header">
+    <h1>Zoznam klubov</h1>
+</div>
+<div class="page-tables">
+    <ul class="list">
+        {% for club in object_list %}
+            <li class="list-item"><a href="{% url 'club' club.id %}">{{ club.club_name }} </a></li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}

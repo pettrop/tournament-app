@@ -7,7 +7,7 @@
     <form class="page-form" method="post">
         {% csrf_token %}
         <table> {{ form.as_table }} </table>
-        <button type="submit">Prihlásiť sa</button>
+        <button class="btn" type="submit">Prihlásiť sa</button>
     </form>
     <a href="{% url 'password_reset' %}">Zabudli ste heslo?</a>
 </div>

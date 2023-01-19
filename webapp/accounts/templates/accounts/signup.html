@@ -1,9 +1,14 @@
 {% extends 'main.html' %}
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-            <table> {{ form.as_table }} </table>
-            <button type="submit">Sign up</button>
 
+<div class="page-header">
+    <h1>Registrácia užívateľa</h1>
+</div>
+<div class="page-tables">
+    <form method="post">
+    {% csrf_token %}
+    <table> {{ form.as_table }} </table>
+    <button class="btn" type="submit">Dokončiť registráciu</button>
 </form>
+</div>
 {% endblock %}
