@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<p> Profil užívateľa {{ user.first_name }} {{ user.last_name }}</p>
+<div>
+    <p>
+                        <label>Meno:</label>
+                            {{ user.first_name }}
+    </p>
+    <p>
+                        <label>Priezvisko:</label>
+                            {{ user.last_name }}
+    </p>
+    <p>
+                        <label>Email:</label>
+                            {{ user.email }}
+    </p>
+    <p>
+                        <label>Telefón:</label>
+                            {{ profile.phone }}
+    </p>
+    <p>
+                        <a href="{% url 'profile_update' %}"> <button type="button">Zmena údajov profilu</button> </a>
+    </p>
+    <p>
+                        <a href="{% url 'password_change' %}"> <button type="button">Zmena hesla</button> </a>
+    </p>
+    <p>Užívateľské skupiny:</p>
+    {% for g in group %}
+        <p>{{ g }}</p>
+    {% endfor %}
+    Ste organizátor turnaja alebo zástupca klubu? Požiadajte si o práva <a href="{% url 'permission_request' %}">tu</a>!
+
+</div>
+{% endblock %}
