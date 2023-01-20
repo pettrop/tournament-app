@@ -6,7 +6,8 @@
     </div>
     <div class="page-tables">
         Hráč hraje v klubu:
-        {{ player.club }}
+        <br>
+        <a href="{% url 'club' player.club.pk %}"> {{ player.club }}</a>
     <!-- ADD here info about player (turnaje, vysledky atd) -->
     </div>
 {% endblock content %}
