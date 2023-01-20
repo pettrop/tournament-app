@@ -17,13 +17,11 @@ class Club(Model):
     class Meta:
         ordering = ['club_name']
 
-
 class Category(Model):
     category_name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
         return self.category_name
-
 def current_year():
     return datetime.date.today().year
 
@@ -33,17 +31,17 @@ def max_value_current_year(value):
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
-    # year_of_birth = forms.DateField(widget=forms.widgets.SelectDateWidget(years=year_list)) ##nefunguje vyber roku
     year_of_birth = models.IntegerField(validators=[MinValueValidator(1950), max_value_current_year])
     license_validity = models.DateField()
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
-    # category = models.ForeignKey(Category, on_delete=models.PROTECT)
+
 
     def __str__(self):
         return '{} {} ({})'.format(self.lastname, self.name, self.year_of_birth)
 
     class Meta:
         ordering = ['lastname']
+
 
 
 class Season(Model):
@@ -58,9 +56,6 @@ class League(Model):
 
     def __str__(self):
         return self.league_name
-
-
-
 
 
 class Discipline(Model):

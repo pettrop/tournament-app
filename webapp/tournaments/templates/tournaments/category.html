@@ -3,6 +3,31 @@
 {% block content %}
     <h1> {{ category.category_name }}</h1>
     <ul>
-        prehled hracu v teto categorii, vysledky turnaju teto categorie
+        {% if category.category_name == 'Dospeli' %}
+            {% for player in players_dospeli %}
+                 <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
+            {% endfor %}
+        {% endif %}
+        {% if category.category_name == 'Dorostenci' %}
+            {% for player in players_dorostenci %}
+            <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
+        {% endfor %}
+        {% endif %}
+        {% if category.category_name == 'Starsi zaci' %}
+            {% for player in players_starsi_zaci %}
+            <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
+        {% endfor %}
+        {% endif %}
+        {% if category.category_name == 'Mladsi zaci' %}
+            {% for player in players_mladsi_zaci %}
+            <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
+        {% endfor %}
+        {% endif %}
+        {% if category.category_name == 'Ostatni' %}
+            {% for player in players_ostatni %}
+           <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
+        {% endfor %}
+        {% endif %}
+
     </ul>
-{% endblock content %}
+{% endblock %}
