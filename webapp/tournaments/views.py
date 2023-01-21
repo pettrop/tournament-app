@@ -1,16 +1,20 @@
-from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, request
+from pprint import pprint
+
+from django.forms import modelformset_factory
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
 
-
 import datetime
+
 
 from logging import getLogger, Logger
 
-from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm
-from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer
+from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm, \
+    PropositionForm, TournamentForm, ResultsAddForm
+from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer, Propositions, Tournament, \
+    Result
 
 LOGGER = getLogger()
 
@@ -354,3 +358,93 @@ class OrganizerDeleteView(DeleteView):
     template_name = 'tournaments/organizer_delete.html'
     model = Organizer
     success_url = reverse_lazy('organizers')
+    context_object_name = 'clubs'
+    # ordering = ['-name']
+
+
+class PropositionsView(ListView):
+    model = Propositions
+    template_name = 'tournaments/propositions.html'
+    context_object_name = 'propositions'
+    paginate_by = 5
+    ordering = ['-event_date']
+
+
+class PropositionCreateView(CreateView):
+    model = Propositions
+    form_class = PropositionForm
+    template_name = 'tournaments/proposition_create.html'
+    success_url = reverse_lazy('propositions')
+    extra_context = {'title': 'Create proposition'}
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+
+def proposition_detail(request, pk):
+    proposition = Propositions.objects.get(pk=pk)
+    league_prop = proposition.league.all()
+    disciplines = proposition.discipline.all()
+    categories = proposition.category.all()
+    schedules = proposition.schedule.all()
+
+    context = {
+        'proposition': proposition,
+        'leagues': league_prop,
+        'disciplines': disciplines,
+        'categories': categories,
+        'schedules': schedules,
+    }
+    return render(request, template_name='tournaments/proposition_detail.html', context=context)
+
+
+def tournament_create_view(request):
+    form = TournamentForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    if form.is_valid():
+        obj = form.save()
+        return redirect(obj.get_absolute_url())
+    return render(request, template_name='tournaments/tournament_create_update.html', context=context)
+
+
+def tournament_list_view(request):
+    tournaments_list = Tournament.objects.all()
+    context = {
+        "tournaments_list": tournaments_list
+    }
+    return render(request, template_name="tournaments/tournaments.html", context=context)
+
+
+def tournament_update_view(request, pk):
+    obj = get_object_or_404(Tournament, pk=pk)
+    form = TournamentForm(request.POST or None, instance=obj)
+    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0 )
+    qs = obj.result_set.all()
+    formset = ResultsFormset(request.POST or None, queryset=qs)
+
+    context = {
+        "form": form,
+        "formset": formset,
+        "object": obj
+    }
+    if all([form.is_valid(), formset.is_valid()]):
+        print("Je validny!")
+        parent = form.save(commit=False)
+        parent.save()
+        for form in formset:
+            child = form.save(commit=False)
+            child.tournament = parent
+            child.save()
+        context['message'] = 'Data saved.'
+    return render(request, template_name="tournaments/tournament_create_update.html", context=context)
+
+
+def tournament_detail_view(request, pk=None):
+    obj = get_object_or_404(Tournament, pk=pk)
+    context = {
+        "object": obj
+    }
+    return render(request, "tournaments/tournament_detail.html", context)

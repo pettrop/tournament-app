@@ -82,4 +82,20 @@ urlpatterns = [
     path('organizer/delete/<pk>', tournaments.views.OrganizerDeleteView.as_view(), name='organizer_delete'),
     path('organizers/', tournaments.views.OrganizersView.as_view(), name='organizers'),
 
+    path('proposition/detail/<pk>', tournaments.views.proposition_detail, name='proposition'),
+    path('proposition/create', tournaments.views.PropositionCreateView.as_view(), name='proposition_create'),
+    path('propositions/', tournaments.views.PropositionsView.as_view(), name='propositions'),
+
+    path('tournament/<int:pk>/edit', tournaments.views.tournament_update_view, name='tournament'),
+    path('tournament/<int:pk>/', tournaments.views.tournament_detail_view),
+    path('tournament/create', tournaments.views.tournament_create_view, name='tournament_create'),
+    path('tournaments/', tournaments.views.tournament_list_view, name='tournaments'),
+
+
+
+    #path('tournament/<int:tournament_id>/results/', tournaments.views.tournament_results, name='tournament_results'),
+    #path('tournaments/', tournaments.views.TournamentsViews.as_view(), name='tournaments'),
+
+    #path('results/add', tournaments.views.result_add, name='results_add'),
+    #path('search_players/', tournaments.views.search_players, name='search_players'),
 ]
