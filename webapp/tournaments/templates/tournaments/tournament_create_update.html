@@ -1,6 +1,11 @@
 {% extends "main.html" %}
 
 {% block content %}
+<style>
+    .hidden {
+        display: none
+    }
+</style>
 <h1>Turnaj</h1>
 {% if message %}
     <p>{{ message }}</p>
@@ -12,15 +17,47 @@
 
         {% if formset %}
         <h3>Hráči</h3>
-        {{ formset.management_form}}
-        {% for form in formset %}
-            <div class="result-form">
-                {{ form.as_p}}
-            </div>
-        {% endfor %}
-        <div>{{ formset.empty_form}}</div>
+        {{ formset.management_form }}
+        <div id='player-form-list'>
+            {% for form in formset %}
+                <div class="result-form">
+                    {{ form.as_p}}
+                </div>
+            {% endfor %}
+
+        </div>
+            <div id="empty-form" class="hidden">{{ formset.empty_form.as_p }}</div>
+            <button id="add-player" type="button">Pridaj hráča</button>
         {% endif %}
-        <button type="submit">Uloz</button>
+        <button type="submit">Ulož</button>
     </form>
+
+<script>
+
+    const addMoreBtn = document.getElementById('add-player')
+    const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+
+    addMoreBtn.addEventListener('click', add_new_form)
+
+    function add_new_form(event) {
+        if (event) {
+            event.preventDefault()
+        }
+        const currentResultForms = document.getElementsByClassName('result-form')
+        const currentFormCount = currentResultForms.length // + 1
+        const formCopyTarget = document.getElementById('player-form-list')
+        const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
+        copyEmptyFormEl.setAttribute('class', 'result-form')
+        copyEmptyFormEl.setAttribute('id', `form-${currentFormCount}`)
+        const regex = new RegExp('__prefix__', 'g')
+        copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
+        totalNewForms.setAttribute('value', currentFormCount + 1)
+        // now add new empty form element to our html form
+        formCopyTarget.append(copyEmptyFormEl)
+    }
+
+
+
+</script>
 
 {% endblock %}

@@ -138,29 +138,35 @@ class PropositionForm(ModelForm):
         fields = ['prescription', 'tournament_system', 'notes', 'category', 'league', 'discipline', 'event_location',
                   'event_date', 'schedule', 'season', 'tournament_order', 'organizer_club', 'director', 'judge', 'registration']
         widgets = {
-            'event_date': SelectDateWidget()
+            'event_date': SelectDateWidget(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['prescription'].label = 'Predpis'
+        self.fields['prescription'].widget.attrs.update({'rows':'4'})
+        self.fields['tournament_system'].label = 'Systém turnaja'
+        self.fields['tournament_system'].widget.attrs.update({'rows': '4'})
+        self.fields['notes'].label = 'Poznámky'
+        self.fields['notes'].widget.attrs.update({'rows': '4'})
+        self.fields['category'].label = 'Kategória'
+        self.fields['league'].label = 'Liga'
+        self.fields['discipline'].label = 'Disciplína'
+        self.fields['event_location'].label = 'Miesto'
+        self.fields['event_date'].label = 'Dátum usporiadania'
+        self.fields['schedule'].label = 'Časový rozpis'
+        self.fields['season'].label = 'Sezóna'
+        self.fields['tournament_order'].label = 'Poradie turnaja v sezóne'
+        self.fields['organizer_club'].label = 'Organizátor'
+        self.fields['registration'].label = 'Prihlášky'
+        self.fields['director'].label = 'Riaditeľ'
+        self.fields['judge'].label = 'Hlavný rozhodca'
+
     category = ModelMultipleChoiceField(queryset=Category.objects.all())
     league = ModelMultipleChoiceField(queryset=League.objects.all())
     discipline = ModelMultipleChoiceField(queryset=Discipline.objects.all())
     schedule = ModelMultipleChoiceField(queryset=Schedule.objects.all())
     season = ModelChoiceField(queryset=Season.objects.all())
-
-
-class ResultForm(ModelForm):
-    player_name = CharField()
-
-    class Meta:
-        model = Result
-        fields = ['player', 'tournament', 'result']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        player_name = cleaned_data.get("player_name")
-        players = Player.objects.filter(name__icontains=player_name)
-        if not players.exists():
-            raise ValidationError("Player does not exist.")
-        self.fields['player'].queryset = players
 
 
 class ResultsAddForm(ModelForm):
@@ -183,3 +189,9 @@ class TournamentForm(ModelForm):
     class Meta:
         model = Tournament
         fields = ['name', 'description', 'propositions']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = 'Názov'
+        self.fields['description'].label = 'Popis'
+        self.fields['propositions'].label = 'Propozície'

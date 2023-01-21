@@ -371,7 +371,7 @@ class PropositionCreateView(CreateView):
     form_class = PropositionForm
     template_name = 'tournaments/proposition_create.html'
     success_url = reverse_lazy('propositions')
-    extra_context = {'title': 'Create proposition'}
+    extra_context = {'title': 'Vytvor propozíciu'}
 
     def form_valid(self, form):
         form.save()
@@ -397,12 +397,15 @@ def proposition_detail(request, pk):
 
 def tournament_create_view(request):
     form = TournamentForm(request.POST or None)
+
     context = {
         "form": form
     }
+
     if form.is_valid():
         obj = form.save()
-        return redirect(obj.get_absolute_url())
+        return redirect('tournaments')
+
     return render(request, template_name='tournaments/tournament_create_update.html', context=context)
 
 
@@ -417,7 +420,7 @@ def tournament_list_view(request):
 def tournament_update_view(request, pk):
     obj = get_object_or_404(Tournament, pk=pk)
     form = TournamentForm(request.POST or None, instance=obj)
-    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0 )
+    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0)
     qs = obj.result_set.all()
     formset = ResultsFormset(request.POST or None, queryset=qs)
 
@@ -427,9 +430,12 @@ def tournament_update_view(request, pk):
         "object": obj,
     }
     if all([form.is_valid(), formset.is_valid()]):
+        print("Formular je validny!")
         parent = form.save(commit=False)
         parent.save()
+        formset.save()
         for form in formset:
+            print(form)
             child = form.save(commit=False)
             child.tournament = parent
             child.save()

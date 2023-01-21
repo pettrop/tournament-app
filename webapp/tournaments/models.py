@@ -128,9 +128,6 @@ class Tournament(Model):
     def __str__(self):
         return '{}'.format(self.name)
 
-    def get_absolute_url(self):
-        return reverse("tournament:detail", kwargs={"pk": self.pk})
-
     def get_edit_url(self):
         return reverse("tournament:update", kwargs={"pk": self.pk})
 
