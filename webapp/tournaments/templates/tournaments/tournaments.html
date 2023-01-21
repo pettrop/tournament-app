@@ -2,10 +2,8 @@
 
 {% block content %}
 <h1>Turnaje</h1>
-    <br/>
-    <ul>
-        {% for tournament in tournaments %}
-            <li><a href="{% url 'tournament_results' tournament.id %}">Výsledky {{ tournament.propositions.tournament_order }}. turnaja {{ tournament.propositions.season}}</a></li>
-        {% endfor %}
-    </ul>
+  {% for tournament in tournaments_list %}
+     <p><a href="{% url 'tournament' tournament.pk %}">{{ tournament }}</a></p>
+  {% endfor %}
+
 {% endblock %}

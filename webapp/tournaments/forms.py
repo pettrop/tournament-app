@@ -1,9 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.forms import (ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField,
-                          SelectDateWidget, EmailField)
+                          SelectDateWidget, EmailField, TextInput)
 
-from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer
-
-
+from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer, \
+    Result, Tournament
 
 
 class PlayerForm(ModelForm):
@@ -145,3 +145,41 @@ class PropositionForm(ModelForm):
     discipline = ModelMultipleChoiceField(queryset=Discipline.objects.all())
     schedule = ModelMultipleChoiceField(queryset=Schedule.objects.all())
     season = ModelChoiceField(queryset=Season.objects.all())
+
+
+class ResultForm(ModelForm):
+    player_name = CharField()
+
+    class Meta:
+        model = Result
+        fields = ['player', 'tournament', 'result']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        player_name = cleaned_data.get("player_name")
+        players = Player.objects.filter(name__icontains=player_name)
+        if not players.exists():
+            raise ValidationError("Player does not exist.")
+        self.fields['player'].queryset = players
+
+
+class ResultsAddForm(ModelForm):
+    error_css_class = 'error-field'
+    required_css_class = 'required-field'
+    #player = CharField(widget=TextInput(attrs={"class": "form-control", "placeholder": "Meno a priezvisko"}))
+    #result = CharField(widget=TextInput)
+    class Meta:
+        model = Result
+        fields = ['player', 'tournament', 'result']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['player'].label = 'Meno hráča'
+        self.fields['tournament'].label = 'Poradie turnaja v sezóne'
+        self.fields['result'].label = 'Body'
+
+
+class TournamentForm(ModelForm):
+    class Meta:
+        model = Tournament
+        fields = ['name', 'description', 'propositions']

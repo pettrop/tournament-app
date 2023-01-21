@@ -1,7 +1,6 @@
-import json
-
 from django.db import models
-from django.db.models import Model
+from django.db.models import Model, Sum
+from django.urls import reverse
 
 
 # Create your models here.
@@ -10,7 +9,7 @@ class Club(Model):
     # # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return self.club_name
+        return '{} (id: {})'.format(self.club_name, self.id)
     # class Meta:
     #     ordering = ['club_name']
 
@@ -22,7 +21,7 @@ class Player(Model):
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
-        return '{} {} ({})'.format(self.lastname, self.name, self.year_of_birth)
+        return '{} {} ({}, id: {})'.format(self.lastname, self.name, self.year_of_birth, self.id)
 
     class Meta:
         ordering = ['lastname']
@@ -91,8 +90,7 @@ class Propositions(Model):
     start_fee = models.PositiveSmallIntegerField(null=True, blank=True)
     director = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='director')
     judge = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='judge')
-    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT,
-                                     related_name='registration')
+    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='registration')
 
     def __str__(self):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
@@ -113,11 +111,19 @@ class Tournament(Model):
     def __str__(self):
         return '{}'.format(self.name)
 
+    def get_absolute_url(self):
+        return reverse("tournament:detail", kwargs={"pk": self.pk})
+
+    def get_edit_url(self):
+        return reverse("tournament:update", kwargs={"pk": self.pk})
+
+    def get_result_children(self):
+        return self.result_set.all()
+
 
 class Result(Model):
-    player = models.ForeignKey(Player, on_delete=models.PROTECT)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
     tournament = models.ForeignKey(Tournament, on_delete=models.PROTECT)
-    # ranking = models.ForeignKey(Scoreboard, on_delete=models.PROTECT)
     result = models.IntegerField()
 
     def __str__(self):

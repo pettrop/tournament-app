@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h1>Turnaj</h1>
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
+
+    <form action='.' method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+
+        {% if formset %}
+        <h3>Hráči</h3>
+        {{ formset.management_form}}
+        {% for form in formset %}
+            <div class="result-form">
+                {{ form.as_p}}
+            </div>
+        {% endfor %}
+        <div>{{ formset.empty_form}}</div>
+        {% endif %}
+        <button type="submit">Uloz</button>
+    </form>
+
+
+{% endblock %}

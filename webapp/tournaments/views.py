@@ -1,13 +1,15 @@
-from django.db.models import Sum
-from django.shortcuts import render
+from pprint import pprint
+
+from django.forms import modelformset_factory
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from logging import getLogger, Logger
 
 from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm, \
-    PropositionForm
+    PropositionForm, TournamentForm, ResultsAddForm
 from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer, Propositions, Tournament, \
     Result
 
@@ -328,7 +330,7 @@ class OrganizerDeleteView(DeleteView):
     model = Organizer
     success_url = reverse_lazy('organizers')
     context_object_name = 'clubs'
-    #ordering = ['-name']
+    # ordering = ['-name']
 
 
 class PropositionsView(ListView):
@@ -364,52 +366,56 @@ def proposition_detail(request, pk):
         'disciplines': disciplines,
         'categories': categories,
         'schedules': schedules,
-               }
+    }
     return render(request, template_name='tournaments/proposition_detail.html', context=context)
 
 
-# def tournament_results(request, tournament_id):
-#     tournament = Tournament.objects.get(id=tournament_id)
-#     results = Result.objects.filter(tournament_id=tournament_id)
-#     club_id = 2
-#     results_club = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(points=Sum('result')).filter(player__club_id=club_id)
-#     print(results_club)
-#     context = {
-#         'tournament': tournament,
-#         'results': results,
-#                }
-#     return render(request, 'tournaments/tournament_results.html', context)
-
-
-def tournament_results(request, tournament_id):
-    #tournament = Tournament.objects.get(id=tournament_id)
-    #results = Result.objects.filter(tournament_id=tournament_id)
-    #clubs_points = Result.objects.filter(tournament_id=tournament_id).values('player__club_id', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
-    #player_points = Result.objects.filter(tournament_id=tournament_id).values('player_id', 'player__name','player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
-
-    #player_points = Result.objects.filter(tournament_id=tournament_id).values('player_id', 'player__name', 'player__lastname').annotate(points=Sum('result')).order_by('-points')
-    #top_three_players = player_points[:3]
-    #top_three_clubs = Result.objects.filter(tournament_id=tournament_id, player_id__in=[player['player_id'] for player in top_three_players]).values('player__club_id', 'player__club__club_name').annotate(points=Sum('result')).distinct().order_by('-points')
-    # top_three_players = Result.objects.filter(tournament_id=tournament_id, player__club_id=club_id) \
-    #                         .values('player_id', 'player__name', 'player__lastname') \
-    #                         .annotate(points=Sum('result')) \
-    #                         .order_by('-points')[:3]
-    top_three_players = Result.objects.filter(tournament_id=tournament_id).values('player_id', 'player__name', 'player__lastname')
-    #sum_points = sum([player['points'] for player in top_three_players])
-
-
-    print(top_three_players)
+def tournament_create_view(request):
+    form = TournamentForm(request.POST or None)
     context = {
-        #'tournament': tournament,
-        #'player_points': player_points,
-        #'clubs_points': top_three_clubs
+        "form": form
     }
-    return render(request, 'tournaments/tournament_results.html', context=context)
+    if form.is_valid():
+        obj = form.save()
+        return redirect(obj.get_absolute_url())
+    return render(request, template_name='tournaments/tournament_create_update.html', context=context)
 
 
-class TournamentsViews(ListView):
-    model = Tournament
-    template_name = 'tournaments/tournaments.html'
-    context_object_name = 'tournaments'
-    paginate_by = 5
-    #ordering = ['']
+def tournament_list_view(request):
+    tournaments_list = Tournament.objects.all()
+    context = {
+        "tournaments_list": tournaments_list
+    }
+    return render(request, template_name="tournaments/tournaments.html", context=context)
+
+
+def tournament_update_view(request, pk):
+    obj = get_object_or_404(Tournament, pk=pk)
+    form = TournamentForm(request.POST or None, instance=obj)
+    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0 )
+    qs = obj.result_set.all()
+    formset = ResultsFormset(request.POST or None, queryset=qs)
+
+    context = {
+        "form": form,
+        "formset": formset,
+        "object": obj
+    }
+    if all([form.is_valid(), formset.is_valid()]):
+        print("Je validny!")
+        parent = form.save(commit=False)
+        parent.save()
+        for form in formset:
+            child = form.save(commit=False)
+            child.tournament = parent
+            child.save()
+        context['message'] = 'Data saved.'
+    return render(request, template_name="tournaments/tournament_create_update.html", context=context)
+
+
+def tournament_detail_view(request, pk=None):
+    obj = get_object_or_404(Tournament, pk=pk)
+    context = {
+        "object": obj
+    }
+    return render(request, "tournaments/tournament_detail.html", context)
