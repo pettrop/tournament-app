@@ -3,7 +3,21 @@
     <div class="page-header">
         <h1>{{club}}</h1> <!---{{Club.club_name}} - pôvodné -->
     </div>
+
+
+
+
     <div class="page-tables">
+        <div>
+        <b>V klubu {{club}} hrají tito hráči:</b>
+        </div>
+        <br>
+
+        {% for player in players %}
+            <a href="{% url 'player' player.pk %}">{{ player.name }} {{ player.lastname }}</a>
+        </br>
+        {% endfor %}
+
         <!-- ADD club info here-->
     </div>
 {% endblock %}

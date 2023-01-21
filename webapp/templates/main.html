@@ -13,9 +13,18 @@
 </head>
 <body onresize="resizeControl()">
         {% include 'navbar.html' %}
+        
         {% include 'sidebar.html' %}
         <i class="fa-solid fa-bars side-bar-btn"></i>
+        
+        <!--Messaging - to be modified by Kubo-->
+        <div style="position: relative; top: 105px; text-align: center;">
+            {% include 'messages.html' %}
+        </div>
+        <!--End of messaging-->
+
         <div class="page-container">
+
                 {% block content %}
                 {% endblock %}
         </div>
