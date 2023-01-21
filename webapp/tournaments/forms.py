@@ -6,6 +6,7 @@ from django.forms import (ModelForm, CharField, DateField, IntegerField, ModelCh
 
 from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer, \
     Result, Tournament
+from webapp import settings
 
 
 class PlayerForm(ModelForm):
@@ -16,7 +17,7 @@ class PlayerForm(ModelForm):
     name = CharField(max_length=32)
     lastname = CharField(max_length=32)
     year_of_birth = IntegerField()
-    license_validity = DateField()
+    license_validity = DateField(input_formats=settings.DATE_INPUT_FORMATS)
 
     def clean_name(self):
         name = self.cleaned_data['name']
