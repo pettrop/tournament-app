@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, request
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
-from django.template import defaulttags
-from django.views import View
+
+
+import datetime
 
 from logging import getLogger, Logger
 
@@ -43,6 +44,9 @@ def player(request, pk):
     return render(request, template_name='tournaments/player.html', context=context)
 
 
+
+
+
 class PlayerCreateView(CreateView):
     template_name = 'tournaments/player_form.html'
     extra_context = {'title': 'Vytvoř hráče'}
@@ -75,9 +79,10 @@ class PlayerDeleteView(DeleteView):
 # Club/Clubs
 def club(request, pk):
     club = Club.objects.get(pk=pk)
-    context = {'club': club}
+    players = club.player_set.all()
+    context = {'club': club,
+               'players': players}
     return render(request, template_name='tournaments/club.html', context=context)
-
 
 class ClubCreateView(CreateView):
     template_name = 'tournaments/club_form.html'
@@ -204,9 +209,31 @@ class LeagueDeleteView(DeleteView):
 
 def category(request, pk):
     category = Category.objects.get(pk=pk)
-    context = {'category': category}
-    return render(request, template_name='tournaments/category.html', context=context)
+    current_year = datetime.date.today().year
+    all_players = Player.objects.all()
+    players_dospeli = []
+    players_dorostenci = []
+    players_starsi_zaci = []
+    players_mladsi_zaci = []
+    players_ostatni = []
+    for player in all_players:
+        if (current_year - 20) >= (player.year_of_birth):
+            players_dospeli.append(player)
+        elif (current_year - 18) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 20):
+            players_dorostenci.append(player)
+        elif (current_year - 13) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 18):
+            players_starsi_zaci.append(player)
+        elif (current_year - 10) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 13):
+            players_mladsi_zaci.append(player)
+        else: players_ostatni.append(player)
 
+    context = {'category': category,
+               'players_dospeli': players_dospeli,
+               'players_dorostenci': players_dorostenci,
+               'players_starsi_zaci': players_starsi_zaci,
+               'players_mladsi_zaci': players_mladsi_zaci,
+               'players_ostatni': players_ostatni}
+    return render(request, template_name='tournaments/category.html', context=context)
 
 class CategoriesView(ListView):
     template_name = 'tournaments/categories.html'
