@@ -216,27 +216,33 @@ def category(request, pk):
     current_year = datetime.date.today().year
     all_players = Player.objects.all()
     players_dospeli = []
-    players_dorostenci = []
-    players_starsi_zaci = []
-    players_mladsi_zaci = []
+    players_dorastenci = []
+    players_starší_žiaci = []
+    players_mladší_žiaci = []
     players_ostatni = []
+    players_dievčata = []
     for player in all_players:
-        if (current_year - 20) >= (player.year_of_birth):
-            players_dospeli.append(player)
-        elif (current_year - 18) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 20):
-            players_dorostenci.append(player)
-        elif (current_year - 13) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 18):
-            players_starsi_zaci.append(player)
-        elif (current_year - 10) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 13):
-            players_mladsi_zaci.append(player)
-        else: players_ostatni.append(player)
+        if player.player_is_girl is True:
+            players_dievčata.append(player)
+        else:
+            if (current_year - 20) >= player.year_of_birth:
+                players_dospeli.append(player)
+            elif (current_year - 15) > player.year_of_birth and player.year_of_birth >= (current_year - 19):
+                players_dorastenci.append(player)
+            elif (current_year - 13) > player.year_of_birth and player.year_of_birth >= (current_year - 15):
+                players_starší_žiaci.append(player)
+            elif player.year_of_birth >= (current_year - 13):
+                players_mladší_žiaci.append(player)
+            else: players_ostatni.append(player)
 
     context = {'category': category,
                'players_dospeli': players_dospeli,
-               'players_dorostenci': players_dorostenci,
-               'players_starsi_zaci': players_starsi_zaci,
-               'players_mladsi_zaci': players_mladsi_zaci,
-               'players_ostatni': players_ostatni}
+               'players_dorastenci': players_dorastenci,
+               'players_starší_žiaci': players_starší_žiaci,
+               'players_mladší_žiaci': players_mladší_žiaci,
+               'players_ostatni': players_ostatni,
+               'players_dievčata': players_dievčata}
+    print(context)
     return render(request, template_name='tournaments/category.html', context=context)
 
 class CategoriesView(ListView):

@@ -24,6 +24,8 @@ class Category(Model):
 
     def __str__(self):
         return self.category_name
+
+
 def current_year():
     return datetime.date.today().year
 
@@ -36,7 +38,9 @@ class Player(Model):
     lastname = models.CharField(max_length=32)
     year_of_birth = models.IntegerField(validators=[MinValueValidator(1950), max_value_current_year])
     license_validity = models.DateField()
+    player_is_girl = models.BooleanField(default=False)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
+
 
 
     def __str__(self):
