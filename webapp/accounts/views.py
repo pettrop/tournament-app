@@ -15,7 +15,7 @@ from .forms import SetPasswordForm, PasswordResetForm
 from .decorators import user_not_authenticated
 from .tokens import account_activation_token
 from tournaments.models import Club
-from webapp.settings import DEBUG
+from webapp.settings import DEBUG, EMAIL_HOST_USER
 from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 
 
@@ -163,7 +163,6 @@ def password_reset_request(request):
             user_email = form.cleaned_data['email']
             associated_user = get_user_model().objects.filter(Q(email=user_email)).first()
             if associated_user:
-                print('found')
                 mail_subject = "Žiadosť o obnovenie hesla"
                 message = render_to_string(template_name='accounts/email_template_password_reset.html', context={
                     'user': associated_user,
@@ -179,7 +178,6 @@ def password_reset_request(request):
                     skontrolujte, či ste zadali správnu e-mailovú adresu a zložku so spamom.""")
 
                 else:
-                    print('not found')
                     messages.error(request, f'Problém pri odosielaní resetovacieho e-mailu.')
 
             else:
@@ -270,13 +268,59 @@ def profile_update(request):
                   )
 
 
+def permission_request_email(request, user, profile, group, club):
+    mail_subject = "Žiadosť o udelenie práv"
+    message_admin = render_to_string(
+        template_name='accounts/email_template_permission_request.html',
+        context={
+            'user': user,
+            'profile': profile,
+            'group': group,
+            'club': club
+        })
+
+    message_user = render_to_string(
+        template_name='accounts/email_template_permission_request_user_copy.html',
+        context={
+            'user': user,
+            'profile': profile,
+            'group': group,
+            'club': club
+        })
+
+    email_admin = EmailMessage(mail_subject, message_admin, to={EMAIL_HOST_USER})
+    email_user = EmailMessage(mail_subject, message_user, to={user.email})
+    if email_admin.send() and email_user.send():
+        messages.success(request, f"""Vaše žádost byla úspěšně odeslána.""")
+
+
 @login_required
 def permission_request(request):
     user = request.user
     profile = request.user.profile
-    permission_groups = ["Organizátor", "Zástupce klubu"]
+    group = None
+    club = None
+    if request.method == "GET":
+        group = request.GET.get('group')
+
+    if request.method == "POST":
+        group = request.GET.get('group')
+        if group == "Organizátor":
+            permission_request_email(request, user, profile, group, club)
+            return redirect('profile')
+
+        elif group == "Zástupca klubu":
+            club = request.POST.get('clubname')
+            permission_request_email(request, user, profile, group, club)
+            return redirect('profile')
+
+        else:
+            messages.error(request, f'Problém pri odosielaní žiadosti.')
+            return redirect('profile')
+
+    permission_groups = ["Organizátor", "Zástupca klubu"]
     clubs = Club.objects.all()
-    context = {'user': user, 'clubs': clubs, 'profile': profile, "groups": permission_groups}
+    context = {'user': user, 'clubs': clubs, 'profile': profile, "groups": permission_groups, "group": group}
     return render(request=request,
                   template_name='accounts/permission_request.html',
                   context=context

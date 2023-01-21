@@ -4,29 +4,43 @@
 <p>Žiadosť o pridelenie práv pre užívateľa {{ user.first_name }} {{ user.last_name }}</p>
 <div>
     {% if user.email and profile.phone %}
-    <p>Vyberte, o jaká práva chcete zažádat:</p>
-        <form>
-            {% for group in groups %}
-            <input type="radio" id="{{group}}" name="group" value="{{group}}">
-            <label for="{{group}}">{{group}}</label><br>
-            {% endfor %}
-        </form>
-    <br>
-    <p>Zobrazit jen když je zaškrtnutý organizátor</p>
-    <p>Odeslat žádost</p>
-    <br>
-    <p>Zobrazit jen když je zaškrtnutý zástupce klubu</p>
-    <input type="text" list="clublist">
-    <datalist id="clublist">
-        {% for club in clubs %}
-        <option value="{{ club.club_name }}">
+    <p>Vyberte, o aké práva chcete požiadať:</p>
+    <form>
+        {% for group in groups %}
+        <input type="radio" id="{{group}}" name="group" value="{{group}}">
+        <label for="{{group}}">{{group}}</label><br>
         {% endfor %}
-    </datalist>
-<br>
-    <p>Odeslat žádost - pokud je vybrán/zapsán klub</p>
-    {% else %}
-    <p>Vráťte sa späť do profilu a doplňte ho. Musíte mať vyplnený email aj telefónne číslo.</p>
-    {% endif %}
+        <input type="submit" name="btn-submit" value="Vyberte možnosť">
+        <br>
+    </form>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            {% if group == "Zástupca klubu" %}
+            <p>Vybraný zástupca klubu:</p>
+            <label>Klub: </label>
+            <input type="text" list="clublist" name="clubname" required="required">
 
+            <datalist id="clublist">
+                {% for club in clubs %}
+
+                <option value="{{ club.club_name }}">
+                    {% endfor %}
+            </datalist><br>
+            {% elif group == "Organizátor" %}
+            <p>Vybraný organizátor:</p>
+            {% endif %}
+
+            {% if group == "Zástupca klubu" or group == "Organizátor" %}
+            <button type="submit">Odeslat žádost</button>
+            {% endif %}
+        </div>
+    </form>
+    <a href="{% url 'profile' %}">Späť</a>
+    {% else %}
+    <p>Vráťte sa späť do <a href="{% url 'profile' %}">profilu</a> a doplňte ho. Musíte mať vyplnený email aj telefónne číslo.</p>
+    {% endif %}
+</div>
 </div>
 {% endblock %}
