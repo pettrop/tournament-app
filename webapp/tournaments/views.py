@@ -47,10 +47,6 @@ def player(request, pk):
     context = {'player': player}
     return render(request, template_name='tournaments/player.html', context=context)
 
-
-
-
-
 class PlayerCreateView(CreateView):
     template_name = 'tournaments/player_form.html'
     extra_context = {'title': 'Vytvoř hráče'}
@@ -95,9 +91,11 @@ class ClubCreateView(CreateView):
     form_class = ClubForm
     success_url = reverse_lazy('clubs')
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
+
 
 
 class ClubUpdateView(UpdateView):
@@ -143,9 +141,10 @@ class SeasonCreateView(CreateView):
     form_class = SeasonForm
     success_url = reverse_lazy('seasons')
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class SeasonUpdateView(UpdateView):
@@ -186,9 +185,10 @@ class LeagueCreateView(CreateView):
     form_class = LeagueForm
     success_url = reverse_lazy('leagues')
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class LeagueUpdateView(UpdateView):
@@ -257,9 +257,10 @@ class CategoryCreateView(CreateView):
     form_class = CategoryForm
     success_url = reverse_lazy('categories')
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class CategoryUpdateView(UpdateView):
@@ -300,9 +301,10 @@ class DisciplineCreateView(CreateView):
     form_class = DisciplineForm
     success_url = reverse_lazy('disciplines')
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class DisciplineUpdateView(UpdateView):
@@ -343,9 +345,10 @@ class OrganizerCreateView(CreateView):
     form_class = OrganizerForm
     success_url = reverse_lazy('organizers')
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class OrganizerUpdateView(UpdateView):
@@ -403,6 +406,12 @@ def proposition_detail(request, pk):
         'schedules': schedules,
     }
     return render(request, template_name='tournaments/proposition_detail.html', context=context)
+
+class PropositionDeleteView(DeleteView):
+    template_name = 'tournaments/proposition_delete.html'
+    model = Propositions
+    success_url = reverse_lazy('propositions')
+    context_object_name = 'propositions'
 
 
 def tournament_create_view(request):

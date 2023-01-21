@@ -1,3 +1,5 @@
+from enum import unique
+
 from django.core.exceptions import ValidationError
 from django.forms import (ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField,
                           SelectDateWidget, EmailField, TextInput)
@@ -16,6 +18,12 @@ class PlayerForm(ModelForm):
     year_of_birth = IntegerField()
     license_validity = DateField()
 
+    # def player_unique_validator(self):
+    #     if name is not unique
+    #         validation_error = "Name must contains min. 2 characters."
+    #         LOGGER.warning(f'{name} : {validation_error}')
+    #         raise ValidationError(validation_error)
+    #     return name.capitalize()
     def clean_name(self):
         name = self.cleaned_data['name']
         return name.capitalize()
@@ -34,11 +42,16 @@ class ClubForm(ModelForm):
         model = Club
         fields = '__all__'
 
-    club_name = CharField(max_length=64)
+    # club_name = CharField(max_length=64)
 
     def clean_club_name(self):
         club_name = self.cleaned_data['club_name']
-        return club_name.capitalize()
+        duplicity_name = Club.objects.filter(club_name=club_name)
+        if duplicity_name.exists():
+            validation_error = "Klub s tímto názvem již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return club_name.capitalize()
 
     def clean(self):
         result = super().clean()
@@ -54,7 +67,12 @@ class SeasonForm(ModelForm):
 
     def clean_season_name(self):
         season_name = self.cleaned_data['season_name']
-        return season_name.capitalize()
+        duplicity_name = Season.objects.filter(season_name=season_name)
+        if duplicity_name.exists():
+            validation_error = "Tato sezóna již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return season_name.capitalize()
 
     def clean(self):
         result = super().clean()
@@ -70,7 +88,12 @@ class LeagueForm(ModelForm):
 
     def clean_league_name(self):
         league_name = self.cleaned_data['league_name']
-        return league_name.capitalize()
+        duplicity_name = League.objects.filter(league_name=league_name)
+        if duplicity_name.exists():
+            validation_error = "Tato liga již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return league_name.capitalize()
 
     def clean(self):
         result = super().clean()
@@ -86,7 +109,12 @@ class CategoryForm(ModelForm):
 
     def clean_category_name(self):
         category_name = self.cleaned_data['category_name']
-        return category_name.capitalize()
+        duplicity_name = Category.objects.filter(category_name=category_name)
+        if duplicity_name.exists():
+            validation_error = "Tato věková kategorie již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return category_name.capitalize()
 
     def clean(self):
         result = super().clean()
@@ -102,7 +130,12 @@ class DisciplineForm(ModelForm):
 
     def clean_discipline_name(self):
         discipline_name = self.cleaned_data['discipline_name']
-        return discipline_name.capitalize()
+        duplicity_name = Discipline.objects.filter(discipline_name=discipline_name)
+        if duplicity_name.exists():
+            validation_error = "Tato disciplína již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return discipline_name.capitalize()
 
     def clean(self):
         result = super().clean()

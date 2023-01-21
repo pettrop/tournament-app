@@ -9,7 +9,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Club(Model):
-    club_name = models.CharField(max_length=64)
+    club_name = models.CharField(max_length=64, unique=True)
     # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -18,6 +18,9 @@ class Club(Model):
 
     class Meta:
         ordering = ['club_name']
+
+
+
 
 class Category(Model):
     category_name = models.CharField(max_length=32, unique=True)
@@ -41,13 +44,12 @@ class Player(Model):
     player_is_girl = models.BooleanField(default=False)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
 
-
-
     def __str__(self):
         return '{} {} ({}, id: {})'.format(self.lastname, self.name, self.year_of_birth, self.id)
 
     class Meta:
         ordering = ['lastname']
+        unique_together = (('name', 'lastname', 'year_of_birth'),)
 
 
 class Season(Model):
@@ -80,7 +82,9 @@ class Organizer(Model):
     def __str__(self):
         return '{} {} ({})'.format(self.organizer_lastname, self.organizer_name, self.organizer_mail)
 
-
+    class Meta:
+        ordering = ['organizer_lastname']
+        unique_together = (('organizer_name', 'organizer_lastname', 'organizer_mail', 'organizer_phone'),)
 class Schedule(Model):
     start_time = models.TimeField()
     end_time = models.TimeField(blank=True, null=True)
@@ -112,6 +116,10 @@ class Propositions(Model):
 
     def __str__(self):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
+
+    class Meta:
+        ordering = ['event_date']
+        unique_together = (('event_location', 'event_date', 'organizer_club'),)
 
 
 class Scoreboard(Model):

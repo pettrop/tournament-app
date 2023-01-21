@@ -85,6 +85,7 @@ urlpatterns = [
     path('proposition/detail/<pk>', tournaments.views.proposition_detail, name='proposition'),
     path('proposition/create', tournaments.views.PropositionCreateView.as_view(), name='proposition_create'),
     path('propositions/', tournaments.views.PropositionsView.as_view(), name='propositions'),
+    path('proposition/delete/<pk>', tournaments.views.PropositionDeleteView.as_view(), name='proposition_delete'),
 
     path('tournament/<int:pk>/edit', tournaments.views.tournament_update_view, name='tournament'),
     path('tournament/<int:pk>/', tournaments.views.tournament_detail_view),
