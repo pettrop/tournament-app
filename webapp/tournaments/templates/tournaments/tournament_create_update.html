@@ -6,7 +6,7 @@
     <p>{{ message }}</p>
 {% endif %}
 
-    <form action='.' method="post">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p}}
 
@@ -22,6 +22,5 @@
         {% endif %}
         <button type="submit">Uloz</button>
     </form>
-
 
 {% endblock %}

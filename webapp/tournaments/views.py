@@ -1,5 +1,6 @@
 from pprint import pprint
 
+from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -29,11 +30,6 @@ def home(request):
     context = {}
     return render(request, template, context)
 
-
-def results(request):
-    template = "results.html"
-    context = {}
-    return render(request, template, context)
 
 
 # Player / Players
@@ -428,10 +424,9 @@ def tournament_update_view(request, pk):
     context = {
         "form": form,
         "formset": formset,
-        "object": obj
+        "object": obj,
     }
     if all([form.is_valid(), formset.is_valid()]):
-        print("Je validny!")
         parent = form.save(commit=False)
         parent.save()
         for form in formset:
@@ -448,3 +443,32 @@ def tournament_detail_view(request, pk=None):
         "object": obj
     }
     return render(request, "tournaments/tournament_detail.html", context)
+
+
+def results_view(request):
+    tournaments_list = Tournament.objects.all()
+    context = {
+        "tournaments_list": tournaments_list
+    }
+    return render(request, template_name="tournaments/results.html", context=context)
+
+
+def results_detail(request, pk=None):
+    results_players = Result.objects.filter(tournament_id=pk).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
+    club_names = Result.objects.filter(tournament_id=pk).values('player__club__club_name').distinct()
+    results_club = []
+    for club_name in club_names:
+        club = club_name["player__club__club_name"]
+        top_three_players = Result.objects.filter(tournament_id=pk,
+                                                  player__club__club_name=club_name["player__club__club_name"]).values(
+            'player_id', 'player__name', 'player__lastname').annotate(points=Sum('result')).order_by('-points')[:3]
+        sum_points_club = sum([player['points'] for player in top_three_players])
+        results_club.extend([(club, sum_points_club)])
+
+    results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)
+
+    context = {
+        "results_club_ordered": results_club_ordered,
+        "results_players": results_players
+    }
+    return render(request, template_name="tournaments/results_detail.html", context=context)

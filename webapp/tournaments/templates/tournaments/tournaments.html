@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Turnaje</h1>
   {% for tournament in tournaments_list %}
-     <p><a href="{% url 'tournament' tournament.pk %}">{{ tournament }}</a></p>
+     <p><a href="{% url 'tournament' tournament.pk %}">{{ tournament }} ({{ tournament.propositions.season }})</a></p>
   {% endfor %}
 
 {% endblock %}
