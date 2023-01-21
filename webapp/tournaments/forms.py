@@ -18,12 +18,6 @@ class PlayerForm(ModelForm):
     year_of_birth = IntegerField()
     license_validity = DateField()
 
-    # def player_unique_validator(self):
-    #     if name is not unique
-    #         validation_error = "Name must contains min. 2 characters."
-    #         LOGGER.warning(f'{name} : {validation_error}')
-    #         raise ValidationError(validation_error)
-    #     return name.capitalize()
     def clean_name(self):
         name = self.cleaned_data['name']
         return name.capitalize()
