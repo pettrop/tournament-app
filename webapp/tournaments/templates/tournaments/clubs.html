@@ -7,7 +7,13 @@
 <div class="page-tables">
     <ul class="list">
         {% for club in object_list %}
-            <li class="list-item"><a href="{% url 'club' club.id %}">{{ club.club_name }} </a></li>
+            <li class="list-item">
+                <a href="{% url 'club' club.id %}">{{ club.club_name }}</a>
+                <div class="list-item-buttons">
+                    <a class="edit" href="{% url 'club_update' club.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    <a class="delete" href="{% url 'club_delete' club.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 </div>

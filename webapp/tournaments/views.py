@@ -144,7 +144,7 @@ class SeasonCreateView(CreateView):
     success_url = reverse_lazy('seasons')
 
     def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
+        LOGGER.warning('Invalid data provided')   #ZÁSAH OD KUBA ... nešlo mi vytvoriť sezónu s kódom "Logger.warning('Invalid data provided), resp pri invalid data vyskakovala chyba"
         return super().form_invalid(form)
 
 

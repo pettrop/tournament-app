@@ -1,12 +1,15 @@
 {% extends 'main.html' %}
-
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <p>
-          Jste si jistí, že chcete vymazat disciplínu "{{ object.discipline_name}}" z databáze?
-        </p>
-        <button type="submit">YES</button>
-        <a href="{% url 'disciplines' %}">Cancel</a>
-    </form>
+<div class="page-header">
+  <h1>Vymazať disciplínu</h1>
+</div>
+<div class="page-tables">
+    <div class="delete-question">
+      <p class="question">Ste si istý, že chcete vymazať disciplínu "{{ object.discipline_name }}" z databázy?</p>
+      <div class="question-buttons">
+        <button type="submit"><i class="fa-solid fa-trash"></i> Vymazať disciplínu</button>
+        <a href="{% url 'disciplines' %}"><i class="fa-solid fa-ban"></i> Zrušiť zmazanie</a>
+      </div>
+    </div>
+</div>
 {% endblock %}
