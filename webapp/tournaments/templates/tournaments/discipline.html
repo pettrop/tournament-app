@@ -1,8 +1,15 @@
 {% extends 'main.html' %}
-
 {% block content %}
+<div class="page-header">
     <h1> {{ discipline.discipline_name }}</h1>
-    <ul>
-        prehled hracu v teto discipline, vysledky turnaju teto discipliny
-    </ul>
+</div>
+<div class="page-tables">
+    <p>prehled hracu v teto discipline, vysledky turnaju teto discipliny</p>
+    <div class="bottom-menu">
+        <ul>
+            <li><a class="edit bottom-menu-btn" href="{% url 'discipline_update' discipline.id %}"><i class="fa-solid fa-pen-to-square"></i> Upraviť disciplínu</a></li>
+            <li><a class="delete bottom-menu-btn" href="{% url 'discipline_delete' discipline.id %}"><i class="fa-solid fa-trash-can"></i> Vymazať disciplínu</a></li>
+        </ul>      
+    </div>
+</div>
 {% endblock content %}

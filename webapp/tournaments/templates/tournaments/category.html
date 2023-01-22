@@ -1,33 +1,61 @@
 {% extends 'main.html' %}
-
 {% block content %}
-    <h1> {{ category.category_name }}</h1>
-    <ul>
+<div class="page-header">
+    <h1>{{ category.category_name }}</h1>
+</div>
+<div class="page-tables">
+    <h2>Zoznam hráčov z kategórie "{{ category.category_name }}":</h2>
+    <table class="table-list">
+        <tr>
+            <th>Meno</th>
+            <th>Priezvisko</th>
+            <th>Rok narodenia</th>
+        </tr>
         {% if category.category_name == 'Dospeli' %}
-            {% for player in players_dospeli %}
-                 <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
-            {% endfor %}
-        {% endif %}
-        {% if category.category_name == 'Dorostenci' %}
-            {% for player in players_dorostenci %}
-            <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
+        {% for player in players_dospeli %}
+        <tr>
+            <td><a href="{% url 'player' player.pk %}">{{ player.name }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.lastname }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.year_of_birth }}</a></td>
+        </tr>
         {% endfor %}
-        {% endif %}
-        {% if category.category_name == 'Starsi zaci' %}
-            {% for player in players_starsi_zaci %}
-            <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
-        {% endfor %}
-        {% endif %}
-        {% if category.category_name == 'Mladsi zaci' %}
-            {% for player in players_mladsi_zaci %}
-            <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
-        {% endfor %}
-        {% endif %}
-        {% if category.category_name == 'Ostatni' %}
-            {% for player in players_ostatni %}
-           <a href="{% url 'player' player.pk %}">{{ player }}</a> <br/>
-        {% endfor %}
-        {% endif %}
 
-    </ul>
+        {% elif category.category_name == 'Dorostenci' %}
+        {% for player in players_dorostenci %}
+        <tr>
+            <td><a href="{% url 'player' player.pk %}">{{ player.name }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.lastname }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.year_of_birth }}</a></td>
+        </tr>
+        {% endfor %}
+
+        {% elif category.category_name == 'Starsi zaci' %}
+        {% for player in players_starsi_zaci  %}
+        <tr>
+            <td><a href="{% url 'player' player.pk %}">{{ player.name }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.lastname }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.year_of_birth }}</a></td>
+        </tr>
+        {% endfor %}
+
+        {% elif category.category_name == 'Mladsi zaci' %}
+        {% for player in players_mladsi_zaci  %}
+        <tr>
+            <td><a href="{% url 'player' player.pk %}">{{ player.name }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.lastname }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.year_of_birth }}</a></td>
+        </tr>
+        {% endfor %}
+
+        {% elif category.category_name == 'Ostatni' %}
+        {% for player in players_ostatni %}
+        <tr>
+            <td><a href="{% url 'player' player.pk %}">{{ player.name }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.lastname }}</a></td>
+            <td><a href="{% url 'player' player.pk %}">{{ player.year_of_birth }}</a></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+</div>
 {% endblock %}

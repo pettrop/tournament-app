@@ -1,11 +1,32 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h1>Leagues</h1>
+<div class="page-header">
+    <h1>Ligy</h1>
+</div>
+<div class="page-tables">
+    <ul class="list">
+        <div class="table-menu">
+            <ul>
+                <li><a class="table-menu-btn" href="{% url 'league_create'%}"><span class="symbol">+</span>Vytvor&nbsp;novú&nbsp;ligu</a></li>
+            </ul>      
+        </div>
+        {% for league in object_list %}
+            <li class="list-item">
+                <a href="{% url 'league' league.id %}">{{ league.league_name }}</a>
+                <div class="list-item-buttons">
+                    <a class="edit" href="{% url 'league_update' league.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    <a class="delete" href="{% url 'league_delete' league.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<!-- <h1>Leagues</h1>
     <br/>
     <ul>
         {% for league in object_list %}
             <li><a href="{% url 'league' league.id %}">{{ league.league_name }}</a></li>
         {% endfor %}
-    </ul>
+    </ul> -->
 {% endblock %}

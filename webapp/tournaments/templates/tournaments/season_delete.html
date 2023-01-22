@@ -1,12 +1,20 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <p>
-          Jste si jistí, že chcete vymazat sezonu "{{ object.season_name}}" z databaze?
-        </p>
-        <button type="submit">YES</button>
-        <a href="{% url 'seasons' %}">Cancel</a>
-    </form>
+<div class="page-header">
+  <h1>Vymazať sezónu</h1>
+</div>
+<div class="page-tables">
+  <form method="post">
+    {% csrf_token %}
+    <div class="delete-question">
+      <p class="question">Ste si istý, že chcete vymazať sezónu "{{ object.season_name }}" z databázy?</p>
+      <div class="question-buttons">
+        <button type="submit"><i class="fa-solid fa-trash"></i> Vymazať sezónu</button>
+        <a href="{% url 'seasons' %}"><i class="fa-solid fa-ban"></i> Zrušiť zmazanie</a>
+      </div>
+    </div>
+</form>
+</div>
+    
 {% endblock %}

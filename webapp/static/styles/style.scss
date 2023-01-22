@@ -65,10 +65,164 @@ body {
         width: 95%;
         min-height: 30vh;
         padding: em(30);
-        margin-left: em(20);
+        margin: 0 auto;
+        position: relative;
         &.under-hero {
             min-height: 30vh;
         }
+
+        h2 {
+            color: $secondary-color;
+            font-size: em(20,16);
+            text-shadow: none;
+            text-transform: none;
+            animation: none;
+        }
+
+        p {
+            a {
+                color: $secondary-color;
+                text-decoration: none;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        a.for-pass {
+            display: inline-block;
+            color: $secondary-color;
+            margin-top: em(20);
+            text-decoration: none;
+            &:hover, &:active {
+                font-weight: bold;
+            }
+        }
+
+        p.instruction {
+            font-weight: bold;
+            margin-bottom: em(15);
+        }
+
+        & .table-menu, .bottom-menu {
+            width: 100%;
+            margin-bottom: em(30);
+            ul {
+                width: 100%;
+                height: 100%;
+                margin: 0 auto;
+                display: flex;
+                @include flex-center;
+                gap: 5%;
+                li {
+                    width: 20%;
+                    text-align: center;
+                    font-size: em(16);
+                    font-weight: bold;
+                    margin-top: em(50);
+
+                    a.table-menu-btn, a.bottom-menu-btn {
+                        display: inline-block;
+                        background-color: $primary-color;
+                        border: 3px solid $fourth-color;
+                        border-radius: em(5);
+                        box-shadow: em(2) em(2) em(1) #333;
+                        transition: all 0.3s;
+                        text-decoration: none;
+                        color: $secondary-color;
+                        padding: em(10) 0;
+                        @include li-clickable(100%);
+                        span.symbol {
+                            color: $fourth-color;
+                            margin-right: em(5);
+                            vertical-align: middle;
+                            font-size: em(30);
+                        }
+                    }
+
+                    a.table-menu-btn:hover {
+                        background-color: $secondary-color;
+                        border-color: $fourth-color;
+                        color: $primary-color;  
+                            span.symbol {
+                                color: lighten($fourth-color, 10%);
+                            }
+                    }
+
+                    a.bottom-menu-btn.delete{
+                        border-color: $fifth-color;
+                    }
+                    a.bottom-menu-btn:hover {
+                        &.edit {
+                            background-color: $fourth-color;
+                            color: $primary-color;
+                            border-color: $fourth-color;
+                        }
+                        &.delete {
+                            background-color: $fifth-color;
+                            border-color: $fifth-color;
+                            color: $primary-color;
+                        }
+                    }
+                }
+            }         
+        }
+
+
+        & .info-block {
+            li {
+                margin-bottom: em(20);
+                span.label {
+                    display: inline-block;
+                    font-weight: bold;
+                    text-decoration: underline;
+                    font-size: em(18,16);
+                    margin-bottom: em(5);
+                }
+            }
+        }
+
+        & .table-list {
+            width: 30%;
+            border: 2px solid $secondary-color;
+            tr {
+                transition: all 0.1s;
+                &:nth-child(odd) {
+                    background-color: darken($focus-color,10%);
+                }
+                &:hover, &:active {
+                    background-color: lighten($fourth-color,5%);
+                     td {
+                        a {
+                            color: $primary-color;
+                        }
+                     }
+                    
+                }
+                th {
+                    background-color: $fourth-color;
+                    padding: em(10) 0;
+                    color: $primary-color;
+                    font-weight: bold;
+                }
+
+                td {
+                    a {
+                        text-decoration: none;
+                        font-weight: bold;
+                        color: $secondary-color;
+                        text-align: center;
+                        padding: em(7);
+                        @include li-clickable(100%);
+                        transition: all 0.1s;
+                        &:hover, &:active {
+                            color: $primary-color;
+                        }
+                    }
+                }
+            }
+        }
+        
         
         p.succes-notice {
             font-weight: bold;
@@ -94,9 +248,11 @@ body {
                 border-radius: em(3);
                 position: relative;
                 transition: all .5s;
-                &:hover {
-                    transform: translate(2%, 0);
-                    padding: em(5);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                &:hover, &:active {
+                    transform: translate(2%, 0) scale(1.05);
                     margin-top: em(5);
                     margin-bottom: em(5);
                     background-color: $fourth-color;
@@ -107,14 +263,93 @@ body {
                     }
                 }
 
+                &:hover .list-item-buttons a.edit, &:active .list-item-buttons a.edit{
+                    background-color: $primary-color;
+                    color: $secondary-color;
+                    border-color: $secondary-color; 
+                    display: block;      
+                }
+                &:hover .list-item-buttons a.delete, &:active .list-item-buttons a.delete  {
+                    background-color: $fifth-color;
+                    display: block;         
+                }
+
                 a {
                     text-decoration: none;
                     color: $secondary-color;
                     font-weight: bold;
                     display: block;
-                    padding: em(10);
+                    padding: em(14);
+                    line-height: 100%;
+                    width: 80%;
+                }
+
+                .list-item-buttons {
+                    width: 20%;
+                    display: flex;
+                    a {
+                        display: none;
+                        padding: em(10);
+                        text-align: center;
+                        margin-right: em(15);
+                        border: 2px solid $secondary-color;
+                        border-radius: em(6);
+                        box-shadow: em(1) em(1) $secondary-color;
+                        transition: all 0.3s;
+                        font-size: em(14,16);
+                        &:first-child {
+                            margin-right: em(30);
+                        }
+                        &:hover, &.active {
+                            transform: scale(1.05);
+                        }
+                    }
                 }
             }
+        }
+
+        .delete-question {
+            p.question {
+                text-align: center;
+                font-size: em(20,16);
+                color: $secondary-color;
+                font-weight: bold;
+                margin-bottom: em(20);
+            }
+            .question-buttons {
+                width: 100%;
+                display: flex;
+                @include flex-center;
+                gap: 3%;
+                a, button {
+                    text-align: center;
+                    width: 20%;
+                    text-decoration: none;
+                    display: block;
+                    padding: em(10) em(20);
+                    border: 2px solid $secondary-color;
+                    border-radius: em(6);
+                    line-height: 100%;
+                    color: $secondary-color;
+                    font-weight: bold;
+                    background-color: $primary-color;
+                    transition: all 0.3s;
+                }
+                a:hover {
+                    background-color: $fourth-color;
+                    color: $primary-color;
+                }
+                button:hover {
+                    background-color: $fifth-color;
+                    color: $primary-color;
+                }
+            }
+        }
+
+        .page-links {
+            width: 100%;
+            margin-top: em(50);
+            text-align: center;
         }
 
         //STYLES FOR DJANGO FORMS!
@@ -141,11 +376,10 @@ body {
                 }
 
                 input:focus, select:focus {
-                    background-color: #ededed;
+                    background-color: $focus-color;
                     transform: scale(1.03);
                     border-width: 3px;
                 }
-
             }
             input.btn, button.btn {
                 border: 2px solid darken($fourth-color, 20%);
@@ -163,6 +397,67 @@ body {
                     background-color: $primary-color;
                     transform: scale(1.05)
                 }
+            }
+
+            &.complex-form{
+                label {
+                    display: block;
+                    font: {
+                        weight: bold;
+                        size: em(18,16)
+                    }
+                    margin: em(35) 0 em(3);
+                }
+                input.btn, button.btn {
+                    margin-top: em(40);
+                }
+            }
+            textarea {
+                border: 2px solid $fourth-color;
+                border-radius: em(5);
+                transition: all 0.3s;
+                margin-left: em(6);
+                box-shadow: em(2) em(2) em(1) #333;
+                font: {
+                    family: 'Montserrat', sans-serif;
+                }
+                padding: em(20);
+                &:focus {
+                    background-color: $focus-color;
+                    transform: scale(1.03);
+                    color: #000;
+                }
+            }
+            input, select {
+                margin-left: em(6);
+                border: 2px solid $fourth-color;
+                border-radius: em(5);
+                box-shadow: em(2) em(2) em(1) #333;
+                transition: all 0.3s;
+            }
+
+            select {
+                margin-right: em(10);
+                padding: em(10) em(15);
+                & option {
+                    background-color: $focus-color;
+                    color: $secondary-color;
+                }
+            }
+
+            input {
+                margin-left: em(6);
+                padding: em(10);
+            }
+
+            input:active, select:active {
+                background-color: $fourth-color;
+            }
+
+            input:focus, select:focus {
+                background-color: $focus-color;
+                transform: scale(1.03);
+                border-width: 3px;
             }
         }
     }
@@ -341,11 +636,21 @@ nav {
                     display: flex;
                     flex-direction: column;
                     gap: em(5);
+
                     .img-wrapper {
                         width: em(50);
                         height: em(50);
                         border-radius: 50%;
                         margin: 0 auto;
+                        position: relative;
+                        a.to-profile {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                        }
                     }
 
                     .avatar-in {
