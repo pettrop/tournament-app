@@ -1,5 +1,8 @@
+import selectors
+
 from django.db import models
 from django.db.models import Model, Sum
+from django.forms import forms
 from django.urls import reverse
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -36,9 +39,11 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
+
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
+    # year_of_birth = models.IntegerField()
     year_of_birth = models.IntegerField(validators=[MinValueValidator(1950), max_value_current_year])
     license_validity = models.DateField()
     player_is_girl = models.BooleanField(default=False)

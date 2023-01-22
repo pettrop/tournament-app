@@ -1,27 +1,46 @@
 from enum import unique
 
 from django.core.exceptions import ValidationError
+from django.db.models.functions import datetime
 from django.forms import (ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField,
-                          SelectDateWidget, EmailField, TextInput)
+                          SelectDateWidget, EmailField, TextInput, forms, MultiWidget, Select)
 
 from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer, \
-    Result, Tournament
-from webapp import settings
+    Tournament, Result
 
+from webapp import settings
 
 class PlayerForm(ModelForm):
     class Meta:
         model = Player
         fields = '__all__'
 
+    # def current_year(self,**kwargs):
+    #     return datetime.date.today().year
+    # def choices():
+    #     return:
+    #         for i in range(1950, 1923)
+    # choices=range(1950,2022)
     name = CharField(max_length=32)
     lastname = CharField(max_length=32)
     year_of_birth = IntegerField()
-    license_validity = DateField(input_formats=settings.DATE_INPUT_FORMATS)
+    # year_of_birth = IntegerField(widget=Select())
+    license_validity = DateField(
+    widget=SelectDateWidget(
+        empty_label=("Choose Year", "Choose Month", "Choose Day"),
+        months={
+            1:'Január', 2:'Február', 3:'Marec', 4:'Apríl',
+            5:'Máj', 6:'Jún', 7:'Júl', 8:'August',
+            9:'September', 10:'Október', 11:'November', 12:'December'
+        }
+    ),
+)
+    # license_validity = DateField(input_formats = settings.DATE_INPUT_FORMATS)
 
     def clean_name(self):
         name = self.cleaned_data['name']
         return name.capitalize()
+
 
     def clean_lastname(self):
         lastname = self.cleaned_data['lastname']
