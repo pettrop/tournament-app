@@ -429,17 +429,16 @@ def tournament_update_view(request, pk):
         "formset": formset,
         "object": obj,
     }
+
+
     if all([form.is_valid(), formset.is_valid()]):
-        print("Formular je validny!")
-        parent = form.save(commit=False)
-        parent.save()
-        formset.save()
-        for form in formset:
-            print(form)
-            child = form.save(commit=False)
-            child.tournament = parent
-            child.save()
-        context['message'] = 'Data saved.'
+            parent = form.save(commit=False)
+            parent.save()
+            for form in formset:
+                child = form.save(commit=False)
+                child.tournament = parent
+                child.save()
+            context['message'] = 'Data saved.'
     return render(request, template_name="tournaments/tournament_create_update.html", context=context)
 
 

@@ -172,17 +172,21 @@ class PropositionForm(ModelForm):
 class ResultsAddForm(ModelForm):
     error_css_class = 'error-field'
     required_css_class = 'required-field'
-    #player = CharField(widget=TextInput(attrs={"class": "form-control", "placeholder": "Meno a priezvisko"}))
-    #result = CharField(widget=TextInput)
+
     class Meta:
         model = Result
-        fields = ['player', 'tournament', 'result']
+        fields = ['player', 'result']
+        exclude = ['tournament']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.fields['player'].label = 'Meno hráča'
-        self.fields['tournament'].label = 'Poradie turnaja v sezóne'
+        # self.fields['tournament'].label = 'Poradie turnaja v sezóne'
         self.fields['result'].label = 'Body'
+        tournament = kwargs.pop('tournament', None)
+        super(ResultsAddForm, self).__init__(*args, **kwargs)
+        if tournament:
+            self.fields['tournament'].initial = tournament
 
 
 class TournamentForm(ModelForm):

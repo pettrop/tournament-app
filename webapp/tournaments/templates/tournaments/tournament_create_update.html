@@ -21,7 +21,7 @@
         <div id='player-form-list'>
             {% for form in formset %}
                 <div class="result-form">
-                    {{ form.as_p}}
+                    {{ form.as_p }}
                 </div>
             {% endfor %}
 
@@ -33,7 +33,6 @@
     </form>
 
 <script>
-
     const addMoreBtn = document.getElementById('add-player')
     const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
 
@@ -55,9 +54,6 @@
         // now add new empty form element to our html form
         formCopyTarget.append(copyEmptyFormEl)
     }
-
-
-
 </script>
 
 {% endblock %}
