@@ -46,7 +46,7 @@ class ClubForm(ModelForm):
             validation_error = "Klub s tímto názvem již existuje v databázi"
             raise ValidationError(validation_error)
         else:
-            return club_name.capitalize()
+            return club_name
 
     def clean(self):
         result = super().clean()
@@ -67,7 +67,7 @@ class SeasonForm(ModelForm):
             validation_error = "Tato sezóna již existuje v databázi"
             raise ValidationError(validation_error)
         else:
-            return season_name.capitalize()
+            return season_name
 
     def clean(self):
         result = super().clean()
@@ -88,7 +88,7 @@ class LeagueForm(ModelForm):
             validation_error = "Tato liga již existuje v databázi"
             raise ValidationError(validation_error)
         else:
-            return league_name.capitalize()
+            return league_name
 
     def clean(self):
         result = super().clean()
@@ -109,7 +109,7 @@ class CategoryForm(ModelForm):
             validation_error = "Tato věková kategorie již existuje v databázi"
             raise ValidationError(validation_error)
         else:
-            return category_name.capitalize()
+            return category_name
 
     def clean(self):
         result = super().clean()
@@ -130,7 +130,7 @@ class DisciplineForm(ModelForm):
             validation_error = "Tato disciplína již existuje v databázi"
             raise ValidationError(validation_error)
         else:
-            return discipline_name.capitalize()
+            return discipline_name
 
     def clean(self):
         result = super().clean()
@@ -149,11 +149,11 @@ class OrganizerForm(ModelForm):
 
     def clean_organizer_name(self):
         organizer_name = self.cleaned_data['organizer_name']
-        return organizer_name.capitalize()
+        return organizer_name
 
     def clean_organizer_lastname(self):
         organizer_lastname = self.cleaned_data['organizer_lastname']
-        return organizer_lastname.capitalize()
+        return organizer_lastname
 
     def clean(self):
         result = super().clean()
