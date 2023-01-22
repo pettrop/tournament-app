@@ -19,7 +19,7 @@ class User(AbstractUser):
 
 class Profile(Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=25, null=True, blank=True)
+    phone = models.CharField(max_length=25, default='', null=True, blank=True)
     club = models.ForeignKey(Club, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):

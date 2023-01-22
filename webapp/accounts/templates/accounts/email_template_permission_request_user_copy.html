@@ -1,0 +1,18 @@
+{% autoescape off %}
+Dobrý deň, {{ user.first_name }} {{ user.last_name }},
+Prijali sme nasledujúcu požiadavku na udelenie práv:
+
+Užívaťel: {{ user.first_name }} {{ user.last_name }}
+Email: {{ user.email }}
+Telefón: {{ profile.phone }}
+
+Skupina užívateľov: {{ group }}
+{% if group == 'Zástupce klubu' %}
+Klub: {{ club }}
+{% endif %}
+
+Vaša žiadosť sa spracováva a jej vybavenie môže trvať niekoľko dní. Administrátor Vás bude kontaktovať kvôli overeniu.
+
+S pozdravom,
+team tournament-app
+{% endautoescape %}
