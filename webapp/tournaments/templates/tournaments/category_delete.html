@@ -1,12 +1,19 @@
 {% extends 'main.html' %}
-
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <p>
-          Jste si jistí, že chcete vymazat kategorii "{{ object.category_name}}" z databáze?
-        </p>
-        <button type="submit">YES</button>
-        <a href="{% url 'categories' %}">Cancel</a>
-    </form>
+<div class="page-header">
+  <h1>Vymazať kategóriu</h1>
+</div>
+<div class="page-tables">
+  <form method="post">
+    {% csrf_token %}
+    <div class="delete-question">
+      <p class="question">Ste si istý, že chcete vymazať kategóriu "{{ category.category_name }}" z databázy?</p>
+      <div class="question-buttons">
+        <button type="submit"><i class="fa-solid fa-trash"></i> Vymazať kategóriu</button>
+        <a href="{% url 'categories' %}"><i class="fa-solid fa-ban"></i> Zrušiť zmazanie</a>
+      </div>
+    </div>
+  </form>
+</div>
+    
 {% endblock %}

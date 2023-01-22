@@ -7,7 +7,13 @@
 <div class="page-tables">
     <ul class="list">
         {% for player in object_list %}
-            <li class="list-item"><a href="{% url 'player' player.id %}">{{ player.name|capfirst }} {{ player.lastname|capfirst }}</a></li>
+            <li class="list-item">
+                <a href="{% url 'player' player.id %}">{{ player.name|capfirst }} {{ player.lastname|capfirst }}</a>
+                <div class="list-item-buttons">
+                    <a class="edit" href="{% url 'player_update' player.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    <a class="delete" href="{% url 'player_delete' player.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 </div>

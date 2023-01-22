@@ -1,13 +1,14 @@
 {% extends "main.html" %}
-
 {% block content %}
-
-<h1>{{ object.name }} </h1>
-<p>{{ object.description }}</p>
-<p>{{ object.propositions }}</p>
-
-{% for result in object.get_result_children %}
-<p>{{ result.player.name }} {{ result.player.lastname }} - {{ result.result }}bodov</p>
-{% endfor %}
-
+<div class="page-header">
+    <h1> {{ object.name }}</h1>
+</div>
+<div class="page-tables">
+    <h2>{{ object.name }} </h2>
+    <p>{{ object.description }}</p>
+    <p>{{ object.propositions }}</p>
+    {% for result in object.get_result_children %}
+    <p>{{ result.player.name }} {{ result.player.lastname }} - {{ result.result }}bodov</p>
+    {% endfor %}
+</div>
 {% endblock %}

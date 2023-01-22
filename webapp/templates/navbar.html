@@ -10,11 +10,14 @@
         <ul class="main-menu">
             <li class="menu-item"><a href="{% url 'home' %}">Domov</a></li>
             <li class="menu-item"><a href="{% url 'results' %}">Výsledky</a></li>
-            <li class="menu-item"><a href="{% url 'tournaments' %}">Turnaje <i class="fa-solid fa-caret-down"></i></a>
+            <li class="menu-item"><a href="#">Turnaje <i class="fa-solid fa-caret-down"></i></a>
                 <div class="dropdown">
                     <ul>
-                        <li><a href="{% url 'proposition_create' %}">Vytvor propozície</a></li>
-                        <li><a href="{% url 'tournament_create' %}">Zadaj výsledky</a></li>
+                        <li><a href="{% url 'propositions' %}">Propozície</a></li>
+                        <li><a href="{% url 'proposition_create' %}">Vytvor propozíciu</a></li>
+                        <li><a href="{% url 'tournaments' %}">Turnaje</a></li>
+                        <li><a href="{% url 'tournament_create' %}">Vytvor turnaj</a></li>
+                        <li><a href="#">Zadaj výsledky</a></li>
                         <li><a href="#">Export výsledkov</a></li>
                     </ul>
                 </div>
@@ -36,6 +39,17 @@
                     </ul>
                 </div>
             </li>
+            <li class="menu-item"><a href="#">Ďalšie možnosti <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="{% url 'organizers' %}">Organizátori</a></li>
+                        <li><a href="{% url 'leagues' %}">Ligy</a></li>
+                        <li><a href="{% url 'seasons' %}">Sezóny</a></li>
+                        <li><a href="{% url 'disciplines' %}">Disciplíny</a></li>
+                        <li><a href="{% url 'categories' %}">Kategórie</a></li>
+                    </ul>
+                </div>
+            </li>
             {% endif %}
         </ul>
     </div>
@@ -45,9 +59,10 @@
             <li class="user-item">
                 <div class="user-avatar">
                     <div class="img-wrapper avatar-in">
+                        <a class="to-profile" href="{% url 'profile'%}"></a>
                         <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
                     </div>
-                    <p class="user-name">{{ request.user }}</p>
+                    <p class="user-name">{{ request.user.first_name }} {{ user.last_name }}</p>
                 </div>
             </li>
             <li class="button">

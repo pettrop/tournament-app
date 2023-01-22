@@ -1,11 +1,25 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h1>Seasons</h1>
-    <br/>
-    <ul>
+<div class="page-header">
+    <h1>Sezóny</h1>
+</div>
+<div class="page-tables">
+    <div class="table-menu">
+        <ul>
+            <li><a class="table-menu-btn" href="{% url 'season_create'%}"><span class="symbol">+</span>Vytvor&nbsp;novú&nbsp;sezónu</a></li>
+        </ul>      
+    </div>
+    <ul class="list">
         {% for season in object_list %}
-            <li><a href="{% url 'season' season.id %}">{{ season.season_name }}</a></li>
+            <li class="list-item">
+                <a href="{% url 'season' season.id %}">{{ season.season_name }}</a>
+                <div class="list-item-buttons">
+                    <a class="edit" href="{% url 'season_update' season.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    <a class="delete" href="{% url 'season_delete' season.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                </div>
+            </li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}

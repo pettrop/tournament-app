@@ -1,23 +1,22 @@
 {% extends 'main.html' %}
 {% block content %}
     <div class="page-header">
-        <h1>{{club}}</h1> <!---{{Club.club_name}} - pôvodné -->
+        <h1>{{club.club_name}}</h1>
     </div>
-
-
-
-
     <div class="page-tables">
-        <div>
-        <b>V klubu {{club}} hrají tito hráči:</b>
-        </div>
-        <br>
-
-        {% for player in players %}
-            <a href="{% url 'player' player.pk %}">{{ player.name }} {{ player.lastname }}</a>
-        </br>
-        {% endfor %}
-
-        <!-- ADD club info here-->
+        <h2>Zoznam hráčov z klubu {{ club.club_name }}:</h2>
+        <table class="table-list">
+            <tr>
+                <th>Meno</th>
+                <th>Priezvisko</th>
+            </tr>
+            {% for player in players %}
+            <tr>
+                <td><a href="{% url 'player' player.id%}">{{ player.name }}</a></td>
+                <td><a href="{% url 'player' player.id%}">{{ player.lastname }}</a></td>
+            </tr>
+            <!-- <a href="{% url 'player' player.pk %}">{{ player.name }} {{ player.lastname }}</a> -->
+            {% endfor %}  
+        </table>
     </div>
 {% endblock %}

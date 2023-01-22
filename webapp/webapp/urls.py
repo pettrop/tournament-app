@@ -30,6 +30,7 @@ urlpatterns = [
     
     path('accounts/signup/', accounts.views.signup, name='signup'),
     path('accounts/activate/<uidb64>/<token>/', accounts.views.activate, name='activate'),
+    path('accounts/deactivate/', accounts.views.deactivate_user, name='deactivate_user'),
     path('accounts/login/', accounts.views.custom_login, name='login'),
     path('accounts/logout/', accounts.views.custom_logout, name='logout'),
     path('accounts/password_change/', PasswordChangeView.as_view(template_name="registration/password_change.html"), name='password_change'),
@@ -85,6 +86,7 @@ urlpatterns = [
     path('proposition/detail/<pk>', tournaments.views.proposition_detail, name='proposition'),
     path('proposition/create', tournaments.views.PropositionCreateView.as_view(), name='proposition_create'),
     path('propositions/', tournaments.views.PropositionsView.as_view(), name='propositions'),
+    path('proposition/delete/<pk>', tournaments.views.PropositionDeleteView.as_view(), name='proposition_delete'),
 
     path('tournament/<int:pk>/edit', tournaments.views.tournament_update_view, name='tournament'),
     path('tournament/<int:pk>/', tournaments.views.tournament_detail_view),
@@ -95,3 +97,5 @@ urlpatterns = [
     path('results/', tournaments.views.results_view, name='results'),
 
 ]
+
+handler403 = 'tournaments.views.handler403'

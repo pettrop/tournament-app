@@ -1,11 +1,25 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h1>Disciplines</h1>
-    <br/>
-    <ul>
+<div class="page-header">
+    <h1>Disciplíny</h1>
+</div>
+<div class="page-tables">
+    <div class="table-menu">
+        <ul>
+            <li><a class="table-menu-btn" href="{% url 'discipline_create'%}"><span class="symbol">+</span>Vytvor&nbsp;novú&nbsp;disciplínu</a></li>
+        </ul>      
+    </div>
+    <ul class="list">
         {% for discipline in object_list %}
-            <li><a href="{% url 'discipline' discipline.id %}">{{ discipline.discipline_name }}</a></li>
+            <li class="list-item">
+                <a href="{% url 'discipline' discipline.id %}">{{ discipline.discipline_name }}</a>
+                <div class="list-item-buttons">
+                    <a class="edit" href="{% url 'discipline_update' discipline.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    <a class="delete" href="{% url 'discipline_delete' discipline.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                </div>
+            </li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}
