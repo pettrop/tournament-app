@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.checks import messages
 from django.db.models import Sum
 from django.forms import modelformset_factory
+from django.http import request
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
-
+from django.conf.urls import handler404, handler500, handler403, handler400
 import datetime
 
 
@@ -278,9 +280,11 @@ class CategoryUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.change_category']
 
-    def form_invalid(self, form):
-        LOGGER.warning('invalid data provided while updating')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
+
 
 
 class CategoryDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
@@ -518,3 +522,10 @@ def results_detail(request, pk=None):
 
 def handler403(request, exception):
     return render(request, '403.html', status=403)
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
+# def error_404(request, exception):
+#    context = {}
+#    return render(request,'404.html', context)

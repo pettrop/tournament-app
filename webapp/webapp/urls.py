@@ -99,3 +99,4 @@ urlpatterns = [
 ]
 
 handler403 = 'tournaments.views.handler403'
+handler404 = 'tournaments.views.handler404'
