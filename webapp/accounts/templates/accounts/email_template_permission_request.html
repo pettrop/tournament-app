@@ -1,0 +1,14 @@
+{% autoescape off %}
+Žiadosť o udelenie práv:
+
+Užívaťel: {{ user.first_name }} {{ user.last_name }}
+Email: {{ user.email }}
+Telefón: {{ profile.phone }}
+
+Skupina užívateľov: {{ group }}
+{% if group == 'Zástupce klubu' %}
+Klub: {{ club }}
+{% endif %}
+
+Pred udelením práv overte, či na ne má dotyčný skutočne nárok! Kontaktujte žiadajúcu osobu!
+{% endautoescape %}
