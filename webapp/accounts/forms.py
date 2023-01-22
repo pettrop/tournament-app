@@ -38,6 +38,10 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['phone']
 
+    def __init__(self, *args, **kwargs):
+        super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['phone'].required = False
+
 
 class SetPasswordForm(SetPasswordForm):
     class Meta:
