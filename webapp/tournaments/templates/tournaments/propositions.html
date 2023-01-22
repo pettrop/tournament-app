@@ -1,25 +1,25 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h1>Propozície</h1>
-    <br/>
-    <ul>
+<div class="page-header">
+    <h1>Propozície</h1>
+</div>
+<div class="page-tables">
+    <ul class="list">
         {% for proposition in propositions %}
-            <li><a href="{% url 'proposition' proposition.pk %}"> {{ proposition }} </a></li>
+            <li class="list-item"><a href="{% url 'proposition' proposition.pk %}"> {{ proposition }} </a></li>
         {% endfor %}
     </ul>
-    <span class="page-links">
+    <div class="page-links">
         {% if page_obj.has_previous %}
             <a href="?page={{ page_obj.previous_page_number }}">previous</a>
         {% endif %}
         <span class="page-current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            Strana {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
         </span>
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}">next</a>
         {% endif %}
-    </span>
-<!--    Toto je len docasny link!!!-->
-    <p>Vytvor novu propozíciu: <a href="{% url 'proposition_create' %}">TU</a> </p>
-<!--    Koniec docasneho linku!!!-->
+    </div>
+</div>
 {% endblock %}

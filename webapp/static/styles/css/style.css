@@ -136,10 +136,147 @@ body nav.side-bar {
   width: 95%;
   min-height: 30vh;
   padding: 1.875em;
-  margin-left: 1.25em;
+  margin: 0 auto;
+  position: relative;
 }
 .page-container .page-tables.under-hero {
   min-height: 30vh;
+}
+.page-container .page-tables h2 {
+  color: #111;
+  font-size: 1.25em;
+  text-shadow: none;
+  text-transform: none;
+  -webkit-animation: none;
+          animation: none;
+}
+.page-container .page-tables p a {
+  color: #111;
+  text-decoration: none;
+}
+.page-container .page-tables p a:hover {
+  text-decoration: underline;
+}
+.page-container .page-tables a.for-pass {
+  display: inline-block;
+  color: #111;
+  margin-top: 1.25em;
+  text-decoration: none;
+}
+.page-container .page-tables a.for-pass:hover, .page-container .page-tables a.for-pass:active {
+  font-weight: bold;
+}
+.page-container .page-tables p.instruction {
+  font-weight: bold;
+  margin-bottom: 0.9375em;
+}
+.page-container .page-tables .table-menu, .page-container .page-tables .bottom-menu {
+  width: 100%;
+  margin-bottom: 1.875em;
+}
+.page-container .page-tables .table-menu ul, .page-container .page-tables .bottom-menu ul {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+}
+.page-container .page-tables .table-menu ul li, .page-container .page-tables .bottom-menu ul li {
+  width: 20%;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 3.125em;
+}
+.page-container .page-tables .table-menu ul li a.table-menu-btn, .page-container .page-tables .table-menu ul li a.bottom-menu-btn, .page-container .page-tables .bottom-menu ul li a.table-menu-btn, .page-container .page-tables .bottom-menu ul li a.bottom-menu-btn {
+  display: inline-block;
+  background-color: #fff;
+  border: 3px solid #005043;
+  border-radius: 0.3125em;
+  box-shadow: 0.125em 0.125em 0.0625em #333;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: #111;
+  padding: 0.625em 0;
+  display: block;
+  width: 100%;
+  line-height: 100%;
+}
+.page-container .page-tables .table-menu ul li a.table-menu-btn span.symbol, .page-container .page-tables .table-menu ul li a.bottom-menu-btn span.symbol, .page-container .page-tables .bottom-menu ul li a.table-menu-btn span.symbol, .page-container .page-tables .bottom-menu ul li a.bottom-menu-btn span.symbol {
+  color: #005043;
+  margin-right: 0.3125em;
+  vertical-align: middle;
+  font-size: 1.875em;
+}
+.page-container .page-tables .table-menu ul li a.table-menu-btn:hover, .page-container .page-tables .bottom-menu ul li a.table-menu-btn:hover {
+  background-color: #111;
+  border-color: #005043;
+  color: #fff;
+}
+.page-container .page-tables .table-menu ul li a.table-menu-btn:hover span.symbol, .page-container .page-tables .bottom-menu ul li a.table-menu-btn:hover span.symbol {
+  color: #00836e;
+}
+.page-container .page-tables .table-menu ul li a.bottom-menu-btn.delete, .page-container .page-tables .bottom-menu ul li a.bottom-menu-btn.delete {
+  border-color: #F24452;
+}
+.page-container .page-tables .table-menu ul li a.bottom-menu-btn:hover.edit, .page-container .page-tables .bottom-menu ul li a.bottom-menu-btn:hover.edit {
+  background-color: #005043;
+  color: #fff;
+  border-color: #005043;
+}
+.page-container .page-tables .table-menu ul li a.bottom-menu-btn:hover.delete, .page-container .page-tables .bottom-menu ul li a.bottom-menu-btn:hover.delete {
+  background-color: #F24452;
+  border-color: #F24452;
+  color: #fff;
+}
+.page-container .page-tables .info-block li {
+  margin-bottom: 1.25em;
+}
+.page-container .page-tables .info-block li span.label {
+  display: inline-block;
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 1.125em;
+  margin-bottom: 0.3125em;
+}
+.page-container .page-tables .table-list {
+  width: 30%;
+  border: 2px solid #111;
+}
+.page-container .page-tables .table-list tr {
+  transition: all 0.1s;
+}
+.page-container .page-tables .table-list tr:nth-child(odd) {
+  background-color: #d9d9d9;
+}
+.page-container .page-tables .table-list tr:hover, .page-container .page-tables .table-list tr:active {
+  background-color: #006a58;
+}
+.page-container .page-tables .table-list tr:hover td a, .page-container .page-tables .table-list tr:active td a {
+  color: #fff;
+}
+.page-container .page-tables .table-list tr th {
+  background-color: #005043;
+  padding: 0.625em 0;
+  color: #fff;
+  font-weight: bold;
+}
+.page-container .page-tables .table-list tr td a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #111;
+  text-align: center;
+  padding: 0.4375em;
+  display: block;
+  width: 100%;
+  line-height: 100%;
+  transition: all 0.1s;
+}
+.page-container .page-tables .table-list tr td a:hover, .page-container .page-tables .table-list tr td a:active {
+  color: #fff;
 }
 .page-container .page-tables p.succes-notice {
   font-weight: bold;
@@ -165,25 +302,102 @@ body nav.side-bar {
   border-radius: 0.1875em;
   position: relative;
   transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.page-container .page-tables .list .list-item:hover {
-  transform: translate(2%, 0);
-  padding: 0.3125em;
+.page-container .page-tables .list .list-item:hover, .page-container .page-tables .list .list-item:active {
+  transform: translate(2%, 0) scale(1.05);
   margin-top: 0.3125em;
   margin-bottom: 0.3125em;
   background-color: #005043;
   border-color: black;
   box-shadow: 0.125em 0.125em 0.0625em #111;
 }
-.page-container .page-tables .list .list-item:hover a {
+.page-container .page-tables .list .list-item:hover a, .page-container .page-tables .list .list-item:active a {
   color: #fff;
+}
+.page-container .page-tables .list .list-item:hover .list-item-buttons a.edit, .page-container .page-tables .list .list-item:active .list-item-buttons a.edit {
+  background-color: #fff;
+  color: #111;
+  border-color: #111;
+  display: block;
+}
+.page-container .page-tables .list .list-item:hover .list-item-buttons a.delete, .page-container .page-tables .list .list-item:active .list-item-buttons a.delete {
+  background-color: #F24452;
+  display: block;
 }
 .page-container .page-tables .list .list-item a {
   text-decoration: none;
   color: #111;
   font-weight: bold;
   display: block;
+  padding: 0.875em;
+  line-height: 100%;
+  width: 80%;
+}
+.page-container .page-tables .list .list-item .list-item-buttons {
+  width: 20%;
+  display: flex;
+}
+.page-container .page-tables .list .list-item .list-item-buttons a {
+  display: none;
   padding: 0.625em;
+  text-align: center;
+  margin-right: 0.9375em;
+  border: 2px solid #111;
+  border-radius: 0.375em;
+  box-shadow: 0.0625em 0.0625em #111;
+  transition: all 0.3s;
+  font-size: 0.875em;
+}
+.page-container .page-tables .list .list-item .list-item-buttons a:first-child {
+  margin-right: 1.875em;
+}
+.page-container .page-tables .list .list-item .list-item-buttons a:hover, .page-container .page-tables .list .list-item .list-item-buttons a.active {
+  transform: scale(1.05);
+}
+.page-container .page-tables .delete-question p.question {
+  text-align: center;
+  font-size: 1.25em;
+  color: #111;
+  font-weight: bold;
+  margin-bottom: 1.25em;
+}
+.page-container .page-tables .delete-question .question-buttons {
+  width: 100%;
+  display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3%;
+}
+.page-container .page-tables .delete-question .question-buttons a, .page-container .page-tables .delete-question .question-buttons button {
+  text-align: center;
+  width: 20%;
+  text-decoration: none;
+  display: block;
+  padding: 0.625em 1.25em;
+  border: 2px solid #111;
+  border-radius: 0.375em;
+  line-height: 100%;
+  color: #111;
+  font-weight: bold;
+  background-color: #fff;
+  transition: all 0.3s;
+}
+.page-container .page-tables .delete-question .question-buttons a:hover {
+  background-color: #005043;
+  color: #fff;
+}
+.page-container .page-tables .delete-question .question-buttons button:hover {
+  background-color: #F24452;
+  color: #fff;
+}
+.page-container .page-tables .page-links {
+  width: 100%;
+  margin-top: 3.125em;
+  text-align: center;
 }
 .page-container .page-tables > * table {
   text-align: left;
@@ -204,7 +418,7 @@ body nav.side-bar {
   background-color: #005043;
 }
 .page-container .page-tables > * table input:focus, .page-container .page-tables > * table select:focus {
-  background-color: #ededed;
+  background-color: #f2f2f2;
   transform: scale(1.03);
   border-width: 3px;
 }
@@ -224,6 +438,56 @@ body nav.side-bar {
   color: #005043;
   background-color: #fff;
   transform: scale(1.05);
+}
+.page-container .page-tables > *.complex-form label {
+  display: block;
+  font-weight: bold;
+  font-size: 1.125em;
+  margin: 2.1875em 0 0.1875em;
+}
+.page-container .page-tables > *.complex-form input.btn, .page-container .page-tables > *.complex-form button.btn {
+  margin-top: 2.5em;
+}
+.page-container .page-tables > * textarea {
+  border: 2px solid #005043;
+  border-radius: 0.3125em;
+  transition: all 0.3s;
+  margin-left: 0.375em;
+  box-shadow: 0.125em 0.125em 0.0625em #333;
+  font-family: "Montserrat", sans-serif;
+  padding: 1.25em;
+}
+.page-container .page-tables > * textarea:focus {
+  background-color: #f2f2f2;
+  transform: scale(1.03);
+  color: #000;
+}
+.page-container .page-tables > * input, .page-container .page-tables > * select {
+  margin-left: 0.375em;
+  border: 2px solid #005043;
+  border-radius: 0.3125em;
+  box-shadow: 0.125em 0.125em 0.0625em #333;
+  transition: all 0.3s;
+}
+.page-container .page-tables > * select {
+  margin-right: 0.625em;
+  padding: 0.625em 0.9375em;
+}
+.page-container .page-tables > * select option {
+  background-color: #f2f2f2;
+  color: #111;
+}
+.page-container .page-tables > * input {
+  margin-left: 0.375em;
+  padding: 0.625em;
+}
+.page-container .page-tables > * input:active, .page-container .page-tables > * select:active {
+  background-color: #005043;
+}
+.page-container .page-tables > * input:focus, .page-container .page-tables > * select:focus {
+  background-color: #f2f2f2;
+  transform: scale(1.03);
+  border-width: 3px;
 }
 .page-container .notice-tbl {
   display: flex;
@@ -412,6 +676,15 @@ nav .user ul li .user-avatar .img-wrapper {
   height: 3.125em;
   border-radius: 50%;
   margin: 0 auto;
+  position: relative;
+}
+nav .user ul li .user-avatar .img-wrapper a.to-profile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 nav .user ul li .user-avatar .avatar-in {
   background-color: #005043;

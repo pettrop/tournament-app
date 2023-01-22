@@ -145,7 +145,7 @@ class SeasonCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = ['tournaments.add_season']
 
     def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
+        LOGGER.warning('Invalid data provided')   #ZÁSAH OD KUBA ... nešlo mi vytvoriť sezónu s kódom "Logger.warning('Invalid data provided), resp pri invalid data vyskakovala chyba"
         return super().form_invalid(form)
 
 

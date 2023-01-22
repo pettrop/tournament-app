@@ -1,9 +1,26 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<div class="page-header">
     <h1> {{ organizer.organizer_name }} {{ organizer.organizer_lastname }} </h1>
-    <ul>
-        {{ organizer.organizer_mail }}
-    {{ organizer.organizer_phone }}
+</div>
+<div class="div page-tables">
+    <ul class="info-block">
+        <li>
+            <span class="label">Email:</span>
+            <p>{{ organizer.organizer_mail }}</p>
+        </li>
+        <li>
+            <span class="label">Tel.:</span>
+            <p>{{ organizer.organizer_phone }}</p>
+        </li>
     </ul>
+    <div class="bottom-menu">
+        <ul>
+            <li><a class="edit bottom-menu-btn" href="{% url 'organizer_update' organizer.id %}"><i class="fa-solid fa-pen-to-square"></i> Upraviť organizátora</a></li>
+            <li><a class="delete bottom-menu-btn" href="{% url 'organizer_delete' organizer.id %}"><i class="fa-solid fa-trash-can"></i> Vymazať organizátora</a></li>
+        </ul>      
+    </div>
+</div>
+    
 {% endblock content %}

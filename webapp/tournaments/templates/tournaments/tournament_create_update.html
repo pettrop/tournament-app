@@ -1,12 +1,14 @@
 {% extends "main.html" %}
-
 {% block content %}
-<h1>Turnaj</h1>
-{% if message %}
+<div class="page-header">
+    <h1>Turnaj</h1> <!-- Nejde mi sem dať {{ title }} extra context  #KUBO-->
+</div>
+<div class="page-tables">
+    {% if message %}
     <p>{{ message }}</p>
-{% endif %}
+    {% endif %}
 
-    <form action='.' method="post">
+    <form class="complex-form" action='.' method="post">
         {% csrf_token %}
         {{ form.as_p}}
 
@@ -20,8 +22,7 @@
         {% endfor %}
         <div>{{ formset.empty_form}}</div>
         {% endif %}
-        <button type="submit">Uloz</button>
+        <button type="submit" class="btn btn-primary">Uložiť</button>
     </form>
-
-
+</div>
 {% endblock %}
