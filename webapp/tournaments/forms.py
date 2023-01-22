@@ -3,7 +3,8 @@ from enum import unique
 from django.core.exceptions import ValidationError
 from django.db.models.functions import datetime
 from django.forms import (ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField,
-                          SelectDateWidget, EmailField, TextInput, forms, MultiWidget, Select)
+                          SelectDateWidget, EmailField, TextInput, forms, MultiWidget, Select, ChoiceField)
+
 
 from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer, \
     Tournament, Result
@@ -15,16 +16,10 @@ class PlayerForm(ModelForm):
         model = Player
         fields = '__all__'
 
-    # def current_year(self,**kwargs):
-    #     return datetime.date.today().year
-    # def choices():
-    #     return:
-    #         for i in range(1950, 1923)
-    # choices=range(1950,2022)
     name = CharField(max_length=32)
     lastname = CharField(max_length=32)
-    year_of_birth = IntegerField()
-    # year_of_birth = IntegerField(widget=Select())
+    CHOICES = [(year, year) for year in range(1950, 2023)]
+    year_of_birth = ChoiceField(widget=Select, choices=CHOICES)
     license_validity = DateField(
     widget=SelectDateWidget(
         empty_label=("Choose Year", "Choose Month", "Choose Day"),
@@ -35,8 +30,6 @@ class PlayerForm(ModelForm):
         }
     ),
 )
-    # license_validity = DateField(input_formats = settings.DATE_INPUT_FORMATS)
-
     def clean_name(self):
         name = self.cleaned_data['name']
         return name.capitalize()
