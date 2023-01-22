@@ -43,13 +43,19 @@ class PlayerForm(ModelForm):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = 'Meno'
+        self.fields['lastname'].label = 'Priezvisko'
+        self.fields['year_of_birth'].label = 'Rok narodenia'
+        self.fields['license_validity'].label = 'Platnosť licencie'
+        self.fields['player_is_girl'].label = 'Hráč je dievča'
+        self.fields['club'].label = 'Klub'
 
 class ClubForm(ModelForm):
     class Meta:
         model = Club
         fields = '__all__'
-
-    # club_name = CharField(max_length=64)
 
     def clean_club_name(self):
         club_name = self.cleaned_data['club_name']
@@ -64,7 +70,9 @@ class ClubForm(ModelForm):
         result = super().clean()
         return result
 
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['club_name'].label = 'Názov klubu'
 class SeasonForm(ModelForm):
     class Meta:
         model = Season
@@ -85,6 +93,9 @@ class SeasonForm(ModelForm):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['season_name'].label = 'Sezóna v tvare 2022/2023'
 
 class LeagueForm(ModelForm):
     class Meta:
@@ -106,6 +117,9 @@ class LeagueForm(ModelForm):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['league_name'].label = 'Liga'
 
 class CategoryForm(ModelForm):
     class Meta:
@@ -127,6 +141,9 @@ class CategoryForm(ModelForm):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category_name'].label = 'Veková kategória'
 
 class DisciplineForm(ModelForm):
     class Meta:
@@ -148,6 +165,9 @@ class DisciplineForm(ModelForm):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['discipline_name'].label = 'Disciplína'
 
 class OrganizerForm(ModelForm):
     class Meta:
@@ -171,6 +191,12 @@ class OrganizerForm(ModelForm):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['organizer_name'].label = 'Meno organizátora'
+        self.fields['organizer_lastname'].label = 'Priezvisko organizátora'
+        self.fields['organizer_mail'].label = 'Email'
+        self.fields['organizer_phone'].label = 'Telefónne číslo'
 
 class PropositionForm(ModelForm):
     class Meta:
