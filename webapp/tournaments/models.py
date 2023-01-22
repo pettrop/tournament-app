@@ -1,17 +1,18 @@
 from django.db import models
 from django.db.models import Model, Sum
+from django.forms import forms
 from django.urls import reverse
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Club(Model):
-    club_name = models.CharField(max_length=64)
-
+    club_name = models.CharField(max_length=64, unique=True)
     # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+
         return '{} (id: {})'.format(self.club_name, self.id)
 
     class Meta:
@@ -36,8 +37,9 @@ def max_value_current_year(value):
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
-    year_of_birth = models.IntegerField(validators=[MinValueValidator(1950), max_value_current_year])
+    year_of_birth = models.IntegerField()
     license_validity = models.DateField()
+    player_is_girl = models.BooleanField(default=False)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
@@ -78,6 +80,10 @@ class Organizer(Model):
     def __str__(self):
         return '{} {} ({})'.format(self.organizer_lastname, self.organizer_name, self.organizer_mail)
 
+    class Meta:
+        ordering = ['organizer_lastname']
+        unique_together = (('organizer_name', 'organizer_lastname', 'organizer_mail', 'organizer_phone'),)
+
 
 class Schedule(Model):
     start_time = models.TimeField()
@@ -111,6 +117,10 @@ class Propositions(Model):
 
     def __str__(self):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
+
+    class Meta:
+        ordering = ['event_date']
+        unique_together = (('event_location', 'event_date', 'organizer_club'),)
 
 
 class Scoreboard(Model):
