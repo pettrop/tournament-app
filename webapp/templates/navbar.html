@@ -10,11 +10,11 @@
         <ul class="main-menu">
             <li class="menu-item"><a href="{% url 'home' %}">Domov</a></li>
             <li class="menu-item"><a href="{% url 'results' %}">Výsledky</a></li>
-            <li class="menu-item"><a href="#">Turnaje <i class="fa-solid fa-caret-down"></i></a>
+            <li class="menu-item"><a href="{% url 'tournaments' %}">Turnaje <i class="fa-solid fa-caret-down"></i></a>
                 <div class="dropdown">
                     <ul>
-                        <li><a href="#">Vytvor propozície</a></li>
-                        <li><a href="#">Zadaj výsledky</a></li>
+                        <li><a href="{% url 'proposition_create' %}">Vytvor propozície</a></li>
+                        <li><a href="{% url 'tournament_create' %}">Zadaj výsledky</a></li>
                         <li><a href="#">Export výsledkov</a></li>
                     </ul>
                 </div>
@@ -24,7 +24,6 @@
                 <div class="dropdown">
                     <ul>
                         <li><a href="{% url 'player_create' %}">Vytvor hráča</a></li>
-                        <li><a href="#">Uprav hráča</a></li>
                         <li><a href="{% url 'players' %}">Zoznam hráčov</a></li>
                     </ul>
                 </div>
@@ -33,7 +32,6 @@
                 <div class="dropdown">
                     <ul>
                         <li><a href="{% url 'club_create' %}">Vytvor klub</a></li>
-                        <li><a href="#">Uprav klub</a></li>
                         <li><a href="{% url 'clubs' %}">Zoznam klubov</a></li>
                     </ul>
                 </div>

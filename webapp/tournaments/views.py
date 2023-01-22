@@ -1,5 +1,6 @@
 from pprint import pprint
 
+from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -29,11 +30,6 @@ def home(request):
     context = {}
     return render(request, template, context)
 
-
-def results(request):
-    template = "results.html"
-    context = {}
-    return render(request, template, context)
 
 
 # Player / Players
@@ -384,7 +380,7 @@ class PropositionCreateView(CreateView):
     form_class = PropositionForm
     template_name = 'tournaments/proposition_create.html'
     success_url = reverse_lazy('propositions')
-    extra_context = {'title': 'Create proposition'}
+    extra_context = {'title': 'Vytvor propozíciu'}
 
     def form_valid(self, form):
         form.save()
@@ -416,12 +412,15 @@ class PropositionDeleteView(DeleteView):
 
 def tournament_create_view(request):
     form = TournamentForm(request.POST or None)
+
     context = {
         "form": form
     }
+
     if form.is_valid():
         obj = form.save()
-        return redirect(obj.get_absolute_url())
+        return redirect('tournaments')
+
     return render(request, template_name='tournaments/tournament_create_update.html', context=context)
 
 
@@ -436,24 +435,25 @@ def tournament_list_view(request):
 def tournament_update_view(request, pk):
     obj = get_object_or_404(Tournament, pk=pk)
     form = TournamentForm(request.POST or None, instance=obj)
-    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0 )
+    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0)
     qs = obj.result_set.all()
     formset = ResultsFormset(request.POST or None, queryset=qs)
 
     context = {
         "form": form,
         "formset": formset,
-        "object": obj
+        "object": obj,
     }
+
+
     if all([form.is_valid(), formset.is_valid()]):
-        print("Je validny!")
-        parent = form.save(commit=False)
-        parent.save()
-        for form in formset:
-            child = form.save(commit=False)
-            child.tournament = parent
-            child.save()
-        context['message'] = 'Data saved.'
+            parent = form.save(commit=False)
+            parent.save()
+            for form in formset:
+                child = form.save(commit=False)
+                child.tournament = parent
+                child.save()
+            context['message'] = 'Data saved.'
     return render(request, template_name="tournaments/tournament_create_update.html", context=context)
 
 
@@ -463,3 +463,32 @@ def tournament_detail_view(request, pk=None):
         "object": obj
     }
     return render(request, "tournaments/tournament_detail.html", context)
+
+
+def results_view(request):
+    tournaments_list = Tournament.objects.all()
+    context = {
+        "tournaments_list": tournaments_list
+    }
+    return render(request, template_name="tournaments/results.html", context=context)
+
+
+def results_detail(request, pk=None):
+    results_players = Result.objects.filter(tournament_id=pk).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
+    club_names = Result.objects.filter(tournament_id=pk).values('player__club__club_name').distinct()
+    results_club = []
+    for club_name in club_names:
+        club = club_name["player__club__club_name"]
+        top_three_players = Result.objects.filter(tournament_id=pk,
+                                                  player__club__club_name=club_name["player__club__club_name"]).values(
+            'player_id', 'player__name', 'player__lastname').annotate(points=Sum('result')).order_by('-points')[:3]
+        sum_points_club = sum([player['points'] for player in top_three_players])
+        results_club.extend([(club, sum_points_club)])
+
+    results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)
+
+    context = {
+        "results_club_ordered": results_club_ordered,
+        "results_players": results_players
+    }
+    return render(request, template_name="tournaments/results_detail.html", context=context)

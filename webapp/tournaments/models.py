@@ -7,21 +7,18 @@ import datetime
 # from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-# Create your models here.
-
-
 class Club(Model):
+
     club_name = models.CharField(max_length=64, unique=True)
+
     # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
-    def __str__(self):
 
+    def __str__(self):
         return '{} (id: {})'.format(self.club_name, self.id)
 
     class Meta:
         ordering = ['club_name']
-
-
 
 
 class Category(Model):
@@ -33,6 +30,7 @@ class Category(Model):
 
 def current_year():
     return datetime.date.today().year
+
 
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
@@ -115,7 +113,8 @@ class Propositions(Model):
     start_fee = models.PositiveSmallIntegerField(null=True, blank=True)
     director = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='director')
     judge = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='judge')
-    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='registration')
+    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT,
+                                     related_name='registration')
 
     def __str__(self):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
@@ -139,9 +138,6 @@ class Tournament(Model):
 
     def __str__(self):
         return '{}'.format(self.name)
-
-    def get_absolute_url(self):
-        return reverse("tournament:detail", kwargs={"pk": self.pk})
 
     def get_edit_url(self):
         return reverse("tournament:update", kwargs={"pk": self.pk})
@@ -168,5 +164,6 @@ def points_for_player_in_season(player_id):
 
 
 def points_for_club_in_tournament(tournament_id, club_id):
-    results = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(points=Sum('result')).filter(player__club_id=club_id)
+    results = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(
+        points=Sum('result')).filter(player__club_id=club_id)
     return results
