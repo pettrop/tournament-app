@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.checks import messages
+
+
 from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.http import request
@@ -9,7 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
 from django.conf.urls import handler404, handler500, handler403, handler400
 import datetime
-
+from django.contrib.messages.views import SuccessMessageMixin
 
 from logging import getLogger, Logger
 
@@ -41,10 +42,11 @@ def player(request, pk):
     return render(request, template_name='tournaments/player.html', context=context)
 
 
-class PlayerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class PlayerCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/player_form.html'
-    extra_context = {'title': 'Vytvoř hráče'}
+    extra_context = {'title': 'Vytvor hráča'}
     form_class = PlayerForm
+    success_message = 'Hráč bol úspešne vytvorený'
     success_url = reverse_lazy('players')
     permission_required = ['tournaments.add_player']
 
@@ -53,11 +55,12 @@ class PlayerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class PlayerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class PlayerUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/player_form.html'
     extra_context = {'title': 'Uprav hráče'}
     model = Player
     form_class = PlayerForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('players')
     permission_required = ['tournaments.change_player']
 
@@ -66,9 +69,10 @@ class PlayerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class PlayerDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class PlayerDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/player_delete.html'
     model = Player
+    success_message = 'Hráč bol zmazaný'
     success_url = reverse_lazy('players')
     permission_required = ['tournaments.delete_player']
 
@@ -83,11 +87,12 @@ def club(request, pk):
     return render(request, template_name='tournaments/club.html', context=context)
 
 
-class ClubCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class ClubCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/club_form.html'
-    extra_context = {'title': 'Vytvoř nový klub'}
+    extra_context = {'title': 'Vytvor nový klub'}
     model = Club
     form_class = ClubForm
+    success_message = 'Klub bol úspešne vytvorený'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.add_club']
 
@@ -98,11 +103,12 @@ class ClubCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
 
 
 
-class ClubUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class ClubUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/club_form.html'
     extra_context = {'title': 'Uprav klub'}
     model = Club
     form_class = ClubForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.change_club']
 
@@ -111,9 +117,10 @@ class ClubUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class ClubDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class ClubDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/club_delete.html'
     model = Club
+    success_message = 'Klub bol zmazaný'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.delete_club']
 
@@ -136,11 +143,12 @@ class SeasonsView(ListView):
     model = Season
 
 
-class SeasonCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class SeasonCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/season_form.html'
-    extra_context = {'title': 'Vytvoř sezonu'}
+    extra_context = {'title': 'Vytvor sezónu'}
     model = Season
     form_class = SeasonForm
+    success_message = 'sezóna bola úspešne vytvorená'
     success_url = reverse_lazy('seasons')
     permission_required = ['tournaments.add_season']
 
@@ -150,11 +158,12 @@ class SeasonCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
         return result
 
 
-class SeasonUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class SeasonUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/season_form.html'
     extra_context = {'title': 'Uprav sezonu'}
     model = Season
     form_class = SeasonForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('seasons')
     permission_required = ['tournaments.change_season']
 
@@ -163,9 +172,10 @@ class SeasonUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class SeasonDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class SeasonDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/season_delete.html'
     model = Season
+    success_message = 'sezóna bola zmazaná'
     success_url = reverse_lazy('seasons')
     permission_required = ['tournaments.delete_season']
 
@@ -183,11 +193,12 @@ class LeaguesView(ListView):
     model = League
 
 
-class LeagueCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class LeagueCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/league_form.html'
-    extra_context = {'title': 'Vytvoř novou ligu'}
+    extra_context = {'title': 'Vytvor novú ligu'}
     model = League
     form_class = LeagueForm
+    success_message = 'Liga bola vytvorená'
     success_url = reverse_lazy('leagues')
     permission_required = ['tournaments.add_league']
 
@@ -197,11 +208,12 @@ class LeagueCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
         return result
 
 
-class LeagueUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class LeagueUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/league_form.html'
     extra_context = {'title': 'Uprav ligu'}
     model = League
     form_class = LeagueForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('leagues')
     permission_required = ['tournaments.change_league']
 
@@ -210,9 +222,10 @@ class LeagueUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class LeagueDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class LeagueDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/league_delete.html'
     model = League
+    success_message = 'Liga bola zmazaná'
     success_url = reverse_lazy('leagues')
     permission_required = ['tournaments.delete_league']
 
@@ -258,11 +271,12 @@ class CategoriesView(ListView):
     model = Category
 
 
-class CategoryCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class CategoryCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/category_form.html'
-    extra_context = {'title': 'Vytvoř novou kategorii'}
+    extra_context = {'title': 'Vytvor novú kategóriu'}
     model = Category
     form_class = CategoryForm
+    success_message = 'Kategória bola vytvorená'
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.add_category']
 
@@ -272,11 +286,12 @@ class CategoryCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView
         return result
 
 
-class CategoryUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class CategoryUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/category_form.html'
     extra_context = {'title': 'Uprav kategorii'}
     model = Category
     form_class = CategoryForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.change_category']
 
@@ -287,9 +302,10 @@ class CategoryUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView
 
 
 
-class CategoryDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class CategoryDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/category_delete.html'
     model = Category
+    success_message = 'Kategória bola zmazaná'
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.delete_category']
 
@@ -307,11 +323,12 @@ class DisciplinesView(ListView):
     model = Discipline
 
 
-class DisciplineCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class DisciplineCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/discipline_form.html'
-    extra_context = {'title': 'Vytvoř novou disciplínu'}
+    extra_context = {'title': 'Vytvor novú disciplínu'}
     model = Discipline
     form_class = DisciplineForm
+    success_message = 'Disciplína bola vytvorená'
     success_url = reverse_lazy('disciplines')
     permission_required = ['tournaments.add_discipline']
 
@@ -321,11 +338,12 @@ class DisciplineCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateVi
         return result
 
 
-class DisciplineUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class DisciplineUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/discipline_form.html'
     extra_context = {'title': 'Uprav disciplínu'}
     model = Discipline
     form_class = DisciplineForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('disciplines')
     permission_required = ['tournaments.change_discipline']
 
@@ -334,9 +352,10 @@ class DisciplineUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateVi
         return super().form_invalid(form)
 
 
-class DisciplineDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class DisciplineDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/discipline_delete.html'
     model = Discipline
+    success_message = 'Disciplína bola zmazaná'
     success_url = reverse_lazy('disciplines')
     permission_required = ['tournaments.delete_discipline']
 
@@ -354,11 +373,12 @@ class OrganizersView(ListView):
     model = Organizer
 
 
-class OrganizerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class OrganizerCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/organizer_form.html'
-    extra_context = {'title': 'Vytvoř organizátora'}
+    extra_context = {'title': 'Vytvor organizátora'}
     model = Organizer
     form_class = OrganizerForm
+    success_message = 'Organizátor bol úspešne vytvorený'
     success_url = reverse_lazy('organizers')
     permission_required = ['tournaments.add_organizer']
 
@@ -368,11 +388,12 @@ class OrganizerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateVie
         return result
 
 
-class OrganizerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class OrganizerUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/organizer_form.html'
     extra_context = {'title': 'Uprav organizátora'}
     model = Organizer
     form_class = OrganizerForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('organizers')
     permission_required = ['tournaments.change_organizer']
 
@@ -381,9 +402,10 @@ class OrganizerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateVie
         return super().form_invalid(form)
 
 
-class OrganizerDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class OrganizerDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/organizer_delete.html'
     model = Organizer
+    success_message = 'Organizátor bol zmazaný'
     success_url = reverse_lazy('organizers')
     context_object_name = 'clubs'
     # ordering = ['-name']
@@ -398,10 +420,11 @@ class PropositionsView(ListView):
     ordering = ['-event_date']
 
 
-class PropositionCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class PropositionCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Propositions
     form_class = PropositionForm
     template_name = 'tournaments/proposition_create.html'
+    success_message = 'Propozícia bola úspešne vytvorená'
     success_url = reverse_lazy('propositions')
     extra_context = {'title': 'Vytvor propozíciu'}
     permission_required = ['tournaments.add_propositions']
@@ -427,9 +450,10 @@ def proposition_detail(request, pk):
     }
     return render(request, template_name='tournaments/proposition_detail.html', context=context)
 
-class PropositionDeleteView(DeleteView):
+class PropositionDeleteView(SuccessMessageMixin, DeleteView):
     template_name = 'tournaments/proposition_delete.html'
     model = Propositions
+    success_message = 'Propozícia bola zmazaná'
     success_url = reverse_lazy('propositions')
     context_object_name = 'propositions'
 
