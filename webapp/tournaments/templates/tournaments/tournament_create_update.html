@@ -13,8 +13,7 @@
 <div class="page-tables">
     {% if message %}
     <p>{{ message }}</p>
-{% endif %}
-
+    {% endif %}
     <form class="complex-form" method="post">
         {% csrf_token %}
         {{ form.as_p}}

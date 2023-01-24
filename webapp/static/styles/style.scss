@@ -117,7 +117,6 @@ body {
             margin-bottom: em(30);
             ul {
                 width: 100%;
-                height: 100%;
                 margin: 0 auto;
                 display: flex;
                 @include flex-center;
@@ -286,7 +285,7 @@ body {
                     background-color: $primary-color;
                     color: $secondary-color;
                     border-color: $secondary-color; 
-                    display: block;      
+                    display: block;     
                 }
                 &:hover .list-item-buttons a.delete, &:active .list-item-buttons a.delete  {
                     background-color: $fifth-color;
@@ -484,6 +483,10 @@ body {
                 box-shadow: none;
                 margin: em(10) 0;
                 margin-left: em(6);
+            }
+
+            input[type="checkbox"] {
+                box-shadow: none;
             }
 
             select {
@@ -734,7 +737,7 @@ div.alert-message {
     top: em(110);
     text-align: center;
     .alert {
-        min-height: em(50);
+        min-height: em(40);
         padding: em(10);
         position: relative;
         color: $primary-color;
@@ -775,15 +778,39 @@ div.alert-message {
 @media screen and (max-width: 1280px) {
     .page-container {
         h1 {
-            font-size: em(45);
+            font-size: em(38);
         }
 
         h2 {
             font-size: em(30);
         }
+        .page-tables {
+            .list {
+                .list-item {
+                    a {
+                        width: 65%;
+                    }
+    
+                    .list-item-buttons {
+                        width: 35%;
+                        font-size: em(12,16);
+                        justify-content: flex-end;
+                        a {
+                            width: max-content;
+                        }
+                    }
+                }
+            }
+    
+            & .table-list {
+                width: 60%;
+            }
+        }
     }
 
+
     nav .menu .main-menu {
+        gap: .8%;
         .menu-item {
             font-size: em(14);
         }
@@ -798,6 +825,14 @@ div.alert-message {
             width: em(40);
             height: em(40);
         }
+    }
+
+    nav .logo-part, nav .user {
+        width: 19%;
+    }
+
+    nav .menu {
+        width: 62%;
     }
 
     nav .user ul {
@@ -823,6 +858,7 @@ div.alert-message {
 
 @media screen and (max-width: 1024px) {
     .page-container {
+        font-size: em(14,16);
         h1 {
             font-size: em(35);
         }
@@ -830,10 +866,48 @@ div.alert-message {
         h2 {
             font-size: em(23);
         }
+        form {
+            font-size: em(14,16);
+        }
+
+        .page-tables {
+            .list {
+                .list-item {
+                    a {
+                        width: 65%;
+                    }
+    
+                    .list-item-buttons {
+                        width: 35%;
+                        font-size: em(12,16);
+                        justify-content: flex-end;
+                        a {
+                            width: max-content;
+                        }
+                    }
+                }
+            }
+    
+            & .table-list {
+                width: 80%;
+            }
+        }
+    }
+
+    div.alert-message {
+        width: 50%;
+        top: em(105);
+        .alert {
+            padding: em(20)
+        }
+    }
+
+    nav {
+        gap: 1%;
     }
 
     nav .menu .main-menu {
-        gap: 1.5%;
+        gap: 1%;
         .menu-item {
             font-size: em(12);
         }
@@ -841,14 +915,15 @@ div.alert-message {
 
     nav .logo-part {
         flex-direction: column;
+        font-size: em(14,16);
     }
 
     nav .logo-part, nav .user {
-        width: 15%;
+        width: 12%;
     }
 
     nav .menu {
-        width: 70%;
+        width: 76%;
     }
 
     nav .user ul {
@@ -864,9 +939,10 @@ div.alert-message {
                 }
             }
             .logo {
+                font-size: em(10,16);
                 display: inline;
-                padding-top: em(20);
-                padding-bottom: em(20);
+                padding-top: em(15);
+                padding-bottom: em(15);
             }
             .text {
                 display: none;
@@ -941,9 +1017,18 @@ div.alert-message {
                 &.avatar-out {
                     background-color: $fifth-color;
                 }
+                a.to-profile {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                }
                 img {
                     width: em(40)
                 }
+
             }
             p.user-name {
                 width: max-content;
@@ -1087,18 +1172,71 @@ div.alert-message {
             &.under-hero {
                 min-height: 65vh;
             }
-            .page-tables {
-                width: 100%;
-                padding: em(30);
-                margin-left: 0;
-                .list {
-                    .list-item {
-                        transition: all 0.2s;
+            
+            .list {
+                .list-item {
+                    &:hover .list-item-buttons a.edit, &:active .list-item-buttons a.edit{
+                        display: none; 
+                    }
+                    &:hover .list-item-buttons a.delete, &:active .list-item-buttons a.delete  {
+                        display: none;
+                    }
+                    transition: all 0.2s;
+                    a {
+                        width: 100%;
+                    }
+                    .list-item-buttons {
+                        width: 0%;
+                        a {
+                            font-size: em(4,16);
+                        }
+                        
                     }
                 }
             }
+
+            .table-menu, .bottom-menu {
+                ul {
+                    width: 100%;
+                    height: auto;
+                    flex-direction: column;
+                    gap: 1%;
+                    li {
+                        margin-bottom: em(10);
+                        min-width: 60%;
+                        margin-top: em(5);
+                    }
+                    
+                }
+            }
+            .bottom-menu {
+                ul {
+                    margin-top: em(30);
+                }  
+            }
+            a.btn {
+                display: inline-block;
+                margin-top: 0;
+            }
+            
+            .table-list {
+                width: 90%;
+                margin: 0 auto;
+            }
+
+            h2 {
+                text-align: center;
+            }
         }
     }
+}
+
+div.alert-message {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 @media screen and (max-width: 640px) {

@@ -1,10 +1,11 @@
 {% extends "main.html" %}
-
 {% block content %}
-
-<h1>Výsledky turnajov</h1>
+<div class="page-header">
+  <h1>Výsledky turnajov</h1>
+</div>
+<div class="page-tables">
   {% for tournament in tournaments_list %}
-     <p><a href="{% url 'results_detail' tournament.pk %}">{{ tournament }} ({{ tournament.propositions.season }})</a></p>
-  {% endfor %}
-
+  <p><a href="{% url 'results_detail' tournament.pk %}">{{ tournament }} ({{ tournament.propositions.season }})</a></p>
+{% endfor %}
+</div>
 {% endblock %}

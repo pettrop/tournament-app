@@ -17,5 +17,11 @@
             </tr>
             {% endfor %}  
         </table>
+        <div class="bottom-menu">
+            <ul>
+                <li><a class="edit bottom-menu-btn" href="{% url 'club_update' club.id %}"><i class="fa-solid fa-pen-to-square"></i> Upraviť klub</a></li>
+                <li><a class="delete bottom-menu-btn" href="{% url 'club_delete' club.id %}"><i class="fa-solid fa-trash-can"></i> Vymazať klub</a></li>
+            </ul>      
+        </div>
     </div>
 {% endblock %}
