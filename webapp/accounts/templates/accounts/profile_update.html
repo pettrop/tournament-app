@@ -1,29 +1,36 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-<p>Zmena údajov profilu užívateľa {{ user.first_name }} {{ user.last_name }}</p>
-<form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+<div class="page-header">
+    <h1>Zmena údajov</h1>
+</div>
+<div class="page-tables">
+    <p class="instruction">Zmena údajov profilu užívateľa "{{ user.first_name }} {{ user.last_name }}"</p>
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <ul class="info-block">
+        <li>
+            <i class="fa-solid fa-user fa-xl"></i>
+            <span class="label">Meno:</span>
+            <p>{{ user_form.first_name }}</p>
+            <span class="label">Priezvisko:</span>
+            <p>{{ user_form.last_name }}</p>
+        </li>
+        <li>
+            <i class="fa-solid fa-envelope fa-xl"></i>
+            <span class="label">Email:</span>
+            <p>{{ user_form.email }}</p>
+        </li>
+        <li>
+            <i class="fa-solid fa-phone fa-xl"></i>
+            <span class="label">Tel.:</span>
+            <p>{{ profile_form.phone }}</p>
+        </li>
+        <li></li>
+    </ul>
+        <button class="btn" type="submit" >Uložiť zmeny</button>
+        <button class="btn" type="reset" >Resetovať</button>
+    </form>
+</div>
 
-    <p>
-                        <label>Meno:</label>
-                            {{ user_form.first_name }}
-    </p>
-    <p>
-                        <label>Priezvisko:</label>
-                            {{ user_form.last_name }}
-    </p>
-    <p>
-                        <label>Email:</label>
-                            {{ user_form.email }}
-    </p>
-    <p>
-                        <label>Telefón:</label>
-                            {{ profile_form.phone }}
-    </p>
-
-            <br><br>
-            <button type="submit" >Uložiť zmeny</button>
-            <button type="reset" >Resetovať</button>
-        </form>
 {% endblock %}

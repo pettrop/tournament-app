@@ -4,6 +4,8 @@
   <h1>Vymazať disciplínu</h1>
 </div>
 <div class="page-tables">
+  <form method="post">
+    {% csrf_token %}
     <div class="delete-question">
       <p class="question">Ste si istý, že chcete vymazať disciplínu "{{ object.discipline_name }}" z databázy?</p>
       <div class="question-buttons">
@@ -11,5 +13,6 @@
         <a href="{% url 'disciplines' %}"><i class="fa-solid fa-ban"></i> Zrušiť zmazanie</a>
       </div>
     </div>
+  </form>
 </div>
 {% endblock %}

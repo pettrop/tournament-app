@@ -2,51 +2,56 @@
 {% load static %}
 {% block content %}
 <div class="page-header">
-    <h1>Profil užívateľa {{ user.first_name }} {{ user.last_name }}</h1>
+    <h1>Profil užívateľa: "{{ user.first_name }} {{ user.last_name }}"</h1>
 </div>
 <div class="page-tables">
-    <p>
-        <label>Meno:</label>
-        {{ user.first_name }}
-    </p>
-    <p>
-        <label>Priezvisko:</label>
-        {{ user.last_name }}
-    </p>
-    <p>
-        <label>Email:</label>
-        {{ user.email }}
-    </p>
-    <p>
-        <label>Telefón:</label>
-        {{ profile.phone }}
-    </p>
-    {% if "Zástupca klubu" in group %}
-    <p>
-        <label>Klub:</label>
-        {{ profile.club }}
-    </p>
-    {% endif %}
-    <p>
-        <a href="{% url 'profile_update' %}">
-            <button type="button">Zmena údajov profilu</button>
-        </a>
-    </p>
-    <p>
-        <a href="{% url 'password_change' %}">
-            <button type="button">Zmena hesla</button>
-        </a>
-    </p>
-    <p>
-        <a href="{% url 'deactivate_user' %}">
-            <button type="button">Deaktivovať účet</button>
-        </a>
-    </p>
-    <p>Užívateľské skupiny:</p>
-    {% for g in group %}
-    <p>{{ g }}</p>
-    {% endfor %}
-    Ste organizátor turnaja alebo zástupca klubu? Požiadajte si o práva <a href="{% url 'permission_request' %}">tu</a>!
-
+    <ul class="info-block">
+        <li>
+            <i class="fa-solid fa-user fa-xl"></i>
+            <span class="label">Meno:</span>
+            <p>{{ user.first_name }}</p>
+            <span class="label">Priezvisko:</span>
+            <p>{{ user.last_name }}</p>
+        </li>
+        <li>
+            <i class="fa-solid fa-envelope fa-xl"></i>
+            <span class="label">Email:</span>
+            <p>{{ user.email }}</p>
+        </li>
+        <li>
+            <i class="fa-solid fa-phone fa-xl"></i>
+            <span class="label">Tel.:</span>
+            <p>{{ profile.phone }}</p>
+        </li>
+        {% if "Zástupca klubu" in group %}
+        <li>
+            <i class="fa-solid fa-people-roof fa-xl"></i>
+            <span class="label">Klub:</span>
+            <p>{{ profile.club }}</p>
+        </li>
+        {% endif %}
+        <li>
+            <i class="fa-solid fa-user-group fa-xl"></i>
+            <span class="label">Užívateľské skupiny:</span>
+            {% for g in group %}
+            <p>{{ g }}</p>
+            {% endfor %}
+        </li>
+        <div class="bottom-menu">
+            <ul>
+                <li>
+                    <a href="{% url 'profile_update' %}" class="table-menu-btn"><i class="fa-regular fa-address-card"></i> Zmena údajov profilu</a>
+                </li>
+                <li>
+                    <a href="{% url 'profile_update' %}" class="table-menu-btn">Zmena údajov profilu</a>
+                </li>
+                <li>
+                    <a href="{% url 'deactivate_user' %}" class="table-menu-btn"><i class="fa-solid fa-user-slash"></i> Deaktivovať účet</a>
+                </li>
+            </ul>
+        </div>
+    </ul>
+    <p class="instruction">Ste organizátor turnaja alebo zástupca klubu? Požiadajte si o práva.</p>
+    <a class="btn" href="{% url 'permission_request' %}">Požiadať o práva</a>
 </div>
 {% endblock %}
