@@ -1,10 +1,17 @@
+# from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.checks import messages
+from django.contrib.messages import constants as messages, error
+from django.core.exceptions import PermissionDenied
+from django.contrib.messages import constants as messages
 
+from django.db.models import ProtectedError
+from django.views.generic.edit import DeletionMixin
 
 from django.db.models import Sum
 from django.forms import modelformset_factory
-from django.http import request
+from django.http import request, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
@@ -116,14 +123,26 @@ class ClubUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequired
         LOGGER.warning('Invalid data provided while updating')
         return super().form_invalid(form)
 
-
+# DeletionMixin,
 class ClubDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/club_delete.html'
     model = Club
     success_message = 'Klub bol zmazaný'
+    error_message = 'Klub nemôže byť zmazaný, pretože má už priradených hráčov'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.delete_club']
 
+    def form_invalid(self, form):
+        LOGGER.warning('Invalid data provided while updating')
+        return super().form_invalid(form)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            messages.success(self.request, "Klub nemôže byť zmazaný, pretože má už priradených hráčov")
+        finally:
+            return redirect('clubs')
 
 class ClubsView(ListView):
     template_name = 'tournaments/clubs.html'
