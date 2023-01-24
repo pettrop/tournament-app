@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -23,11 +24,6 @@ def home(request):
     context = {}
     return render(request, template, context)
 
-
-def results(request):
-    template = "results.html"
-    context = {}
-    return render(request, template, context)
 
 
 # Player / Players
@@ -93,9 +89,11 @@ class ClubCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.add_club']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
+
 
 
 class ClubUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
@@ -144,9 +142,10 @@ class SeasonCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('seasons')
     permission_required = ['tournaments.add_season']
 
-    def form_invalid(self, form):
-        LOGGER.warning('Invalid data provided')   #ZÁSAH OD KUBA ... nešlo mi vytvoriť sezónu s kódom "Logger.warning('Invalid data provided), resp pri invalid data vyskakovala chyba"
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class SeasonUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
@@ -190,9 +189,10 @@ class LeagueCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('leagues')
     permission_required = ['tournaments.add_league']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class LeagueUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
@@ -222,27 +222,33 @@ def category(request, pk):
     current_year = datetime.date.today().year
     all_players = Player.objects.all()
     players_dospeli = []
-    players_dorostenci = []
-    players_starsi_zaci = []
-    players_mladsi_zaci = []
+    players_dorastenci = []
+    players_starší_žiaci = []
+    players_mladší_žiaci = []
     players_ostatni = []
+    players_dievčata = []
     for player in all_players:
-        if (current_year - 20) >= (player.year_of_birth):
-            players_dospeli.append(player)
-        elif (current_year - 18) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 20):
-            players_dorostenci.append(player)
-        elif (current_year - 13) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 18):
-            players_starsi_zaci.append(player)
-        elif (current_year - 10) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 13):
-            players_mladsi_zaci.append(player)
-        else: players_ostatni.append(player)
+        if player.player_is_girl is True:
+            players_dievčata.append(player)
+        else:
+            if (current_year - 20) >= player.year_of_birth:
+                players_dospeli.append(player)
+            elif (current_year - 15) > player.year_of_birth and player.year_of_birth >= (current_year - 19):
+                players_dorastenci.append(player)
+            elif (current_year - 13) > player.year_of_birth and player.year_of_birth >= (current_year - 15):
+                players_starší_žiaci.append(player)
+            elif player.year_of_birth >= (current_year - 13):
+                players_mladší_žiaci.append(player)
+            else: players_ostatni.append(player)
 
     context = {'category': category,
                'players_dospeli': players_dospeli,
-               'players_dorostenci': players_dorostenci,
-               'players_starsi_zaci': players_starsi_zaci,
-               'players_mladsi_zaci': players_mladsi_zaci,
-               'players_ostatni': players_ostatni}
+               'players_dorastenci': players_dorastenci,
+               'players_starší_žiaci': players_starší_žiaci,
+               'players_mladší_žiaci': players_mladší_žiaci,
+               'players_ostatni': players_ostatni,
+               'players_dievčata': players_dievčata}
+    print(context)
     return render(request, template_name='tournaments/category.html', context=context)
 
 class CategoriesView(ListView):
@@ -258,9 +264,10 @@ class CategoryCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.add_category']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class CategoryUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
@@ -304,9 +311,10 @@ class DisciplineCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateVi
     success_url = reverse_lazy('disciplines')
     permission_required = ['tournaments.add_discipline']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class DisciplineUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
@@ -350,9 +358,10 @@ class OrganizerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateVie
     success_url = reverse_lazy('organizers')
     permission_required = ['tournaments.add_organizer']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
 class OrganizerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
@@ -390,7 +399,7 @@ class PropositionCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateV
     form_class = PropositionForm
     template_name = 'tournaments/proposition_create.html'
     success_url = reverse_lazy('propositions')
-    extra_context = {'title': 'Create proposition'}
+    extra_context = {'title': 'Vytvor propozíciu'}
     permission_required = ['tournaments.add_propositions']
 
     def form_valid(self, form):
@@ -414,6 +423,12 @@ def proposition_detail(request, pk):
     }
     return render(request, template_name='tournaments/proposition_detail.html', context=context)
 
+class PropositionDeleteView(DeleteView):
+    template_name = 'tournaments/proposition_delete.html'
+    model = Propositions
+    success_url = reverse_lazy('propositions')
+    context_object_name = 'propositions'
+
 
 @login_required
 @permission_required(['tournaments.add_tournament'])
@@ -424,7 +439,8 @@ def tournament_create_view(request):
     }
     if form.is_valid():
         obj = form.save()
-        return redirect(obj.get_absolute_url())
+        return redirect('tournaments')
+
     return render(request, template_name='tournaments/tournament_create_update.html', context=context)
 
 
@@ -440,24 +456,25 @@ def tournament_list_view(request):
 def tournament_update_view(request, pk):
     obj = get_object_or_404(Tournament, pk=pk)
     form = TournamentForm(request.POST or None, instance=obj)
-    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0 )
+    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0)
     qs = obj.result_set.all()
     formset = ResultsFormset(request.POST or None, queryset=qs)
 
     context = {
         "form": form,
         "formset": formset,
-        "object": obj
+        "object": obj,
     }
+
+
     if all([form.is_valid(), formset.is_valid()]):
-        print("Je validny!")
-        parent = form.save(commit=False)
-        parent.save()
-        for form in formset:
-            child = form.save(commit=False)
-            child.tournament = parent
-            child.save()
-        context['message'] = 'Data saved.'
+            parent = form.save(commit=False)
+            parent.save()
+            for form in formset:
+                child = form.save(commit=False)
+                child.tournament = parent
+                child.save()
+            context['message'] = 'Data saved.'
     return render(request, template_name="tournaments/tournament_create_update.html", context=context)
 
 
@@ -467,6 +484,36 @@ def tournament_detail_view(request, pk=None):
         "object": obj
     }
     return render(request, "tournaments/tournament_detail.html", context)
+
+
+def results_view(request):
+    tournaments_list = Tournament.objects.all()
+    context = {
+        "tournaments_list": tournaments_list
+    }
+    return render(request, template_name="tournaments/results.html", context=context)
+
+
+def results_detail(request, pk=None):
+    results_players = Result.objects.filter(tournament_id=pk).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
+    club_names = Result.objects.filter(tournament_id=pk).values('player__club__club_name').distinct()
+    results_club = []
+    for club_name in club_names:
+        club = club_name["player__club__club_name"]
+        top_three_players = Result.objects.filter(tournament_id=pk,
+                                                  player__club__club_name=club_name["player__club__club_name"]).values(
+            'player_id', 'player__name', 'player__lastname').annotate(points=Sum('result')).order_by('-points')[:3]
+        sum_points_club = sum([player['points'] for player in top_three_players])
+        results_club.extend([(club, sum_points_club)])
+
+    results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)
+
+    context = {
+        "results_club_ordered": results_club_ordered,
+        "results_players": results_players
+    }
+    return render(request, template_name="tournaments/results_detail.html", context=context)
+
 
 
 def handler403(request, exception):
