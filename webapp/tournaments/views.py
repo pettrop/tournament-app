@@ -1,19 +1,14 @@
-# from django.contrib import messages
+from django.contrib import messages
+from importlib._common import _
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.checks import messages
-from django.contrib.messages import constants as messages, error
-from django.core.exceptions import PermissionDenied
-from django.contrib.messages import constants as messages
-
+from django.db import DatabaseError
 from django.db.models import ProtectedError
-from django.views.generic.edit import DeletionMixin
-
 from django.db.models import Sum
 from django.forms import modelformset_factory
-from django.http import request, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
 from django.conf.urls import handler404, handler500, handler403, handler400
 import datetime
@@ -21,6 +16,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from logging import getLogger, Logger
 
+from tournaments import models
 from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm, \
     PropositionForm, TournamentForm, ResultsAddForm
 from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer, Propositions, Tournament, \
@@ -123,18 +119,17 @@ class ClubUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequired
         LOGGER.warning('Invalid data provided while updating')
         return super().form_invalid(form)
 
-# DeletionMixin,
-class ClubDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+
+def error_message(param):
+    pass
+
+
+class ClubDeleteView(SuccessMessageMixin, DatabaseError, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/club_delete.html'
     model = Club
     success_message = 'Klub bol zmazaný'
-    error_message = 'Klub nemôže byť zmazaný, pretože má už priradených hráčov'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.delete_club']
-
-    def form_invalid(self, form):
-        LOGGER.warning('Invalid data provided while updating')
-        return super().form_invalid(form)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -143,6 +138,9 @@ class ClubDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequired
             messages.success(self.request, "Klub nemôže byť zmazaný, pretože má už priradených hráčov")
         finally:
             return redirect('clubs')
+# funguje jen jedna z moznosti - bud zprava o uspesnem smazani,
+# nebo odchyceni ProtectedError a zprava uzivateli.
+
 
 class ClubsView(ListView):
     template_name = 'tournaments/clubs.html'
