@@ -1,20 +1,3 @@
-// Navbar user-name cleaned
-// function userNameTrimer() {
-//     let userName = document.querySelectorAll("p.user-name")
-//     for (uName of userName) {
-//         let lastIndex = uName.innerText.search('@')
-//         let shorthand = uName.innerText.substring(0, lastIndex)
-//         if (shorthand.length > 15 && shorthand.length < 19) {
-//             uName.style.fontSize = '10px'
-//         } else if (shorthand.length >= 19) {
-//             uName.style.fontSize = '8px'
-//         }
-//         uName.innerText = shorthand;
-//     }  
-// }
-// userNameTrimer()
-
-
 // SIDE-BAR-BTN function
 function displaySideBar() {
     let sideBar = document.querySelector("nav.side-bar")
@@ -62,4 +45,12 @@ function dropdownToggle(dropMenu) {
             drop.classList.add("hidden")
         }
     }
+}
+
+
+//MESSAGE CANCEL CROSS
+
+function closeMessage() {
+    let message = document.querySelector(".alert")
+    message.style.display = "none"
 }

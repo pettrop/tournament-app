@@ -1,46 +1,53 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-<p>Žiadosť o pridelenie práv pre užívateľa {{ user.first_name }} {{ user.last_name }}</p>
-<div>
+<div class="page-header">
+    <h1>Žiadosť o pridelenie práv</h1>
+</div>
+<div class="page-tables">
+    <p class="instruction">Žiadosť o pridelenie práv pre užívateľa {{ user.first_name }} {{ user.last_name }}</p>
     {% if user.email and profile.phone %}
-    <p>Vyberte, o aké práva chcete požiadať:</p>
+    <p class="text">Vyberte, o aké práva chcete požiadať:</p>
     <form>
+        {% csrf_token %}
         {% for group in groups %}
-        <input type="radio" id="{{group}}" name="group" value="{{group}}">
-        <label for="{{group}}">{{group}}</label><br>
+        <div>
+            <input type="radio" id="{{group}}" name="group" value="{{group}}">
+            <label for="{{group}}">{{group}}</label><br>
+        </div>
         {% endfor %}
-        <input type="submit" name="btn-submit" value="Vyberte možnosť">
-        <br>
+        <button class="btn" type="submit" name="btn-submit"><i class="fa-solid fa-hand-pointer"></i> Vyberte možnosť</button>
+        
     </form>
-    <br>
     <form method="POST">
         {% csrf_token %}
         <div>
             {% if group == "Zástupca klubu" %}
-            <p>Vybraný zástupca klubu:</p>
+            <p class="instruction">Vybrali ste možnosť "{{ group }}".</p>
+            <p class="text">Vyberte klub, ktorého chcete byť zástupcom.</p>
             <label>Klub: </label>
-            <input type="text" list="clublist" name="clubname" required="required">
-
-            <datalist id="clublist">
+            <select name="clublist" id="clublist" required>
                 {% for club in clubs %}
-
+                <option value="{{ club.club_name }}">{{ club.club_name }}</option>
+                {% endfor %}
+            </select>
+            <!-- <input type="text" list="clublist" name="clubname" required="required"> -->
+            <!-- <datalist id="clublist">
+                {% for club in clubs %}
                 <option value="{{ club.club_name }}">
-                    {% endfor %}
-            </datalist><br>
+                {% endfor %}
+            </datalist> -->
             {% elif group == "Organizátor" %}
-            <p>Vybraný organizátor:</p>
+            <p class="instruction">Vybrali ste možnosť "{{ group }}".</p>
             {% endif %}
-
             {% if group == "Zástupca klubu" or group == "Organizátor" %}
-            <button type="submit">Odeslat žádost</button>
+            <button class="btn" type="submit"><i class="fa-solid fa-paper-plane"></i> Odoslať žiadosť</button>
             {% endif %}
         </div>
     </form>
-    <a href="{% url 'profile' %}">Späť</a>
     {% else %}
-    <p>Vráťte sa späť do <a href="{% url 'profile' %}">profilu</a> a doplňte ho. Musíte mať vyplnený email aj telefónne číslo.</p>
+    <p class="text">Vráťte sa späť do profilu a doplňte svoje údaje. Musíte mať vyplnený email aj telefónne číslo.</p>
     {% endif %}
-</div>
+    <a class="btn" href="{% url 'profile' %}"><i class="fa-solid fa-left-long"></i> Späť do profilu</a>
 </div>
 {% endblock %}

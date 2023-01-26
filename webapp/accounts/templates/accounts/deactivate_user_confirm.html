@@ -3,16 +3,14 @@
 <div class="page-header">
     <h1>Deaktivácia účtu</h1>
 </div>
-<form method="POST">
-{% csrf_token %}
-<div>
-    <p>Opavdu chcete deaktivovat svůj účet? </p>
-    <a href="{% url 'deactivate_user' %}">
-        <button type="submit">Áno</button>
-    </a>
-    <a href="{% url 'profile' %}">
-        <button type="button">Nie</button>
-    </a>
+<div class="page-tables">
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <p class="instruction">Naozaj chcete deaktivovať svoj účet? </p>
+            <a href="{% url 'deactivate_user' %}"><button class="btn" type="submit">Áno</button></a>
+            <a href="{% url 'profile' %}"><button class="btn" type="button">Nie</button></a>
+        </div>
+        </form>
 </div>
-</form>
 {% endblock %}
