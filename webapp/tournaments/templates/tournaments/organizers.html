@@ -7,7 +7,9 @@
 <div class="page-tables">
     <div class="table-menu">
         <ul>
+            {% if perms.tournaments.add_organizer %}
             <li><a class="table-menu-btn" href="{% url 'organizer_create'%}"><span class="symbol">+</span>Vytvor&nbsp;nového&nbsp;organizátora</a></li>
+            {% endif %}
         </ul>      
     </div>
     <ul class="list">
@@ -15,8 +17,12 @@
             <li class="list-item">
                 <a href="{% url 'organizer' organizer.id %}">{{ organizer.organizer_name }} {{ organizer.organizer_lastname }}</a>
                 <div class="list-item-buttons">
+                    {% if perms.tournaments.change_organizer %}
                     <a class="edit" href="{% url 'organizer_update' organizer.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    {% endif %}
+                    {% if perms.tournaments.delete_organizer %}
                     <a class="delete" href="{% url 'organizer_delete' organizer.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}

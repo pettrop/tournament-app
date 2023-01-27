@@ -7,8 +7,12 @@
     <p>prehled hracu v teto discipline, vysledky turnaju teto discipliny</p>
     <div class="bottom-menu">
         <ul>
+            {% if perms.tournaments.change_discipline %}
             <li><a class="edit bottom-menu-btn" href="{% url 'discipline_update' discipline.id %}"><i class="fa-solid fa-pen-to-square"></i> Upraviť disciplínu</a></li>
+            {% endif %}
+            {% if perms.tournaments.delete_discipline %}
             <li><a class="delete bottom-menu-btn" href="{% url 'discipline_delete' discipline.id %}"><i class="fa-solid fa-trash-can"></i> Vymazať disciplínu</a></li>
+            {% endif %}
         </ul>      
     </div>
 </div>

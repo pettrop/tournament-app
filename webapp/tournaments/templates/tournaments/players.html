@@ -10,8 +10,12 @@
             <li class="list-item">
                 <a href="{% url 'player' player.id %}">{{ player.name|capfirst }} {{ player.lastname|capfirst }}</a>
                 <div class="list-item-buttons">
+                    {% if perms.tournaments.change_player and user.profile.club.pk == player.club.pk or user.is_staff %}
                     <a class="edit" href="{% url 'player_update' player.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    {% endif %}
+                    {% if perms.tournaments.delete_player and user.profile.club.pk == player.club.pk or user.is_staff %}
                     <a class="delete" href="{% url 'player_delete' player.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}
