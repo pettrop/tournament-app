@@ -24,19 +24,14 @@
         <div>
             {% if group == "Zástupca klubu" %}
             <p class="instruction">Vybrali ste možnosť "{{ group }}".</p>
-            <p class="text">Vyberte klub, ktorého chcete byť zástupcom.</p>
+            <p class="text"><strong>Vyhľadajte a vyberte klub</strong>, ktorého chcete byť zástupcom. <strong>Ak ste nenašli klub, napíšte názov nového klubu</strong>, ktorého chcete byť zástupcom.</p>
             <label>Klub: </label>
-            <select name="clublist" id="clublist" required>
-                {% for club in clubs %}
-                <option value="{{ club.club_name }}">{{ club.club_name }}</option>
-                {% endfor %}
-            </select>
-            <!-- <input type="text" list="clublist" name="clubname" required="required"> -->
-            <!-- <datalist id="clublist">
+            <input type="text" list="clublist" name="clubname" required="required">
+            <datalist id="clublist">
                 {% for club in clubs %}
                 <option value="{{ club.club_name }}">
                 {% endfor %}
-            </datalist> -->
+            </datalist>
             {% elif group == "Organizátor" %}
             <p class="instruction">Vybrali ste možnosť "{{ group }}".</p>
             {% endif %}

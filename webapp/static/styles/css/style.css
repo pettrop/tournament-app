@@ -68,6 +68,9 @@ body i.side-bar-btn {
 body nav.side-bar {
   display: none;
 }
+body strong {
+  text-decoration: underline;
+}
 
 .hidden {
   display: none;
