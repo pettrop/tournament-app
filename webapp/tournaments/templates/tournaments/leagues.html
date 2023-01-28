@@ -8,15 +8,21 @@
     <ul class="list">
         <div class="table-menu">
             <ul>
+                {% if perms.tournaments.add_league %}
                 <li><a class="table-menu-btn" href="{% url 'league_create'%}"><span class="symbol">+</span>Vytvor&nbsp;novú&nbsp;ligu</a></li>
+                {% endif %}
             </ul>      
         </div>
         {% for league in object_list %}
             <li class="list-item">
                 <a href="{% url 'league' league.id %}">{{ league.league_name }}</a>
                 <div class="list-item-buttons">
+                    {% if perms.tournaments.change_league %}
                     <a class="edit" href="{% url 'league_update' league.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    {% endif %}
+                    {% if perms.tournaments.delete_league %}
                     <a class="delete" href="{% url 'league_delete' league.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}

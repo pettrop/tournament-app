@@ -8,8 +8,12 @@
     <p>Prehled sezon, pote by se melo dat rozkliknout na turnaje v dane sezone, pripadne proposice na ty co jeste nebyly pripadne vysledky?</p>
     <div class="bottom-menu">
         <ul>
-            <li><a class="edit bottom-menu-btn" href="{% url 'season_update' season.id %}"><i class="fa-solid fa-pen-to-square"></i> Upraviť sezónu</a></li>
-            <li><a class="delete bottom-menu-btn" href="{% url 'season_delete' season.id %}"><i class="fa-solid fa-trash-can"></i> Vymazať sezónu</a></li>
+            {% if perms.tournaments.change_season %}
+                <li><a class="edit bottom-menu-btn" href="{% url 'season_update' season.id %}"><i class="fa-solid fa-pen-to-square"></i> Upraviť sezónu</a></li>
+            {% endif %}
+            {% if perms.tournaments.delete_season %}
+                <li><a class="delete bottom-menu-btn" href="{% url 'season_delete' season.id %}"><i class="fa-solid fa-trash-can"></i> Vymazať sezónu</a></li>
+            {% endif %}
         </ul>      
     </div>
 </div>

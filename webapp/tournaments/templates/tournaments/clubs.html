@@ -10,8 +10,12 @@
             <li class="list-item">
                 <a href="{% url 'club' club.id %}">{{ club.club_name }}</a>
                 <div class="list-item-buttons">
+                    {% if perms.tournaments.change_club and user.profile.club.pk == club.pk or user.is_staff %}
                     <a class="edit" href="{% url 'club_update' club.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    {% endif %}
+                    {% if perms.tournaments.delete_club %}
                     <a class="delete" href="{% url 'club_delete' club.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}

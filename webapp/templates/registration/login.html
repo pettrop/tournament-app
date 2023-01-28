@@ -9,6 +9,7 @@
         <table> {{ form.as_table }} </table>
         <button class="btn" type="submit">Prihlásiť sa</button>
     </form>
+    <a class="for-pass" href="{% url 'signup' %}">Ešte nemáte účet? Vytvorte si ho tu.</a><br>
     <a class="for-pass" href="{% url 'password_reset' %}">Zabudli ste heslo?</a>
 </div>
 {% endblock %}

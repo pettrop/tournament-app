@@ -25,7 +25,11 @@
         <li><a href="#" onclick="dropdownToggle('.tournaments-dropdown')">Turnaje <i class="fa-solid fa-caret-down"></i></a>
             <div class="dropdown hidden tournaments-dropdown">
                 <ul class="drop-list">
-                    <li class="drop-item"><a href="#">Vytvor propozície</a></li>
+                    {% if request.user.is_authenticated  %}
+                        {% if perms.tournaments.add_proposition %}
+                            <li class="drop-item"><a href="#">Vytvor propozície</a></li>
+                        {% endif %}
+                    {% endif %}
                     <li class="drop-item"><a href="#">Zadaj výsledky</a></li>
                     <li class="drop-item"><a href="#">Export výsledkov</a></li>
                 </ul>
@@ -35,8 +39,12 @@
         <li><a href="#" onclick="dropdownToggle('.players-dropdown')">Hráči <i class="fa-solid fa-caret-down"></i></a>
             <div class="dropdown hidden players-dropdown">
                 <ul class="drop-list">
-                    <li class="drop-item"><a href="{% url 'player_create' %}">Vytvor hráča</a></li>
-                    <li class="drop-item"><a href="#">Uprav hráča</a></li>
+                    {% if perms.tournaments.add_player %}
+                        <li class="drop-item"><a href="{% url 'player_create' %}">Vytvor hráča</a></li>
+                    {% endif %}
+                    {% if perms.tournaments.change_player %}
+                        <li class="drop-item"><a href="#">Uprav hráča</a></li>
+                    {% endif %}
                     <li class="drop-item"><a href="{% url 'players' %}">Zoznam hráčov</a></li>
                 </ul>
             </div>
@@ -44,8 +52,12 @@
         <li><a href="#" onclick="dropdownToggle('.clubs-dropdown')">Kluby <i class="fa-solid fa-caret-down"></i></a>
             <div class="dropdown hidden clubs-dropdown">
                 <ul class="drop-list">
-                    <li class="drop-item"><a href="{% url 'club_create' %}">Vytvor klub</a></li>
-                    <li class="drop-item"><a href="#">Uprav klub</a></li>
+                    {% if perms.tournaments.add_club %}
+                        <li class="drop-item"><a href="{% url 'club_create' %}">Vytvor klub</a></li>
+                    {% endif %}
+                    {% if perms.tournaments.change_club %}
+                        <li class="drop-item"><a href="#">Uprav klub</a></li>
+                    {% endif %}
                     <li class="drop-item"><a href="{% url 'clubs' %}">Zoznam klubov</a></li>
                 </ul>
             </div>

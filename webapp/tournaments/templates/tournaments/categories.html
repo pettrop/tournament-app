@@ -6,7 +6,9 @@
 <div class="page-tables">
     <div class="table-menu">
         <ul>
+            {% if perms.tournaments.add_category %}
             <li><a class="table-menu-btn" href="{% url 'category_create'%}"><span class="symbol">+</span>Vytvor&nbsp;novú&nbsp;kategóriu</a></li>
+            {% endif %}
         </ul>      
     </div>
     <ul class="list">
@@ -14,8 +16,12 @@
             <li class="list-item">
                 <a href="{% url 'category' category.id %}">{{ category.category_name }}</a>
                 <div class="list-item-buttons">
+                    {% if perms.tournaments.change_category %}
                     <a class="edit" href="{% url 'category_update' category.id %}"><i class="fa-solid fa-pen-to-square"></i>&nbsp;Upraviť</a>
+                    {% endif %}
+                    {% if perms.tournaments.delete_category %}
                     <a class="delete" href="{% url 'category_delete' category.id %}"><i class="fa-solid fa-trash-can"></i>&nbsp;Vymazať</a>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}
