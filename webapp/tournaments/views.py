@@ -105,7 +105,6 @@ class ClubCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequired
         return result
 
 
-
 class ClubUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/club_form.html'
     extra_context = {'title': 'Uprav klub'}
@@ -118,10 +117,6 @@ class ClubUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequired
     def form_invalid(self, form):
         LOGGER.warning('Invalid data provided while updating')
         return super().form_invalid(form)
-
-
-def error_message(param):
-    pass
 
 
 class ClubDeleteView(SuccessMessageMixin, DatabaseError, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
