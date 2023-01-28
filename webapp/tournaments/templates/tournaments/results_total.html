@@ -5,13 +5,11 @@
 </div>
 <div class="page-tables">
   <h2>Priebežné výsledky klubov</h2>
-  <ul clas="list">
-
+  <ul class="list">
     {% for club, score in season_sum_score.items %}
-        <li class="list-item">{{ club }}: {{ score }} bodov </li>
+        <li class="list-item"><a>{{ club }}: {{ score }} bodov</a></li>
     {% endfor %}
-
   </ul>
-
+  <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 {% endblock %}

@@ -9,7 +9,14 @@
     <div class="menu">
         <ul class="main-menu">
             <li class="menu-item"><a href="{% url 'home' %}">Domov</a></li>
-            <li class="menu-item"><a href="{% url 'results' %}">Výsledky</a></li>
+            <li class="menu-item"><a href="#">Výsledky <i class="fa-solid fa-caret-down"></i></a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="{% url 'results' %}">Výsledky turnajov</a></li>
+                        <li><a href="{% url 'seasons' %}">Celkové výsledky</a></li>
+                    </ul>
+                </div>
+            </li>
             <li class="menu-item"><a href="#">Turnaje <i class="fa-solid fa-caret-down"></i></a>
                 <div class="dropdown">
                     <ul>

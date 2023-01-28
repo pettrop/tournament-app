@@ -1,7 +1,13 @@
 {% extends 'main.html' %}
 {% block content %}
+<div class="page-header">
     <h1>Prístup zamietnutý</h1>
+</div>
+<div class="page-tables">
     <div class="box">
         <p>Nemáte potrebné oprávnenia. Vráťte sa prosím na <a href="{% url 'home' %}">hlavnú stránku</a>.</p>
     </div>
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
+</div>
+    
 {% endblock %}

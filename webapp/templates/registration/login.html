@@ -10,6 +10,7 @@
         <button class="btn" type="submit">Prihlásiť sa</button>
     </form>
     <a class="for-pass" href="{% url 'signup' %}">Ešte nemáte účet? Vytvorte si ho tu.</a><br>
-    <a class="for-pass" href="{% url 'password_reset' %}">Zabudli ste heslo?</a>
+    <a class="for-pass" href="{% url 'password_reset' %}">Zabudli ste heslo?</a><br>
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 {% endblock %}

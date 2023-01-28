@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="page-header">
-    <h1> {{ object.name }}</h1>
+    <h1>{{ object.name }}</h1>
 </div>
 <div class="page-tables">
     <h2>{{ object.name }} </h2>
@@ -10,5 +10,6 @@
     {% for result in object.get_result_children %}
     <p>{{ result.player.name }} {{ result.player.lastname }} - {{ result.result }}bodov</p>
     {% endfor %}
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 {% endblock %}

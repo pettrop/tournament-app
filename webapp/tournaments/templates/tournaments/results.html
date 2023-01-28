@@ -4,8 +4,13 @@
   <h1>Výsledky turnajov</h1>
 </div>
 <div class="page-tables">
-  {% for tournament in tournaments_list %}
-  <p><a href="{% url 'results_detail' tournament.pk %}">{{ tournament }} ({{ tournament.propositions.season }})</a></p>
-{% endfor %}
+  <ul class="list">
+    {% for tournament in tournaments_list %}
+    <li class="list-item">
+      <a href="{% url 'results_detail' tournament.pk %}">{{ tournament }} ({{ tournament.propositions.season }})</a>
+    </li>
+    {% endfor %}
+  </ul>
+  <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button> 
 </div>
 {% endblock %}
