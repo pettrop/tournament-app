@@ -14,9 +14,9 @@
     <form class="complex-form" method="post">
         {% csrf_token %}
         {{ form.as_p}}
-
+        <a href="{% url 'proposition_create' %}" class="btn">Vytvor novú propozíciu</a>
         {% if formset %}
-        <h3>Hráči</h3>
+        <h3>Hráči:</h3>
         {{ formset.management_form }}
         <div id='player-form-list'>
             {% for form in formset %}
@@ -31,19 +31,20 @@
         {% endif %}
         <button type="submit" class="btn btn-primary">Uložiť</button>
     </form>
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 <script>
     const addMoreBtn = document.getElementById('add-player')
     const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
 
-    addMoreBtn.addEventListener('click', add_new_form)
+    addMoreBtn.addEventListener('click', createPlayerForm)
 
-    function add_new_form(event) {
+    function createPlayerForm() {
         if (event) {
             event.preventDefault()
         }
         const currentResultForms = document.getElementsByClassName('result-form')
-        const currentFormCount = currentResultForms.length // + 1
+        const currentFormCount = currentResultForms.length
         const formCopyTarget = document.getElementById('player-form-list')
         const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
         copyEmptyFormEl.setAttribute('class', 'result-form')
@@ -51,8 +52,16 @@
         const regex = new RegExp('__prefix__', 'g')
         copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
         totalNewForms.setAttribute('value', currentFormCount + 1)
-        // now add new empty form element to our html form
         formCopyTarget.append(copyEmptyFormEl)
+        addForm(currentFormCount)
+    }
+    function addForm(index) {
+        let currentDiv = document.getElementById(`form-${index}`)
+        const removeBtn = document.createElement("button");
+        removeBtn.innerHTML = "Vymazať hráča";
+        removeBtn.classList.add("delete")
+        removeBtn.addEventListener("click", () => currentDiv.remove())
+        currentDiv.appendChild(removeBtn);
     }
 
 </script>

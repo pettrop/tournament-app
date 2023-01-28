@@ -1,17 +1,17 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="page-header">
-  <h1>Výsledky turnaju</h1>
+  <h1>Výsledky turnaja</h1>
 </div>
 <div class="page-tables">
   <h2>Výsledky klubov</h2>
   <ul class="list">
     {% for result_club in results_club_ordered%}
-        <li class="list-item">{{ result_club.0 }} - {{ result_club.1 }} bodov</li>
+        <li class="list-item"><a>{{ result_club.0 }} - {{ result_club.1 }} bodov</a></li>
     {% endfor %}
-  </ul>
+  </ul><br>
   <h2>Poradie jednotlivcov</h2>
-  <table class="table-list">
+  <table class="table-list results-detail">
     <thead>
       <tr>
         <th>Poradie</th>
@@ -24,14 +24,15 @@
     <tbody>
       {% for player in results_players %}
       <tr>
-        <td></td>
-        <td>{{ player.player__lastname }} {{ player.player__name }}</td>
-        <td>{{ player.player__club__club_name}}</td>
-        <td>{{ player.player__year_of_birth }}</td>
-        <td>{{ player.points }}</td>
+        <td><a></a></td>
+        <td><a>{{ player.player__lastname }} {{ player.player__name }}</a></td>
+        <td><a>{{ player.player__club__club_name}}</a></td>
+        <td><a>{{ player.player__year_of_birth }}</a></td>
+        <td><a>{{ player.points }}</a></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+  <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 {% endblock %}

@@ -5,39 +5,91 @@
     <h1>Propozícia</h1>
 </div>
 <div class="page-tables">
-    <div class="info-block">
+    <div class="proposition-info">
         <h2>Podtatranský stolnotenisový zväz</h2> 
-        <p>Vás pozýva na {{ proposition.tournament_order }}. turnaj
+        <p class="intro">Vás pozýva na {{ proposition.tournament_order }}. turnaj
             {% for league in leagues %}
                     {{ league }}. ligy{% if not forloop.last %},{% endif %}
                 {% endfor %} žiakov a dorastencov PSTZ sezóny {{ proposition.season }}</p>
-        <p>Usporiadateľ: {{ proposition.organizer_club }}</p>
-        <p>Dátum usporiadania: {{ proposition.event_date }}</p>
-        <p>Miesto: {{ proposition.event_location }}</p>
-        <p>Vedenie turnaja: {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }} - riaditeľ <br>
-            {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }} - hlavný rozhodca
-        </p>
-        Prihlášky: {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }}, email: {{ proposition.registration.organizer_mail}}, tel.: {{ proposition.registration.organizer_phone }}</p>
-        <p>Štartovné: štartovné je {{ proposition.start_fee }},-€ za hráča/hráčku</p>
+        <div class="info-line">
+            <i class="fa-solid fa-people-roof"></i>
+            <p><strong>Usporiadateľ:</strong> {{ proposition.organizer_club }}</p>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-calendar-days"></i>
+            <p><strong>Dátum usporiadania:</strong> {{ proposition.event_date }}</p>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-location-dot"></i>
+            <p><strong>Miesto:</strong> {{ proposition.event_location }}</p>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-user-tie"></i>
+            <div>
+                <p><strong>Vedenie turnaja:</strong></p>
+                <p><span class="sub-strong">Riaditeľ:</span> {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }}</p>
+                <p><span class="sub-strong">Hlavný rozhodca:</span> {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }}</p>
+            </div>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <div>
+                <p><strong>Prihlášky:</strong></p>
+                <p><span class="sub-strong">Zodpovedná osoba:</span> {{ proposition.director.organizer_name }} {{ proposition.director.organizer_lastname }}</p>
+                <p><span class="sub-strong">Posielať na email:</span> {{ proposition.registration.organizer_mail}}</p>
+                <p><span class="sub-strong">Tel. kontakt:</span> {{ proposition.registration.organizer_phone }}</p>
+
+            </div>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <p><strong>Štartovné:</strong> {{ proposition.start_fee }},-€ za hráča/hráčku</p>
+        </div>
         <h3>TECHNICKÉ USTANOVENIA:</h3>
-        <p>Predpis: {{ proposition.prescription }}</p>
-        <p>Súťažné disciplíny:
-            {% for discipline in disciplines %}
-                    {{ discipline }}{% if not forloop.last %},{% endif %}
-            {% endfor %}</p>
-        <p>Systém turnaja: {{ proposition.tournament_system }}</p>
-        <p>Vekové kategória platné pre sezónu {{ proposition.season }}:</p>
-        <p>{% for category in categories %}
-                    {{ category }}{% if not forloop.last %},{% endif %}
-            {% endfor %}</p>
-        
-        <p>Časový rozpis:</p>
-        <p>{% for schedule in schedules %}
-                    {{ schedule }} <br>
-            {% endfor %}</p>
-        
-        <p>{{ proposition.notes }}</p>
+        <div class="info-line">
+            <i class="fa-solid fa-note-sticky"></i>
+            <div>
+                <p><strong>Predpis:</strong>
+                <p>{{ proposition.prescription }}</p>
+            </div>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+            <div>
+                <p><strong>Súťažné disciplíny:</strong></p>
+                <ul>
+                    {% for discipline in disciplines %}
+                    <li class="sub-line">{{ discipline }}{% if not forloop.last %},{% endif %}</li>
+                {% endfor %}</p>
+                </ul>
+            </div>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-table-list"></i>
+            <p><strong>Systém turnaja:</strong></p>
+            <p>{{ proposition.tournament_system }}</p>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-user-check"></i>
+            <p><strong>Vekové kategória platné pre sezónu {{ proposition.season }}:</strong></p>
+            <ul>
+                {% for category in categories %}
+                    <li class="sub-line">{{ category }}{% if not forloop.last %},{% endif %}</li>
+                {% endfor %}</p>
+            </ul>
+        </div>
+        <div class="info-line">
+            <i class="fa-solid fa-clock"></i>
+            <p><strong>Časový rozpis:</strong></p>
+            <ul>
+                {% for schedule in schedules %}
+                    <li class="sub-line">{{ schedule }} </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <p class="intro">{{ proposition.notes }}</p>
     </div>
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 
 

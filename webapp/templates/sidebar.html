@@ -16,13 +16,20 @@
         <div class="img-wrapper avatar-out">
             <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
         </div>
-        <p class="user-name">offline@</p>
+        <p class="user-name">offline</p>
         {% endif %}      
     </div>
     <div class="side-menu">
     <ul>
         <li><a href="{% url 'home' %}">Domov</a></li>
-        <li><a href="{% url 'results' %}">Výsledky</a></li>
+        <li><a href="#" onclick="dropdownToggle('.results-dropdown')">Výsledky <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown hidden results-dropdown">
+                <ul class="drop-list">
+                    <li class="drop-item"><a href="{% url 'results' %}">Výsledky turnajov</a></li>
+                    <li class="drop-item"><a href="{% url 'seasons' %}">Celkové výsledky</a></li>
+                </ul>
+            </div>
+        </li>
         <li><a href="#" onclick="dropdownToggle('.tournaments-dropdown')">Turnaje <i class="fa-solid fa-caret-down"></i></a>
             <div class="dropdown hidden tournaments-dropdown">
                 <ul class="drop-list">
