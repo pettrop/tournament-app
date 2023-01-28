@@ -53,7 +53,7 @@ urlpatterns = [
     path('player/delete/<pk>', tournaments.views.PlayerDeleteView.as_view(), name='player_delete'),
     path('players/', tournaments.views.PlayersView.as_view(), name='players'),
 
-    path('season/detail/<pk>', tournaments.views.season, name='season'),
+    path('season/detail/<pk>', tournaments.views.results_total, name='season'),
     path('season/create', tournaments.views.SeasonCreateView.as_view(), name='season_create'),
     path('season/update/<pk>', tournaments.views.SeasonUpdateView.as_view(), name='season_update'),
     path('season/delete/<pk>', tournaments.views.SeasonDeleteView.as_view(), name='season_delete'),
@@ -95,7 +95,7 @@ urlpatterns = [
 
     path('results/<int:pk>/', tournaments.views.results_detail, name='results_detail'),
     path('results/', tournaments.views.results_view, name='results'),
-
+    path('total/<int:pk>/', tournaments.views.results_total, name='total'),
 ]
 
 handler403 = 'tournaments.views.handler403'

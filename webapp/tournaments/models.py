@@ -136,7 +136,7 @@ class Tournament(Model):
     propositions = models.ForeignKey(Propositions, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
-        return '{}'.format(self.name)
+        return '{} ({})'.format(self.name, self.propositions)
 
     def get_edit_url(self):
         return reverse("tournament:update", kwargs={"pk": self.pk})
@@ -152,17 +152,3 @@ class Result(Model):
 
     def __str__(self):
         return '{}'.format(self.player)
-
-
-def points_for_player_in_season(player_id):
-    results = Result.objects.filter(player_id=player_id)
-    total_result = 0
-    for result in results:
-        total_result += result.result
-    return total_result
-
-
-def points_for_club_in_tournament(tournament_id, club_id):
-    results = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(
-        points=Sum('result')).filter(player__club_id=club_id)
-    return results

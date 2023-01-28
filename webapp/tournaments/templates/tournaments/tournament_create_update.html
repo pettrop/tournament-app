@@ -11,9 +11,6 @@
     <h1>Turnaj</h1> <!-- Nejde mi sem dať {{ title }} extra context  #KUBO-->
 </div>
 <div class="page-tables">
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
     <form class="complex-form" method="post">
         {% csrf_token %}
         {{ form.as_p}}
@@ -30,7 +27,7 @@
 
         </div>
             <div id="empty-form" class="hidden">{{ formset.empty_form.as_p }}</div>
-            <button id="add-player" type="button">Pridaj hráča</button>
+            <button id="add-player" type="button" class="btn btn-primary">Pridaj hráča</button>
         {% endif %}
         <button type="submit" class="btn btn-primary">Uložiť</button>
     </form>
@@ -57,6 +54,7 @@
         // now add new empty form element to our html form
         formCopyTarget.append(copyEmptyFormEl)
     }
+
 </script>
 
 {% endblock %}
