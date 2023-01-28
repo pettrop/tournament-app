@@ -1,10 +1,13 @@
+from collections import defaultdict
+from itertools import groupby
+
 from django.contrib import messages
 from importlib._common import _
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import DatabaseError
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Count, F, OuterRef, Subquery
 from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
@@ -145,6 +148,7 @@ class ClubsView(ListView):
 
 def season(request, pk):
     season = Season.objects.get(pk=pk)
+
     context = {'season': season}
     return render(request, template_name='tournaments/season.html', context=context)
 
@@ -244,6 +248,7 @@ class LeagueDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequir
 # Category / Categories
 
 def category(request, pk):
+    #TODO zatial natvrdo zadane radenie do kategorie!
     category = Category.objects.get(pk=pk)
     current_year = datetime.date.today().year
     all_players = Player.objects.all()
@@ -478,6 +483,7 @@ def tournament_create_view(request):
     }
     if form.is_valid():
         obj = form.save()
+        #TODO Upravit presmerovanie/nacitanie stranky pri vytvarani turnajov
         return redirect('tournaments')
 
     return render(request, template_name='tournaments/tournament_create_update.html', context=context)
@@ -489,6 +495,7 @@ def tournament_list_view(request):
         "tournaments_list": tournaments_list
     }
     return render(request, template_name="tournaments/tournaments.html", context=context)
+
 
 @login_required
 @permission_required(['tournaments.change_tournament'])
@@ -505,7 +512,6 @@ def tournament_update_view(request, pk):
         "object": obj,
     }
 
-
     if all([form.is_valid(), formset.is_valid()]):
             parent = form.save(commit=False)
             parent.save()
@@ -513,7 +519,7 @@ def tournament_update_view(request, pk):
                 child = form.save(commit=False)
                 child.tournament = parent
                 child.save()
-            context['message'] = 'Data saved.'
+            messages.success(request, 'Zmeny boli uložené!')
     return render(request, template_name="tournaments/tournament_create_update.html", context=context)
 
 
@@ -536,6 +542,7 @@ def results_view(request):
 def results_detail(request, pk=None):
     results_players = Result.objects.filter(tournament_id=pk).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
     club_names = Result.objects.filter(tournament_id=pk).values('player__club__club_name').distinct()
+    print(club_names)
     results_club = []
     for club_name in club_names:
         club = club_name["player__club__club_name"]
@@ -545,7 +552,7 @@ def results_detail(request, pk=None):
         sum_points_club = sum([player['points'] for player in top_three_players])
         results_club.extend([(club, sum_points_club)])
 
-    results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)
+    results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)[:4] #doriesit ak su dva kluby na 4.mieste, cize maju rovnaky pocet bodov
 
     context = {
         "results_club_ordered": results_club_ordered,
@@ -553,6 +560,68 @@ def results_detail(request, pk=None):
     }
     return render(request, template_name="tournaments/results_detail.html", context=context)
 
+
+def seasons_views(request):
+    seasons = Season.objects.all()
+    context = {
+        'seasons': seasons
+    }
+    return render(request, template_name='tournaments/seasons_list.html')
+
+
+def results_total(request, pk=None):
+    season = Season.objects.get(pk=pk) #vypise sezonu podla pk => 2022/2023
+    tournaments = Tournament.objects.filter(propositions__season__season_name=season)
+    tournaments_count = int(len(tournaments))
+    print("POCET TURNAJOV:", tournaments_count)
+
+    season_sum_score = dict()
+    for tournament in tournaments:
+        print("TURNAMENTY:", tournament)
+        result_data = Result.objects.filter(tournament=tournament).values('player__club__id',
+                                                                               'tournament').annotate(player_count=Count('player')).filter(player_count__gte=2)
+        
+        club_ids = set()
+
+        for result in result_data:
+            # print("RESULT", result)
+            club_id = result['player__club__id']
+            club_ids.add(club_id)
+
+        for club_id in club_ids:
+            club = Club.objects.get(id=club_id)
+            print("CLUB", club)
+
+            scores = []
+            for player in club.player_set.all():
+                try:
+                    tresult = Result.objects.get(player=player, tournament=tournament)
+                except Exception: #upravit zachytenie iba chyby DoesNotExist!
+                    continue
+                # print("PLAYER", player, tresult)
+                scores.append((player, tresult.result))
+            top_3_players = sorted(scores, key=lambda x: x[1], reverse=True)[:3]
+            tournament_sum_score = sum( map(lambda x: x[1], top_3_players) )
+            print("SUMA", tournament_sum_score)
+            if club.club_name in season_sum_score:
+                season_sum_score[club.club_name] += tournament_sum_score
+            else:
+                season_sum_score[club.club_name] = tournament_sum_score
+
+    print(season_sum_score)
+
+    ###
+    results_players = Result.objects.filter(tournament_id__in=tournaments).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'tournament__name', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
+
+
+    context = {
+        'tournaments_count': tournaments_count,
+        'tournaments': tournaments,
+        'results_players': results_players,
+        'season_sum_score': season_sum_score,
+        'season': season,
+    }
+    return render(request, template_name="tournaments/results_total.html", context=context)
 
 
 def handler403(request, exception):
@@ -564,3 +633,6 @@ def handler404(request, exception):
 # def error_404(request, exception):
 #    context = {}
 #    return render(request,'404.html', context)
+
+
+#TODO dorobit views pre rozvrh - schedule turnajov
