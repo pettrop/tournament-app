@@ -1,15 +1,22 @@
+from django.contrib import messages
+from importlib._common import _
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db import DatabaseError
+from django.db.models import ProtectedError
+from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
-
+from django.conf.urls import handler404, handler500, handler403, handler400
 import datetime
-
+from django.contrib.messages.views import SuccessMessageMixin
 
 from logging import getLogger, Logger
 
+from tournaments import models
 from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm, \
     PropositionForm, TournamentForm, ResultsAddForm
 from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer, Propositions, Tournament, \
@@ -23,11 +30,6 @@ def home(request):
     context = {}
     return render(request, template, context)
 
-
-def results(request):
-    template = "results.html"
-    context = {}
-    return render(request, template, context)
 
 
 # Player / Players
@@ -43,10 +45,11 @@ def player(request, pk):
     return render(request, template_name='tournaments/player.html', context=context)
 
 
-class PlayerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class PlayerCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/player_form.html'
-    extra_context = {'title': 'Vytvoř hráče'}
+    extra_context = {'title': 'Vytvor hráča'}
     form_class = PlayerForm
+    success_message = 'Hráč bol úspešne vytvorený'
     success_url = reverse_lazy('players')
     permission_required = ['tournaments.add_player']
 
@@ -55,11 +58,12 @@ class PlayerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class PlayerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class PlayerUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/player_form.html'
     extra_context = {'title': 'Uprav hráče'}
     model = Player
     form_class = PlayerForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('players')
     permission_required = ['tournaments.change_player']
 
@@ -68,9 +72,10 @@ class PlayerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class PlayerDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class PlayerDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/player_delete.html'
     model = Player
+    success_message = 'Hráč bol zmazaný'
     success_url = reverse_lazy('players')
     permission_required = ['tournaments.delete_player']
 
@@ -85,24 +90,27 @@ def club(request, pk):
     return render(request, template_name='tournaments/club.html', context=context)
 
 
-class ClubCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class ClubCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/club_form.html'
-    extra_context = {'title': 'Vytvoř nový klub'}
+    extra_context = {'title': 'Vytvor nový klub'}
     model = Club
     form_class = ClubForm
+    success_message = 'Klub bol úspešne vytvorený'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.add_club']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
-class ClubUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class ClubUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/club_form.html'
     extra_context = {'title': 'Uprav klub'}
     model = Club
     form_class = ClubForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.change_club']
 
@@ -111,12 +119,22 @@ class ClubUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class ClubDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class ClubDeleteView(SuccessMessageMixin, DatabaseError, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/club_delete.html'
     model = Club
+    success_message = 'Klub bol zmazaný'
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.delete_club']
 
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        try:
+            self.object.delete()
+        except ProtectedError:
+            messages.error(self.request, "Klub nemôže byť zmazaný, pretože má už priradených hráčov")
+        else:
+            messages.success(self.request, "Klub bol zmazaný")
+        return redirect(success_url)
 
 class ClubsView(ListView):
     template_name = 'tournaments/clubs.html'
@@ -136,24 +154,27 @@ class SeasonsView(ListView):
     model = Season
 
 
-class SeasonCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class SeasonCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/season_form.html'
-    extra_context = {'title': 'Vytvoř sezonu'}
+    extra_context = {'title': 'Vytvor sezónu'}
     model = Season
     form_class = SeasonForm
+    success_message = 'sezóna bola úspešne vytvorená'
     success_url = reverse_lazy('seasons')
     permission_required = ['tournaments.add_season']
 
-    def form_invalid(self, form):
-        LOGGER.warning('Invalid data provided')   #ZÁSAH OD KUBA ... nešlo mi vytvoriť sezónu s kódom "Logger.warning('Invalid data provided), resp pri invalid data vyskakovala chyba"
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
-class SeasonUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class SeasonUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/season_form.html'
     extra_context = {'title': 'Uprav sezonu'}
     model = Season
     form_class = SeasonForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('seasons')
     permission_required = ['tournaments.change_season']
 
@@ -162,9 +183,10 @@ class SeasonUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class SeasonDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class SeasonDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/season_delete.html'
     model = Season
+    success_message = 'sezóna bola zmazaná'
     success_url = reverse_lazy('seasons')
     permission_required = ['tournaments.delete_season']
 
@@ -182,24 +204,27 @@ class LeaguesView(ListView):
     model = League
 
 
-class LeagueCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class LeagueCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/league_form.html'
-    extra_context = {'title': 'Vytvoř novou ligu'}
+    extra_context = {'title': 'Vytvor novú ligu'}
     model = League
     form_class = LeagueForm
+    success_message = 'Liga bola vytvorená'
     success_url = reverse_lazy('leagues')
     permission_required = ['tournaments.add_league']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
-class LeagueUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class LeagueUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/league_form.html'
     extra_context = {'title': 'Uprav ligu'}
     model = League
     form_class = LeagueForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('leagues')
     permission_required = ['tournaments.change_league']
 
@@ -208,9 +233,10 @@ class LeagueUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class LeagueDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class LeagueDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/league_delete.html'
     model = League
+    success_message = 'Liga bola zmazaná'
     success_url = reverse_lazy('leagues')
     permission_required = ['tournaments.delete_league']
 
@@ -222,27 +248,33 @@ def category(request, pk):
     current_year = datetime.date.today().year
     all_players = Player.objects.all()
     players_dospeli = []
-    players_dorostenci = []
-    players_starsi_zaci = []
-    players_mladsi_zaci = []
+    players_dorastenci = []
+    players_starší_žiaci = []
+    players_mladší_žiaci = []
     players_ostatni = []
+    players_dievčata = []
     for player in all_players:
-        if (current_year - 20) >= (player.year_of_birth):
-            players_dospeli.append(player)
-        elif (current_year - 18) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 20):
-            players_dorostenci.append(player)
-        elif (current_year - 13) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 18):
-            players_starsi_zaci.append(player)
-        elif (current_year - 10) >= (player.year_of_birth) and (player.year_of_birth) >= (current_year - 13):
-            players_mladsi_zaci.append(player)
-        else: players_ostatni.append(player)
+        if player.player_is_girl is True:
+            players_dievčata.append(player)
+        else:
+            if (current_year - 20) >= player.year_of_birth:
+                players_dospeli.append(player)
+            elif (current_year - 15) > player.year_of_birth and player.year_of_birth >= (current_year - 19):
+                players_dorastenci.append(player)
+            elif (current_year - 13) > player.year_of_birth and player.year_of_birth >= (current_year - 15):
+                players_starší_žiaci.append(player)
+            elif player.year_of_birth >= (current_year - 13):
+                players_mladší_žiaci.append(player)
+            else: players_ostatni.append(player)
 
     context = {'category': category,
                'players_dospeli': players_dospeli,
-               'players_dorostenci': players_dorostenci,
-               'players_starsi_zaci': players_starsi_zaci,
-               'players_mladsi_zaci': players_mladsi_zaci,
-               'players_ostatni': players_ostatni}
+               'players_dorastenci': players_dorastenci,
+               'players_starší_žiaci': players_starší_žiaci,
+               'players_mladší_žiaci': players_mladší_žiaci,
+               'players_ostatni': players_ostatni,
+               'players_dievčata': players_dievčata}
+    print(context)
     return render(request, template_name='tournaments/category.html', context=context)
 
 class CategoriesView(ListView):
@@ -250,35 +282,41 @@ class CategoriesView(ListView):
     model = Category
 
 
-class CategoryCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class CategoryCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/category_form.html'
-    extra_context = {'title': 'Vytvoř novou kategorii'}
+    extra_context = {'title': 'Vytvor novú kategóriu'}
     model = Category
     form_class = CategoryForm
+    success_message = 'Kategória bola vytvorená'
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.add_category']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
-class CategoryUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class CategoryUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/category_form.html'
     extra_context = {'title': 'Uprav kategorii'}
     model = Category
     form_class = CategoryForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.change_category']
 
-    def form_invalid(self, form):
-        LOGGER.warning('invalid data provided while updating')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
-class CategoryDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+
+class CategoryDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/category_delete.html'
     model = Category
+    success_message = 'Kategória bola zmazaná'
     success_url = reverse_lazy('categories')
     permission_required = ['tournaments.delete_category']
 
@@ -296,24 +334,27 @@ class DisciplinesView(ListView):
     model = Discipline
 
 
-class DisciplineCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class DisciplineCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/discipline_form.html'
-    extra_context = {'title': 'Vytvoř novou disciplínu'}
+    extra_context = {'title': 'Vytvor novú disciplínu'}
     model = Discipline
     form_class = DisciplineForm
+    success_message = 'Disciplína bola vytvorená'
     success_url = reverse_lazy('disciplines')
     permission_required = ['tournaments.add_discipline']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
-class DisciplineUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class DisciplineUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/discipline_form.html'
     extra_context = {'title': 'Uprav disciplínu'}
     model = Discipline
     form_class = DisciplineForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('disciplines')
     permission_required = ['tournaments.change_discipline']
 
@@ -322,9 +363,10 @@ class DisciplineUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateVi
         return super().form_invalid(form)
 
 
-class DisciplineDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class DisciplineDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/discipline_delete.html'
     model = Discipline
+    success_message = 'Disciplína bola zmazaná'
     success_url = reverse_lazy('disciplines')
     permission_required = ['tournaments.delete_discipline']
 
@@ -342,24 +384,27 @@ class OrganizersView(ListView):
     model = Organizer
 
 
-class OrganizerCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class OrganizerCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'tournaments/organizer_form.html'
-    extra_context = {'title': 'Vytvoř organizátora'}
+    extra_context = {'title': 'Vytvor organizátora'}
     model = Organizer
     form_class = OrganizerForm
+    success_message = 'Organizátor bol úspešne vytvorený'
     success_url = reverse_lazy('organizers')
     permission_required = ['tournaments.add_organizer']
 
-    def form_invalid(self, form):
-        Logger.warning('Invalid data provided')
-        return super().form_invalid(form)
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        LOGGER.warning(form.cleaned_data)
+        return result
 
 
-class OrganizerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class OrganizerUpdateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'tournaments/organizer_form.html'
     extra_context = {'title': 'Uprav organizátora'}
     model = Organizer
     form_class = OrganizerForm
+    success_message = 'Úprava údajov prebehla v poriadku'
     success_url = reverse_lazy('organizers')
     permission_required = ['tournaments.change_organizer']
 
@@ -368,9 +413,10 @@ class OrganizerUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateVie
         return super().form_invalid(form)
 
 
-class OrganizerDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class OrganizerDeleteView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'tournaments/organizer_delete.html'
     model = Organizer
+    success_message = 'Organizátor bol zmazaný'
     success_url = reverse_lazy('organizers')
     context_object_name = 'clubs'
     # ordering = ['-name']
@@ -385,12 +431,13 @@ class PropositionsView(ListView):
     ordering = ['-event_date']
 
 
-class PropositionCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class PropositionCreateView(SuccessMessageMixin, PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Propositions
     form_class = PropositionForm
     template_name = 'tournaments/proposition_create.html'
+    success_message = 'Propozícia bola úspešne vytvorená'
     success_url = reverse_lazy('propositions')
-    extra_context = {'title': 'Create proposition'}
+    extra_context = {'title': 'Vytvor propozíciu'}
     permission_required = ['tournaments.add_propositions']
 
     def form_valid(self, form):
@@ -414,6 +461,13 @@ def proposition_detail(request, pk):
     }
     return render(request, template_name='tournaments/proposition_detail.html', context=context)
 
+class PropositionDeleteView(SuccessMessageMixin, DeleteView):
+    template_name = 'tournaments/proposition_delete.html'
+    model = Propositions
+    success_message = 'Propozícia bola zmazaná'
+    success_url = reverse_lazy('propositions')
+    context_object_name = 'propositions'
+
 
 @login_required
 @permission_required(['tournaments.add_tournament'])
@@ -424,7 +478,8 @@ def tournament_create_view(request):
     }
     if form.is_valid():
         obj = form.save()
-        return redirect(obj.get_absolute_url())
+        return redirect('tournaments')
+
     return render(request, template_name='tournaments/tournament_create_update.html', context=context)
 
 
@@ -440,24 +495,25 @@ def tournament_list_view(request):
 def tournament_update_view(request, pk):
     obj = get_object_or_404(Tournament, pk=pk)
     form = TournamentForm(request.POST or None, instance=obj)
-    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0 )
+    ResultsFormset = modelformset_factory(Result, form=ResultsAddForm, extra=0)
     qs = obj.result_set.all()
     formset = ResultsFormset(request.POST or None, queryset=qs)
 
     context = {
         "form": form,
         "formset": formset,
-        "object": obj
+        "object": obj,
     }
+
+
     if all([form.is_valid(), formset.is_valid()]):
-        print("Je validny!")
-        parent = form.save(commit=False)
-        parent.save()
-        for form in formset:
-            child = form.save(commit=False)
-            child.tournament = parent
-            child.save()
-        context['message'] = 'Data saved.'
+            parent = form.save(commit=False)
+            parent.save()
+            for form in formset:
+                child = form.save(commit=False)
+                child.tournament = parent
+                child.save()
+            context['message'] = 'Data saved.'
     return render(request, template_name="tournaments/tournament_create_update.html", context=context)
 
 
@@ -469,5 +525,42 @@ def tournament_detail_view(request, pk=None):
     return render(request, "tournaments/tournament_detail.html", context)
 
 
+def results_view(request):
+    tournaments_list = Tournament.objects.all()
+    context = {
+        "tournaments_list": tournaments_list
+    }
+    return render(request, template_name="tournaments/results.html", context=context)
+
+
+def results_detail(request, pk=None):
+    results_players = Result.objects.filter(tournament_id=pk).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
+    club_names = Result.objects.filter(tournament_id=pk).values('player__club__club_name').distinct()
+    results_club = []
+    for club_name in club_names:
+        club = club_name["player__club__club_name"]
+        top_three_players = Result.objects.filter(tournament_id=pk,
+                                                  player__club__club_name=club_name["player__club__club_name"]).values(
+            'player_id', 'player__name', 'player__lastname').annotate(points=Sum('result')).order_by('-points')[:3]
+        sum_points_club = sum([player['points'] for player in top_three_players])
+        results_club.extend([(club, sum_points_club)])
+
+    results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)
+
+    context = {
+        "results_club_ordered": results_club_ordered,
+        "results_players": results_players
+    }
+    return render(request, template_name="tournaments/results_detail.html", context=context)
+
+
+
 def handler403(request, exception):
     return render(request, '403.html', status=403)
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
+
+# def error_404(request, exception):
+#    context = {}
+#    return render(request,'404.html', context)

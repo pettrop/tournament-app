@@ -1,10 +1,15 @@
+from enum import unique
+
 from django.core.exceptions import ValidationError
+from django.db.models.functions import datetime
 from django.forms import (ModelForm, CharField, DateField, IntegerField, ModelChoiceField, ModelMultipleChoiceField,
-                          SelectDateWidget, EmailField, TextInput)
+                          SelectDateWidget, EmailField, TextInput, forms, MultiWidget, Select, ChoiceField)
+
 
 from tournaments.models import Club, Player, Propositions, Category, League, Discipline, Schedule, Season, Organizer, \
-    Result, Tournament
+    Tournament, Result
 
+from webapp import settings
 
 class PlayerForm(ModelForm):
     class Meta:
@@ -13,12 +18,22 @@ class PlayerForm(ModelForm):
 
     name = CharField(max_length=32)
     lastname = CharField(max_length=32)
-    year_of_birth = IntegerField()
-    license_validity = DateField()
-
+    CHOICES = [(year, year) for year in range(1950, 2023)]
+    year_of_birth = ChoiceField(widget=Select, choices=CHOICES)
+    license_validity = DateField(
+    widget=SelectDateWidget(
+        empty_label=("Choose Year", "Choose Month", "Choose Day"),
+        months={
+            1:'Január', 2:'Február', 3:'Marec', 4:'Apríl',
+            5:'Máj', 6:'Jún', 7:'Júl', 8:'August',
+            9:'September', 10:'Október', 11:'November', 12:'December'
+        }
+    ),
+)
     def clean_name(self):
         name = self.cleaned_data['name']
         return name.capitalize()
+
 
     def clean_lastname(self):
         lastname = self.cleaned_data['lastname']
@@ -28,23 +43,36 @@ class PlayerForm(ModelForm):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = 'Meno'
+        self.fields['lastname'].label = 'Priezvisko'
+        self.fields['year_of_birth'].label = 'Rok narodenia'
+        self.fields['license_validity'].label = 'Platnosť licencie'
+        self.fields['player_is_girl'].label = 'Hráč je dievča'
+        self.fields['club'].label = 'Klub'
 
 class ClubForm(ModelForm):
     class Meta:
         model = Club
         fields = '__all__'
 
-    club_name = CharField(max_length=64)
-
     def clean_club_name(self):
         club_name = self.cleaned_data['club_name']
-        return club_name.capitalize()
+        duplicity_name = Club.objects.filter(club_name=club_name)
+        if duplicity_name.exists():
+            validation_error = "Klub s tímto názvem již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return club_name
 
     def clean(self):
         result = super().clean()
         return result
 
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['club_name'].label = 'Názov klubu'
 class SeasonForm(ModelForm):
     class Meta:
         model = Season
@@ -54,12 +82,20 @@ class SeasonForm(ModelForm):
 
     def clean_season_name(self):
         season_name = self.cleaned_data['season_name']
-        return season_name.capitalize()
+        duplicity_name = Season.objects.filter(season_name=season_name)
+        if duplicity_name.exists():
+            validation_error = "Tato sezóna již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return season_name
 
     def clean(self):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['season_name'].label = 'Sezóna v tvare 2022/2023'
 
 class LeagueForm(ModelForm):
     class Meta:
@@ -70,12 +106,20 @@ class LeagueForm(ModelForm):
 
     def clean_league_name(self):
         league_name = self.cleaned_data['league_name']
-        return league_name.capitalize()
+        duplicity_name = League.objects.filter(league_name=league_name)
+        if duplicity_name.exists():
+            validation_error = "Tato liga již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return league_name
 
     def clean(self):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['league_name'].label = 'Liga'
 
 class CategoryForm(ModelForm):
     class Meta:
@@ -86,12 +130,20 @@ class CategoryForm(ModelForm):
 
     def clean_category_name(self):
         category_name = self.cleaned_data['category_name']
-        return category_name.capitalize()
+        duplicity_name = Category.objects.filter(category_name=category_name)
+        if duplicity_name.exists():
+            validation_error = "Tato věková kategorie již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return category_name
 
     def clean(self):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category_name'].label = 'Veková kategória'
 
 class DisciplineForm(ModelForm):
     class Meta:
@@ -102,12 +154,20 @@ class DisciplineForm(ModelForm):
 
     def clean_discipline_name(self):
         discipline_name = self.cleaned_data['discipline_name']
-        return discipline_name.capitalize()
+        duplicity_name = Discipline.objects.filter(discipline_name=discipline_name)
+        if duplicity_name.exists():
+            validation_error = "Tato disciplína již existuje v databázi"
+            raise ValidationError(validation_error)
+        else:
+            return discipline_name
 
     def clean(self):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['discipline_name'].label = 'Disciplína'
 
 class OrganizerForm(ModelForm):
     class Meta:
@@ -121,16 +181,22 @@ class OrganizerForm(ModelForm):
 
     def clean_organizer_name(self):
         organizer_name = self.cleaned_data['organizer_name']
-        return organizer_name.capitalize()
+        return organizer_name
 
     def clean_organizer_lastname(self):
         organizer_lastname = self.cleaned_data['organizer_lastname']
-        return organizer_lastname.capitalize()
+        return organizer_lastname
 
     def clean(self):
         result = super().clean()
         return result
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['organizer_name'].label = 'Meno organizátora'
+        self.fields['organizer_lastname'].label = 'Priezvisko organizátora'
+        self.fields['organizer_mail'].label = 'Email'
+        self.fields['organizer_phone'].label = 'Telefónne číslo'
 
 class PropositionForm(ModelForm):
     class Meta:
@@ -138,8 +204,30 @@ class PropositionForm(ModelForm):
         fields = ['prescription', 'tournament_system', 'notes', 'category', 'league', 'discipline', 'event_location',
                   'event_date', 'schedule', 'season', 'tournament_order', 'organizer_club', 'director', 'judge', 'registration']
         widgets = {
-            'event_date': SelectDateWidget()
+            'event_date': SelectDateWidget(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['prescription'].label = 'Predpis'
+        self.fields['prescription'].widget.attrs.update({'rows':'4'})
+        self.fields['tournament_system'].label = 'Systém turnaja'
+        self.fields['tournament_system'].widget.attrs.update({'rows': '4'})
+        self.fields['notes'].label = 'Poznámky'
+        self.fields['notes'].widget.attrs.update({'rows': '4'})
+        self.fields['category'].label = 'Kategória'
+        self.fields['league'].label = 'Liga'
+        self.fields['discipline'].label = 'Disciplína'
+        self.fields['event_location'].label = 'Miesto'
+        self.fields['event_date'].label = 'Dátum usporiadania'
+        self.fields['schedule'].label = 'Časový rozpis'
+        self.fields['season'].label = 'Sezóna'
+        self.fields['tournament_order'].label = 'Poradie turnaja v sezóne'
+        self.fields['organizer_club'].label = 'Organizátor'
+        self.fields['registration'].label = 'Prihlášky'
+        self.fields['director'].label = 'Riaditeľ'
+        self.fields['judge'].label = 'Hlavný rozhodca'
+
     category = ModelMultipleChoiceField(queryset=Category.objects.all())
     league = ModelMultipleChoiceField(queryset=League.objects.all())
     discipline = ModelMultipleChoiceField(queryset=Discipline.objects.all())
@@ -147,39 +235,33 @@ class PropositionForm(ModelForm):
     season = ModelChoiceField(queryset=Season.objects.all())
 
 
-class ResultForm(ModelForm):
-    player_name = CharField()
-
-    class Meta:
-        model = Result
-        fields = ['player', 'tournament', 'result']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        player_name = cleaned_data.get("player_name")
-        players = Player.objects.filter(name__icontains=player_name)
-        if not players.exists():
-            raise ValidationError("Player does not exist.")
-        self.fields['player'].queryset = players
-
-
 class ResultsAddForm(ModelForm):
     error_css_class = 'error-field'
     required_css_class = 'required-field'
-    #player = CharField(widget=TextInput(attrs={"class": "form-control", "placeholder": "Meno a priezvisko"}))
-    #result = CharField(widget=TextInput)
+
     class Meta:
         model = Result
-        fields = ['player', 'tournament', 'result']
+        fields = ['player', 'result']
+        exclude = ['tournament']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.fields['player'].label = 'Meno hráča'
-        self.fields['tournament'].label = 'Poradie turnaja v sezóne'
+        # self.fields['tournament'].label = 'Poradie turnaja v sezóne'
         self.fields['result'].label = 'Body'
+        tournament = kwargs.pop('tournament', None)
+        super(ResultsAddForm, self).__init__(*args, **kwargs)
+        if tournament:
+            self.fields['tournament'].initial = tournament
 
 
 class TournamentForm(ModelForm):
     class Meta:
         model = Tournament
         fields = ['name', 'description', 'propositions']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = 'Názov'
+        self.fields['description'].label = 'Popis'
+        self.fields['propositions'].label = 'Propozície'

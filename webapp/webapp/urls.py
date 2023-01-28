@@ -26,7 +26,7 @@ urlpatterns = [
 
     path('', tournaments.views.home, name='home'),
     
-    path('results/', tournaments.views.results, name="results"),
+
     
     path('accounts/signup/', accounts.views.signup, name='signup'),
     path('accounts/activate/<uidb64>/<token>/', accounts.views.activate, name='activate'),
@@ -86,19 +86,17 @@ urlpatterns = [
     path('proposition/detail/<pk>', tournaments.views.proposition_detail, name='proposition'),
     path('proposition/create', tournaments.views.PropositionCreateView.as_view(), name='proposition_create'),
     path('propositions/', tournaments.views.PropositionsView.as_view(), name='propositions'),
+    path('proposition/delete/<pk>', tournaments.views.PropositionDeleteView.as_view(), name='proposition_delete'),
 
     path('tournament/<int:pk>/edit', tournaments.views.tournament_update_view, name='tournament'),
     path('tournament/<int:pk>/', tournaments.views.tournament_detail_view),
     path('tournament/create', tournaments.views.tournament_create_view, name='tournament_create'),
     path('tournaments/', tournaments.views.tournament_list_view, name='tournaments'),
 
+    path('results/<int:pk>/', tournaments.views.results_detail, name='results_detail'),
+    path('results/', tournaments.views.results_view, name='results'),
 
-
-    #path('tournament/<int:tournament_id>/results/', tournaments.views.tournament_results, name='tournament_results'),
-    #path('tournaments/', tournaments.views.TournamentsViews.as_view(), name='tournaments'),
-
-    #path('results/add', tournaments.views.result_add, name='results_add'),
-    #path('search_players/', tournaments.views.search_players, name='search_players'),
 ]
 
 handler403 = 'tournaments.views.handler403'
+handler404 = 'tournaments.views.handler404'

@@ -1,17 +1,16 @@
 from django.db import models
 from django.db.models import Model, Sum
+from django.forms import forms
 from django.urls import reverse
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-# Create your models here.
-
-
 class Club(Model):
-    club_name = models.CharField(max_length=64)
+    club_name = models.CharField(max_length=64, unique=True)
     # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
+
     def __str__(self):
 
         return '{} (id: {})'.format(self.club_name, self.id)
@@ -19,13 +18,17 @@ class Club(Model):
     class Meta:
         ordering = ['club_name']
 
+
 class Category(Model):
     category_name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
         return self.category_name
+
+
 def current_year():
     return datetime.date.today().year
+
 
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
@@ -34,16 +37,17 @@ def max_value_current_year(value):
 class Player(Model):
     name = models.CharField(max_length=32)
     lastname = models.CharField(max_length=32)
-    year_of_birth = models.IntegerField(validators=[MinValueValidator(1950), max_value_current_year])
+    year_of_birth = models.IntegerField()
     license_validity = models.DateField()
+    player_is_girl = models.BooleanField(default=False)
     club = models.ForeignKey(Club, on_delete=models.PROTECT, null=True)
-
 
     def __str__(self):
         return '{} {} ({}, id: {})'.format(self.lastname, self.name, self.year_of_birth, self.id)
 
     class Meta:
         ordering = ['lastname']
+        unique_together = (('name', 'lastname', 'year_of_birth'),)
 
 
 class Season(Model):
@@ -76,6 +80,10 @@ class Organizer(Model):
     def __str__(self):
         return '{} {} ({})'.format(self.organizer_lastname, self.organizer_name, self.organizer_mail)
 
+    class Meta:
+        ordering = ['organizer_lastname']
+        unique_together = (('organizer_name', 'organizer_lastname', 'organizer_mail', 'organizer_phone'),)
+
 
 class Schedule(Model):
     start_time = models.TimeField()
@@ -104,10 +112,15 @@ class Propositions(Model):
     start_fee = models.PositiveSmallIntegerField(null=True, blank=True)
     director = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='director')
     judge = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='judge')
-    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT, related_name='registration')
+    registration = models.ForeignKey(Organizer, null=True, blank=True, on_delete=models.PROTECT,
+                                     related_name='registration')
 
     def __str__(self):
         return '{} - {} ({})'.format(self.event_date, self.event_location, self.season)
+
+    class Meta:
+        ordering = ['event_date']
+        unique_together = (('event_location', 'event_date', 'organizer_club'),)
 
 
 class Scoreboard(Model):
@@ -124,9 +137,6 @@ class Tournament(Model):
 
     def __str__(self):
         return '{}'.format(self.name)
-
-    def get_absolute_url(self):
-        return reverse("tournament:detail", kwargs={"pk": self.pk})
 
     def get_edit_url(self):
         return reverse("tournament:update", kwargs={"pk": self.pk})
@@ -153,5 +163,6 @@ def points_for_player_in_season(player_id):
 
 
 def points_for_club_in_tournament(tournament_id, club_id):
-    results = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(points=Sum('result')).filter(player__club_id=club_id)
+    results = Result.objects.filter(tournament_id=tournament_id).values('player__club_id').annotate(
+        points=Sum('result')).filter(player__club_id=club_id)
     return results
