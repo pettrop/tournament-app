@@ -9,7 +9,10 @@ from .models import Profile, User
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-        instance.groups.add(Group.objects.get(name='Bežný uživateľ'))
+        try:
+            instance.groups.add(Group.objects.get(name='Bežný uživateľ'))
+        except:
+            pass
 
 
 @receiver(post_save, sender=User)
