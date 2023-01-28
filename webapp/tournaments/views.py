@@ -131,16 +131,15 @@ class ClubDeleteView(SuccessMessageMixin, DatabaseError, PermissionRequiredMixin
     success_url = reverse_lazy('clubs')
     permission_required = ['tournaments.delete_club']
 
-    def post(self, request, *args, **kwargs):
+    def form_valid(self, form):
+        success_url = self.get_success_url()
         try:
-            return self.delete(request, *args, **kwargs)
+            self.object.delete()
         except ProtectedError:
-            messages.success(self.request, "Klub nemôže byť zmazaný, pretože má už priradených hráčov")
-        finally:
-            return redirect('clubs')
-# funguje jen jedna z moznosti - bud zprava o uspesnem smazani,
-# nebo odchyceni ProtectedError a zprava uzivateli.
-
+            messages.error(self.request, "Klub nemôže byť zmazaný, pretože má už priradených hráčov")
+        else:
+            messages.success(self.request, "Klub bol zmazaný")
+        return redirect(success_url)
 
 class ClubsView(ListView):
     template_name = 'tournaments/clubs.html'
