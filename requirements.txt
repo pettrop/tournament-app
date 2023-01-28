@@ -1,2 +1,3 @@
 django
 six
+gunicorn==20.1.0
