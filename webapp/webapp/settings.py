@@ -172,3 +172,6 @@ EMAIL_USE_TLS = True
 PASSWORD_RESET_TIMING = 3600
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
