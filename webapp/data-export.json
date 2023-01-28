@@ -1,0 +1,1053 @@
+[
+  {
+    "model": "tournaments.club",
+    "pk": 1,
+    "fields": {
+      "club_name": "STO Slovenská Ves"
+    }
+  },
+  {
+    "model": "tournaments.club",
+    "pk": 2,
+    "fields": {
+      "club_name": "TTC Spartak Poprad"
+    }
+  },
+  {
+    "model": "tournaments.club",
+    "pk": 3,
+    "fields": {
+      "club_name": "ŠKST Spišský Štvrtok"
+    }
+  },
+  {
+    "model": "tournaments.club",
+    "pk": 4,
+    "fields": {
+      "club_name": "TJ Dunajec Spišská Stará Ves"
+    }
+  },
+  {
+    "model": "tournaments.club",
+    "pk": 5,
+    "fields": {
+      "club_name": "1. PPC Fortuna Kežmarok"
+    }
+  },
+  {
+    "model": "tournaments.club",
+    "pk": 6,
+    "fields": {
+      "club_name": "STO Mladý pinpongista Slovenská Ves"
+    }
+  },
+  {
+    "model": "tournaments.category",
+    "pk": 1,
+    "fields": {
+      "category_name": "mladší žiaci"
+    }
+  },
+  {
+    "model": "tournaments.category",
+    "pk": 2,
+    "fields": {
+      "category_name": "starší žiaci"
+    }
+  },
+  {
+    "model": "tournaments.category",
+    "pk": 3,
+    "fields": {
+      "category_name": "dorastenci"
+    }
+  },
+  {
+    "model": "tournaments.category",
+    "pk": 4,
+    "fields": {
+      "category_name": "dievčatá"
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 1,
+    "fields": {
+      "name": "Dávid",
+      "lastname": "Kovalčík",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-15",
+      "club": 1
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 2,
+    "fields": {
+      "name": "Dávid",
+      "lastname": "Michalák",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 3,
+    "fields": {
+      "name": "Adam",
+      "lastname": "Harhay",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 4,
+    "fields": {
+      "name": "Adrián",
+      "lastname": "Šterbák",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 5,
+    "fields": {
+      "name": "Adam",
+      "lastname": "Chrabačka",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 6,
+    "fields": {
+      "name": "Jakub",
+      "lastname": "Javorský",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 3
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 7,
+    "fields": {
+      "name": "Michal",
+      "lastname": "Danielčák",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 4
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 8,
+    "fields": {
+      "name": "Martin",
+      "lastname": "Hiščár",
+      "year_of_birth": 2012,
+      "license_validity": "2023-01-15",
+      "club": 5
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 9,
+    "fields": {
+      "name": "Marco",
+      "lastname": "Horník",
+      "year_of_birth": 2012,
+      "license_validity": "2023-01-15",
+      "club": 4
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 10,
+    "fields": {
+      "name": "Tobias",
+      "lastname": "Ragan",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 4
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 11,
+    "fields": {
+      "name": "Lukáš",
+      "lastname": "Halčin",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-15",
+      "club": 6
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 12,
+    "fields": {
+      "name": "Richard",
+      "lastname": "Kriak",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 13,
+    "fields": {
+      "name": "Martin",
+      "lastname": "Harniš",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 5
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 14,
+    "fields": {
+      "name": "Lukáš",
+      "lastname": "Povazsay",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-15",
+      "club": 5
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 15,
+    "fields": {
+      "name": "Karol",
+      "lastname": "Demko",
+      "year_of_birth": 2012,
+      "license_validity": "2023-01-15",
+      "club": 6
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 16,
+    "fields": {
+      "name": "Alex",
+      "lastname": "Litkowietz",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-15",
+      "club": 5
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 17,
+    "fields": {
+      "name": "Jozef",
+      "lastname": "Majerčák",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-15",
+      "club": 6
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 18,
+    "fields": {
+      "name": "Vladimír",
+      "lastname": "Strišovský",
+      "year_of_birth": 2013,
+      "license_validity": "2023-01-15",
+      "club": 6
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 19,
+    "fields": {
+      "name": "Tobias",
+      "lastname": "Neupauer",
+      "year_of_birth": 2012,
+      "license_validity": "2023-01-15",
+      "club": 6
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 20,
+    "fields": {
+      "name": "Alexander",
+      "lastname": "Strišovský",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-15",
+      "club": 6
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 21,
+    "fields": {
+      "name": "Pavol",
+      "lastname": "Sebeš",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-15",
+      "club": 6
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 22,
+    "fields": {
+      "name": "Tomáš",
+      "lastname": "Kuruc",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-15",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 23,
+    "fields": {
+      "name": "Dominik",
+      "lastname": "Jurkovský",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-18",
+      "club": 1
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 24,
+    "fields": {
+      "name": "Samuel",
+      "lastname": "Lištiak",
+      "year_of_birth": 2010,
+      "license_validity": "2023-01-18",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 25,
+    "fields": {
+      "name": "Jakub",
+      "lastname": "Skokan",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-18",
+      "club": 2
+    }
+  },
+  {
+    "model": "tournaments.player",
+    "pk": 26,
+    "fields": {
+      "name": "Martin",
+      "lastname": "Harniš",
+      "year_of_birth": 2011,
+      "license_validity": "2023-01-18",
+      "club": 5
+    }
+  },
+  {
+    "model": "tournaments.season",
+    "pk": 1,
+    "fields": {
+      "season_name": "2022/2023"
+    }
+  },
+  {
+    "model": "tournaments.league",
+    "pk": 1,
+    "fields": {
+      "league_name": "2"
+    }
+  },
+  {
+    "model": "tournaments.league",
+    "pk": 2,
+    "fields": {
+      "league_name": "3"
+    }
+  },
+  {
+    "model": "tournaments.league",
+    "pk": 3,
+    "fields": {
+      "league_name": "4"
+    }
+  },
+  {
+    "model": "tournaments.league",
+    "pk": 4,
+    "fields": {
+      "league_name": "5"
+    }
+  },
+  {
+    "model": "tournaments.discipline",
+    "pk": 1,
+    "fields": {
+      "discipline_name": "dvojhra"
+    }
+  },
+  {
+    "model": "tournaments.discipline",
+    "pk": 2,
+    "fields": {
+      "discipline_name": "štvorhra"
+    }
+  },
+  {
+    "model": "tournaments.organizer",
+    "pk": 1,
+    "fields": {
+      "organizer_name": "V",
+      "organizer_lastname": "D",
+      "organizer_mail": "v@d.vd",
+      "organizer_phone": "+412123456789"
+    }
+  },
+  {
+    "model": "tournaments.organizer",
+    "pk": 2,
+    "fields": {
+      "organizer_name": "L",
+      "organizer_lastname": "J",
+      "organizer_mail": "l@j.lj",
+      "organizer_phone": "0912345678"
+    }
+  },
+  {
+    "model": "tournaments.organizer",
+    "pk": 3,
+    "fields": {
+      "organizer_name": "J",
+      "organizer_lastname": "S",
+      "organizer_mail": "J@S.JS",
+      "organizer_phone": "12314214354356"
+    }
+  },
+  {
+    "model": "tournaments.schedule",
+    "pk": 1,
+    "fields": {
+      "start_time": "07:30:00",
+      "end_time": "08:30:00",
+      "task": "prezentácia"
+    }
+  },
+  {
+    "model": "tournaments.schedule",
+    "pk": 2,
+    "fields": {
+      "start_time": "08:30:00",
+      "end_time": null,
+      "task": "žrebovanie"
+    }
+  },
+  {
+    "model": "tournaments.schedule",
+    "pk": 3,
+    "fields": {
+      "start_time": "09:00:00",
+      "end_time": null,
+      "task": "otvorenie turnaja, začiatok súťaží"
+    }
+  },
+  {
+    "model": "tournaments.propositions",
+    "pk": 1,
+    "fields": {
+      "prescription": "Hrá sa podľa pravidiel stolného tenisu, podľa SP stolného tenisu a podľa ustanovení tohto rozpisu. Hrá sa s plastovými loptičkami JOOLA ***",
+      "tournament_system": "hrá sa v skupinách s nasadenými hráčmi podľa rebríčka vytvoreného na základe priebežných výsledkov po treťom turnaji. Zo skupiny postupujú prví dvaja do horného pavúka. Hráči na spodných priečkach hrajú spodný pavúk. Hrá sa o konečné umiestnenie. Hrá sa na tri vyhrané sety.",
+      "notes": "Jednotliví hráči musia byť nahlásení do piatka 14.10.2022, 18:00 pred turnajom na email: stolnytenis@texnet.sk alebo sms na tel.:0905 704 895",
+      "event_location": "Telocvičňa ZŠ Spišský Štvrtok",
+      "event_date": "2022-10-15",
+      "season": 1,
+      "tournament_order": 1,
+      "organizer_club": 3,
+      "start_fee": 4,
+      "director": 1,
+      "judge": 2,
+      "registration": 1,
+      "category": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "league": [
+        1
+      ],
+      "discipline": [
+        1
+      ],
+      "schedule": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "tournaments.propositions",
+    "pk": 2,
+    "fields": {
+      "prescription": "Hrá sa podľa pravidiel stolného tenisu, podľa SP stolného tenisu a podľa ustanovení tohto rozpisu. Hrá sa plastovými loptičkami Schildkrot +++",
+      "tournament_system": "hrá sa v skupinách s nasadenými hráčmi podľa rebríčka po 1. turnaji. Zo skupiny postupujú prví dvaja do horného pavúka. Hráči na spodných priečkach hrajú spodný pavúk. Hrá sa o konečné umiestnenie. Hrá sa na tri vyhrané sety.",
+      "notes": "Hráči musia byť nahlásení najneskôr do piatku 28. októbra 2022 do 18:00 hod. na hore uvedenú adresu alebo tel. číslo",
+      "event_location": "Telocvičňa ZŠ Spišská Stará Ves",
+      "event_date": "2022-10-29",
+      "season": 1,
+      "tournament_order": 2,
+      "organizer_club": 4,
+      "start_fee": 4,
+      "director": 3,
+      "judge": 2,
+      "registration": 3,
+      "category": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "league": [
+        1
+      ],
+      "discipline": [
+        1
+      ],
+      "schedule": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "tournaments.scoreboard",
+    "pk": 1,
+    "fields": {
+      "ranking_points": [
+        {
+          "points": 70,
+          "ranking": 1
+        },
+        {
+          "points": 65,
+          "ranking": 2
+        },
+        {
+          "points": 60,
+          "ranking": 3
+        },
+        {
+          "points": 55,
+          "ranking": 4
+        },
+        {
+          "points": 50,
+          "ranking": 5
+        },
+        {
+          "points": 47,
+          "ranking": 6
+        },
+        {
+          "points": 45,
+          "ranking": 7
+        },
+        {
+          "points": 43,
+          "ranking": 8
+        },
+        {
+          "points": 40,
+          "ranking": 9
+        },
+        {
+          "points": 38,
+          "ranking": 10
+        },
+        {
+          "points": 36,
+          "ranking": 11
+        },
+        {
+          "points": 34,
+          "ranking": 12
+        },
+        {
+          "points": 32,
+          "ranking": 13
+        },
+        {
+          "points": 30,
+          "ranking": 14
+        },
+        {
+          "points": 29,
+          "ranking": 15
+        },
+        {
+          "points": 28,
+          "ranking": 16
+        },
+        {
+          "points": 26,
+          "ranking": 17
+        },
+        {
+          "points": 24,
+          "ranking": 18
+        },
+        {
+          "points": 23,
+          "ranking": 19
+        },
+        {
+          "points": 22,
+          "ranking": 20
+        },
+        {
+          "points": 21,
+          "ranking": 21
+        },
+        {
+          "points": 20,
+          "ranking": 22
+        },
+        {
+          "points": 19,
+          "ranking": 23
+        },
+        {
+          "points": 18,
+          "ranking": 24
+        },
+        {
+          "points": 16,
+          "ranking": 25
+        },
+        {
+          "points": 15,
+          "ranking": 26
+        },
+        {
+          "points": 14,
+          "ranking": 27
+        },
+        {
+          "points": 13,
+          "ranking": 28
+        },
+        {
+          "points": 12,
+          "ranking": 29
+        },
+        {
+          "points": 11,
+          "ranking": 30
+        },
+        {
+          "points": 10,
+          "ranking": 31
+        },
+        {
+          "points": 9,
+          "ranking": 32
+        },
+        {
+          "points": 8,
+          "ranking": 33
+        },
+        {
+          "points": 7,
+          "ranking": 34
+        },
+        {
+          "points": 6,
+          "ranking": 35
+        },
+        {
+          "points": 5,
+          "ranking": 36
+        },
+        {
+          "points": 4,
+          "ranking": 37
+        },
+        {
+          "points": 3,
+          "ranking": 38
+        },
+        {
+          "points": 2,
+          "ranking": 39
+        },
+        {
+          "points": 1,
+          "ranking": 40
+        }
+      ]
+    }
+  },
+  {
+    "model": "tournaments.tournament",
+    "pk": 1,
+    "fields": {
+      "name": "Turnaj 1",
+      "description": "Popis len tak pre srandu",
+      "propositions": 1
+    }
+  },
+  {
+    "model": "tournaments.tournament",
+    "pk": 2,
+    "fields": {
+      "name": "Turnaj 2",
+      "description": "Len tak pre turnaj 2",
+      "propositions": 2
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 4,
+    "fields": {
+      "player": 1,
+      "tournament": 1,
+      "result": 70
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 5,
+    "fields": {
+      "player": 2,
+      "tournament": 1,
+      "result": 65
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 6,
+    "fields": {
+      "player": 3,
+      "tournament": 1,
+      "result": 60
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 7,
+    "fields": {
+      "player": 4,
+      "tournament": 1,
+      "result": 55
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 8,
+    "fields": {
+      "player": 5,
+      "tournament": 1,
+      "result": 50
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 9,
+    "fields": {
+      "player": 6,
+      "tournament": 1,
+      "result": 47
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 10,
+    "fields": {
+      "player": 7,
+      "tournament": 1,
+      "result": 45
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 11,
+    "fields": {
+      "player": 8,
+      "tournament": 1,
+      "result": 43
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 12,
+    "fields": {
+      "player": 9,
+      "tournament": 1,
+      "result": 40
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 13,
+    "fields": {
+      "player": 10,
+      "tournament": 1,
+      "result": 38
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 14,
+    "fields": {
+      "player": 12,
+      "tournament": 1,
+      "result": 34
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 15,
+    "fields": {
+      "player": 13,
+      "tournament": 1,
+      "result": 32
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 16,
+    "fields": {
+      "player": 14,
+      "tournament": 1,
+      "result": 30
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 17,
+    "fields": {
+      "player": 15,
+      "tournament": 1,
+      "result": 29
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 18,
+    "fields": {
+      "player": 16,
+      "tournament": 1,
+      "result": 29
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 19,
+    "fields": {
+      "player": 17,
+      "tournament": 1,
+      "result": 26
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 20,
+    "fields": {
+      "player": 18,
+      "tournament": 1,
+      "result": 26
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 21,
+    "fields": {
+      "player": 21,
+      "tournament": 1,
+      "result": 21
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 22,
+    "fields": {
+      "player": 22,
+      "tournament": 1,
+      "result": 21
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 23,
+    "fields": {
+      "player": 11,
+      "tournament": 1,
+      "result": 36
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 24,
+    "fields": {
+      "player": 20,
+      "tournament": 1,
+      "result": 26
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 25,
+    "fields": {
+      "player": 19,
+      "tournament": 1,
+      "result": 26
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 26,
+    "fields": {
+      "player": 1,
+      "tournament": 2,
+      "result": 70
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 27,
+    "fields": {
+      "player": 2,
+      "tournament": 2,
+      "result": 65
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 28,
+    "fields": {
+      "player": 3,
+      "tournament": 2,
+      "result": 60
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 29,
+    "fields": {
+      "player": 7,
+      "tournament": 2,
+      "result": 55
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 30,
+    "fields": {
+      "player": 23,
+      "tournament": 2,
+      "result": 50
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 31,
+    "fields": {
+      "player": 5,
+      "tournament": 2,
+      "result": 47
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 32,
+    "fields": {
+      "player": 4,
+      "tournament": 2,
+      "result": 45
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 33,
+    "fields": {
+      "player": 24,
+      "tournament": 2,
+      "result": 43
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 34,
+    "fields": {
+      "player": 25,
+      "tournament": 2,
+      "result": 40
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 35,
+    "fields": {
+      "player": 10,
+      "tournament": 2,
+      "result": 38
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 36,
+    "fields": {
+      "player": 15,
+      "tournament": 2,
+      "result": 36
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 37,
+    "fields": {
+      "player": 26,
+      "tournament": 2,
+      "result": 36
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 38,
+    "fields": {
+      "player": 22,
+      "tournament": 2,
+      "result": 32
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 39,
+    "fields": {
+      "player": 14,
+      "tournament": 2,
+      "result": 32
+    }
+  },
+  {
+    "model": "tournaments.result",
+    "pk": 40,
+    "fields": {
+      "player": 17,
+      "tournament": 2,
+      "result": 32
+    }
+  }
+]

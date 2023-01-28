@@ -24,11 +24,7 @@
                             {% if perms.tournaments.add_tournament %}
                                 <li><a href="{% url 'tournament_create' %}">Vytvor turnaj</a></li>
                             {% endif %}
-                            {% if perms.tournaments.add_results %}
-                                <li><a href="#">Zadaj výsledky</a></li>
-                            {% endif %}
                         {% endif %}
-                        <li><a href="#">Export výsledkov</a></li>
                     </ul>
                 </div>
             </li>
@@ -53,7 +49,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="menu-item"><a href="#">Ďalšie možnosti <i class="fa-solid fa-caret-down"></i></a>
+            <li class="menu-item"><a href="#">Ostatné <i class="fa-solid fa-caret-down"></i></a>
                 <div class="dropdown">
                     <ul>
                         <li><a href="{% url 'organizers' %}">Organizátori</a></li>

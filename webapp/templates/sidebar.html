@@ -8,6 +8,7 @@
     <div class="side-user-avatar">
         {% if request.user.is_authenticated  %}
         <div class="img-wrapper avatar-in">
+            <a class="to-profile" href="{% url 'profile'%}"></a>
             <img src="{% static 'images/user_avatar.svg' %}" alt="user-avatar">
         </div>
         <p class="user-name">{{ request.user }}</p>
@@ -26,12 +27,13 @@
             <div class="dropdown hidden tournaments-dropdown">
                 <ul class="drop-list">
                     {% if request.user.is_authenticated  %}
+                        <li class="drop-item"><a href="{% url 'propositions' %}">Propozície</a></li>
+                        <li class="drop-item"><a href="{% url 'tournaments' %}">Turnaje</a></li>
+                        <li class="drop-item"><a href="{% url 'tournament_create' %}">Vytvor turnaj</a></li>
                         {% if perms.tournaments.add_proposition %}
                             <li class="drop-item"><a href="#">Vytvor propozície</a></li>
                         {% endif %}
                     {% endif %}
-                    <li class="drop-item"><a href="#">Zadaj výsledky</a></li>
-                    <li class="drop-item"><a href="#">Export výsledkov</a></li>
                 </ul>
             </div>
         </li>
@@ -41,9 +43,6 @@
                 <ul class="drop-list">
                     {% if perms.tournaments.add_player %}
                         <li class="drop-item"><a href="{% url 'player_create' %}">Vytvor hráča</a></li>
-                    {% endif %}
-                    {% if perms.tournaments.change_player %}
-                        <li class="drop-item"><a href="#">Uprav hráča</a></li>
                     {% endif %}
                     <li class="drop-item"><a href="{% url 'players' %}">Zoznam hráčov</a></li>
                 </ul>
@@ -55,10 +54,18 @@
                     {% if perms.tournaments.add_club %}
                         <li class="drop-item"><a href="{% url 'club_create' %}">Vytvor klub</a></li>
                     {% endif %}
-                    {% if perms.tournaments.change_club %}
-                        <li class="drop-item"><a href="#">Uprav klub</a></li>
-                    {% endif %}
                     <li class="drop-item"><a href="{% url 'clubs' %}">Zoznam klubov</a></li>
+                </ul>
+            </div>
+        </li>
+        <li><a href="#" onclick="dropdownToggle('.others-dropdown')">Ostatné <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown hidden others-dropdown">
+                <ul class="drop-list">
+                    <li class="drop-item"><a href="{% url 'organizers' %}">Organizátori</a></li>
+                    <li class="drop-item"><a href="{% url 'leagues' %}">Ligy</a></li>
+                    <li class="drop-item"><a href="{% url 'seasons' %}">Sezóny</a></li>
+                    <li class="drop-item"><a href="{% url 'disciplines' %}">Disciplíny</a></li>
+                    <li class="drop-item"><a href="{% url 'categories' %}">Kategórie</a></li>
                 </ul>
             </div>
         </li>
