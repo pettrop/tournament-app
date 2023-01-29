@@ -60,6 +60,7 @@
 body {
   background-color: #E6E8E7;
   color: #111;
+  position: relative;
   font-family: "Montserrat", sans-serif;
 }
 body i.side-bar-btn {
@@ -163,6 +164,22 @@ body strong {
 .page-container .page-tables button {
   margin-right: 0.625em;
 }
+.page-container .page-tables button.back-btn {
+  color: #111;
+  border: 2px solid #111;
+  border-radius: 0.3125em;
+  font-size: 1em;
+  padding: 0.625em 0.9375em;
+  margin-top: 1.25em;
+  font-weight: bold;
+  background-color: #fff;
+  transition: all 0.2s;
+}
+.page-container .page-tables button.back-btn:hover, .page-container .page-tables button.back-btn:active {
+  transform: scale(1.03);
+  background-color: #005043;
+  color: #fff;
+}
 .page-container .page-tables a.for-pass {
   display: inline-block;
   color: #111;
@@ -171,6 +188,9 @@ body strong {
 }
 .page-container .page-tables a.for-pass:hover, .page-container .page-tables a.for-pass:active {
   font-weight: bold;
+}
+.page-container .page-tables .box a {
+  text-decoration: underline;
 }
 .page-container .page-tables p.instruction {
   font-weight: bold;
@@ -298,6 +318,67 @@ body strong {
 }
 .page-container .page-tables .table-list tr td a:hover, .page-container .page-tables .table-list tr td a:active {
   color: #fff;
+}
+.page-container .page-tables .results-detail {
+  width: 80%;
+}
+.page-container .page-tables .results-detail tr th {
+  border-right: 1px solid #111;
+}
+.page-container .page-tables .results-detail tr td {
+  border-right: 1px solid #919191;
+}
+.page-container .page-tables .results-detail tr td a {
+  text-align: left;
+}
+.page-container .page-tables .proposition-info {
+  margin: 1.25em;
+  padding: 1.875em;
+}
+.page-container .page-tables .proposition-info h2 {
+  text-align: center;
+  text-decoration: underline;
+  font-size: 2.1875em;
+  margin-bottom: 1.875em;
+}
+.page-container .page-tables .proposition-info h3 {
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.5625em;
+  margin-bottom: 0.9375em;
+}
+.page-container .page-tables .proposition-info p.intro {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.875em;
+  font-size: 1.25em;
+}
+.page-container .page-tables .proposition-info .info-line {
+  margin-bottom: 1.5625em;
+}
+.page-container .page-tables .proposition-info .info-line i {
+  display: block;
+  font-size: 1.5625em;
+  margin-bottom: 0.1875em;
+}
+.page-container .page-tables .proposition-info .info-line strong {
+  text-decoration: none;
+  font-weight: bold;
+  padding-right: 0.625em;
+}
+.page-container .page-tables .proposition-info .info-line .sub-strong {
+  text-decoration: underline;
+  padding-right: 0.625em;
+}
+.page-container .page-tables .proposition-info .info-line ul {
+  list-style-type: disc;
+  margin-top: 0.3125em;
+}
+.page-container .page-tables .proposition-info .info-line .sub-line {
+  margin-left: 2.5em;
+  text-transform: uppercase;
+  margin-bottom: 0.625em;
 }
 .page-container .page-tables p.succes-notice {
   font-weight: bold;
@@ -485,14 +566,36 @@ body strong {
   background-color: #fff;
   transform: scale(1.05);
 }
-.page-container .page-tables > *.complex-form label {
+.page-container .page-tables > *.complex-form label, .page-container .page-tables > *.complex-form h3 {
   display: block;
   font-weight: bold;
   font-size: 1.125em;
   margin: 2.1875em 0 0.1875em;
 }
+.page-container .page-tables > *.complex-form a {
+  display: block;
+  line-height: 1.1;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
 .page-container .page-tables > *.complex-form input.btn, .page-container .page-tables > *.complex-form button.btn {
   margin-top: 2.5em;
+}
+.page-container .page-tables > *.complex-form button.delete {
+  margin-top: 0.625em;
+  background-color: #fff;
+  border: 3px solid #F24452;
+  border-radius: 0.3125em;
+  box-shadow: 0.125em 0.125em 0.0625em #333;
+  transition: all 0.3s;
+  color: #111;
+  padding: 0.625em 0.625em;
+  font-weight: bold;
+}
+.page-container .page-tables > *.complex-form button.delete:hover {
+  background-color: #F24452;
+  color: #fff;
 }
 .page-container .page-tables > * textarea {
   border: 2px solid #005043;
@@ -561,7 +664,7 @@ nav {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10;
+  z-index: 100;
   font-weight: bold;
 }
 nav .logo-part {
@@ -758,16 +861,20 @@ div.alert-message {
   position: relative;
   top: 6.875em;
   text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 div.alert-message .alert {
   min-height: 2.5em;
-  padding: 0.625em;
+  padding: 1.875em;
   position: relative;
   color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.75em;
+  font-size: 0.875em;
 }
 div.alert-message .alert a {
   position: absolute;
@@ -1219,5 +1326,27 @@ div.alert-message {
   }
   body .page-container p {
     font-size: 0.875em;
+  }
+}
+@media print {
+  nav {
+    display: none;
+  }
+  .page-container {
+    width: 100;
+    margin-top: 0;
+    border: none;
+    box-shadow: none;
+  }
+  .page-container .page-header {
+    display: none;
+  }
+  .page-container .page-tables {
+    margin: 0;
+    padding: 0;
+  }
+  .page-container .page-tables .proposition-info {
+    margin: 0;
+    padding: 0;
   }
 }/*# sourceMappingURL=style.css.map */
