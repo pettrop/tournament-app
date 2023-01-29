@@ -172,3 +172,6 @@ PASSWORD_RESET_TIMING = 3600
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
