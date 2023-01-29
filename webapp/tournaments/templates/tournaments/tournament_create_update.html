@@ -8,7 +8,7 @@
 </style>
 
 <div class="page-header">
-    <h1>Turnaj</h1> <!-- Nejde mi sem dať {{ title }} extra context  #KUBO-->
+    <h1>Turnaj</h1>
 </div>
 <div class="page-tables">
     <form class="complex-form" method="post">
@@ -36,15 +36,16 @@
 <script>
     const addMoreBtn = document.getElementById('add-player')
     const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+    const currentResultForms = document.getElementsByClassName('result-form')
+    let currentFormCount = 0;
 
     addMoreBtn.addEventListener('click', createPlayerForm)
 
-    function createPlayerForm() {
+    function createPlayerForm(event) {
         if (event) {
             event.preventDefault()
         }
-        const currentResultForms = document.getElementsByClassName('result-form')
-        const currentFormCount = currentResultForms.length
+        
         const formCopyTarget = document.getElementById('player-form-list')
         const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
         copyEmptyFormEl.setAttribute('class', 'result-form')
@@ -62,8 +63,9 @@
         removeBtn.classList.add("delete")
         removeBtn.addEventListener("click", () => currentDiv.remove())
         currentDiv.appendChild(removeBtn);
+        currentFormCount++
+        console.log(currentResultForms)
+        console.log(currentFormCount)
     }
-
 </script>
-
 {% endblock %}
