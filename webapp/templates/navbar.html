@@ -28,12 +28,13 @@
                                 <li><a href="{% url 'proposition_create' %}">Vytvor propozíciu</a></li>
                             {% endif %}
                         {% endif %}
-                        <li><a href="{% url 'tournaments' %}">Turnaje</a></li>
                         {% if request.user.is_authenticated  %}
                             {% if perms.tournaments.add_tournament %}
                                 <li><a href="{% url 'tournament_create' %}">Vytvor turnaj</a></li>
                             {% endif %}
                         {% endif %}
+                        <li><a href="{% url 'tournaments' %}">Zadaj výsledky</a></li>
+
                     </ul>
                 </div>
             </li>
