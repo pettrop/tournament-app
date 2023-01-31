@@ -1,12 +1,12 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="page-header">
-  <h1>Výsledky turnaja</h1>
+  <h1>Výsledky turnaja - {{ tournament_cat }}</h1>
 </div>
 <div class="page-tables">
   <h2>Výsledky klubov</h2>
   <ul class="list">
-    {% for result_club in results_club_ordered%}
+    {% for result_club in results_club_ordered %}
         <li class="list-item"><a>{{ result_club.0 }} - {{ result_club.1 }} bodov</a></li>
     {% endfor %}
   </ul><br>

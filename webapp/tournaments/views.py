@@ -1,25 +1,19 @@
-from collections import defaultdict
-from itertools import groupby
-
 from django.contrib import messages
-from importlib._common import _
-
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import DatabaseError
-from django.db.models import ProtectedError, Count, F, OuterRef, Subquery
+from django.db.models import ProtectedError, Count
 from django.db.models import Sum
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView, ListView, FormView, CreateView, UpdateView, DeleteView
-from django.conf.urls import handler404, handler500, handler403, handler400
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
 import datetime
 from django.contrib.messages.views import SuccessMessageMixin
 
-from logging import getLogger, Logger
+from logging import getLogger
 
-from tournaments import models
 from tournaments.forms import ClubForm, PlayerForm, SeasonForm, LeagueForm, CategoryForm, DisciplineForm, OrganizerForm, \
     PropositionForm, TournamentForm, ResultsAddForm
 from tournaments.models import Club, Player, Season, League, Category, Discipline, Organizer, Propositions, Tournament, \
@@ -540,6 +534,8 @@ def results_view(request):
 
 
 def results_detail(request, pk=None):
+    tournament = Tournament.objects.filter(id=pk).values('category__category_name')
+    tournament_cat = tournament[0]['category__category_name']
     results_players = Result.objects.filter(tournament_id=pk).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
     club_names = Result.objects.filter(tournament_id=pk).values('player__club__club_name').distinct()
     print(club_names)
@@ -555,6 +551,7 @@ def results_detail(request, pk=None):
     results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)[:4] #doriesit ak su dva kluby na 4.mieste, cize maju rovnaky pocet bodov
 
     context = {
+        'tournament_cat': tournament_cat,
         "results_club_ordered": results_club_ordered,
         "results_players": results_players
     }
