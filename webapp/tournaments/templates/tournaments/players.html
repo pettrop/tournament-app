@@ -20,6 +20,18 @@
             </li>
         {% endfor %}
     </ul>
+    <div class="page-links">
+
+        <span class="page-current">
+            Zoznam mien: {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}"> < </a>
+                         {% endif %}
+            {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"> > </a>
+        {% endif %}
+    </div>
     <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 {% endblock %}

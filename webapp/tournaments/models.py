@@ -23,7 +23,7 @@ class Category(Model):
     category_name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
-        return self.category_name
+        return '{}'.format(self.category_name)
 
 
 def current_year():
@@ -137,7 +137,7 @@ class Tournament(Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT,blank=True, null=True)
 
     def __str__(self):
-        return '{} ({})'.format(self.name, self.propositions)
+        return '{} - {} ({})'.format(self.name, self.category, self.propositions)
 
     def get_edit_url(self):
         return reverse("tournament:update", kwargs={"pk": self.pk})

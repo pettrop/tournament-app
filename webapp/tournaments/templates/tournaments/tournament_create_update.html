@@ -56,6 +56,9 @@
         addForm(currentFormCount)
     }
     function addForm(index) {
+        if (event) {
+            event.preventDefault()
+        }
         let currentDiv = document.getElementById(`form-${index}`)
         const removeBtn = document.createElement("button");
         removeBtn.innerHTML = "Vymazať hráča";

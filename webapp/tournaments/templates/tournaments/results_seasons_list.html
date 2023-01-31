@@ -1,0 +1,20 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Priebežné výsledky</h1>
+</div>
+<div class="page-tables">
+    <div class="table-menu">
+
+    </div>
+    <ul class="list">
+        {% for season in seasons_list %}
+            <li class="list-item">
+                <a href="{% url 'season' season.id %}">{{ season.season_name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
+</div>
+{% endblock %}

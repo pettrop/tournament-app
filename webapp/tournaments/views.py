@@ -34,6 +34,7 @@ def home(request):
 class PlayersView(ListView):
     template_name = 'tournaments/players.html'
     model = Player
+    paginate_by = 20
 
 
 def player(request, pk):
@@ -136,6 +137,7 @@ class ClubDeleteView(SuccessMessageMixin, DatabaseError, PermissionRequiredMixin
 class ClubsView(ListView):
     template_name = 'tournaments/clubs.html'
     model = Club
+    paginate_by = 20
 
 
 # Season / Seasons
@@ -426,7 +428,7 @@ class PropositionsView(ListView):
     model = Propositions
     template_name = 'tournaments/propositions.html'
     context_object_name = 'propositions'
-    paginate_by = 5
+    paginate_by = 10
     ordering = ['-event_date']
 
 
@@ -559,31 +561,49 @@ def results_detail(request, pk=None):
 
 
 def seasons_views(request):
-    seasons = Season.objects.all()
+    seasons_list = Season.objects.all()
+    print(seasons_list)
     context = {
-        'seasons': seasons
+        'seasons_list': seasons_list
     }
-    return render(request, template_name='tournaments/seasons_list.html')
+    return render(request, template_name='tournaments/results_seasons_list.html', context=context)
 
 
-def results_total(request, pk=None):
-    season = Season.objects.get(pk=pk) #vypise sezonu podla pk => 2022/2023
+def season_category_view(request, season_pk=None):
+
+    tournaments_season = Tournament.objects.filter(propositions__season__id=season_pk)
+    category_season = Category.objects.filter(tournament__result__isnull=False).annotate(tournament_count=Count('tournament')).filter(tournament_count__gt=0)
+    season_name = Season.objects.get(id=season_pk)
+    print(season_name)
+    context = {
+        'season_name': season_name,
+        'season': season_pk,
+        'tournament_season': tournaments_season,
+        'category_season': category_season
+    }
+    return render(request, template_name='tournaments/season_category.html', context=context)
+
+def results_total(request, season_pk=None, category_pk=None):
+    season = Season.objects.get(pk=season_pk) #vypise sezonu podla pk => 2022/2023
     tournaments = Tournament.objects.filter(propositions__season__season_name=season)
-    tournaments_count = int(len(tournaments))
-    print("POCET TURNAJOV:", tournaments_count)
+    category_name = Category.objects.get(id=category_pk)
 
-    season_sum_score = dict()
+    tournaments_count = int(len(tournaments))
+    #print("POCET TURNAJOV:", tournaments_count)
+
+    season_sum_score_category = dict()
     for tournament in tournaments:
-        print("TURNAMENTY:", tournament)
+        #print("TURNAMENTY:", tournament)
         result_data = Result.objects.filter(tournament=tournament).values('player__club__id',
                                                                                'tournament').annotate(player_count=Count('player')).filter(player_count__gte=2)
-        
+
         club_ids = set()
 
         for result in result_data:
-            # print("RESULT", result)
+            #print("RESULT", result)
             club_id = result['player__club__id']
             club_ids.add(club_id)
+        #print("IDcka KLUBOV:", club_ids)
 
         for club_id in club_ids:
             club = Club.objects.get(id=club_id)
@@ -595,30 +615,32 @@ def results_total(request, pk=None):
                     tresult = Result.objects.get(player=player, tournament=tournament)
                 except Exception: #upravit zachytenie iba chyby DoesNotExist!
                     continue
-                # print("PLAYER", player, tresult)
+                print("PLAYER", player, tresult)
                 scores.append((player, tresult.result))
             top_3_players = sorted(scores, key=lambda x: x[1], reverse=True)[:3]
             tournament_sum_score = sum( map(lambda x: x[1], top_3_players) )
             print("SUMA", tournament_sum_score)
-            if club.club_name in season_sum_score:
-                season_sum_score[club.club_name] += tournament_sum_score
+            if club.club_name in season_sum_score_category:
+                season_sum_score_category[club.club_name] += tournament_sum_score
             else:
-                season_sum_score[club.club_name] = tournament_sum_score
+                season_sum_score_category[club.club_name] = tournament_sum_score
 
-    print(season_sum_score)
+    print(season_sum_score_category)
 
     ###
     results_players = Result.objects.filter(tournament_id__in=tournaments).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'tournament__name', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
 
 
     context = {
+        'category_name': category_name,
         'tournaments_count': tournaments_count,
         'tournaments': tournaments,
         'results_players': results_players,
-        'season_sum_score': season_sum_score,
+        'season_sum_score_category': season_sum_score_category,
         'season': season,
     }
-    return render(request, template_name="tournaments/results_total.html", context=context)
+    return render(request, template_name="tournaments/results_total_category.html", context=context)
+
 
 
 def handler403(request, exception):

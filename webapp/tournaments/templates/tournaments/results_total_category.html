@@ -1,12 +1,12 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="page-header">
-  <h1>Priebežné výsledky turnajov {{ season }}</h1>
+  <h1>Priebežné výsledky - {{category_name}} {{ season }}</h1>
 </div>
 <div class="page-tables">
   <h2>Priebežné výsledky klubov</h2>
   <ul class="list">
-    {% for club, score in season_sum_score.items %}
+    {% for club, score in season_sum_score_category.items %}
         <li class="list-item"><a>{{ club }}: {{ score }} bodov</a></li>
     {% endfor %}
   </ul>

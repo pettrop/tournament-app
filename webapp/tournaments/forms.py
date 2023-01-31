@@ -265,3 +265,4 @@ class TournamentForm(ModelForm):
         self.fields['name'].label = 'Názov'
         self.fields['description'].label = 'Popis'
         self.fields['propositions'].label = 'Propozície'
+        self.fields['category'].label = 'Kategória'
