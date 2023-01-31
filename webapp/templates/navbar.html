@@ -17,10 +17,12 @@
                     </ul>
                 </div>
             </li>
+            <li class="menu-item"><a href="{% url 'propositions' %}">Propozície</a></li>
+{% if request.user.is_authenticated  %}
             <li class="menu-item"><a href="#">Turnaje <i class="fa-solid fa-caret-down"></i></a>
                 <div class="dropdown">
                     <ul>
-                        <li><a href="{% url 'propositions' %}">Propozície</a></li>
+
                         {% if request.user.is_authenticated  %}
                             {% if perms.tournaments.add_propositions %}
                                 <li><a href="{% url 'proposition_create' %}">Vytvor propozíciu</a></li>
@@ -35,6 +37,7 @@
                     </ul>
                 </div>
             </li>
+            {% endif %}
             {% if request.user.is_authenticated  %}
             <li class="menu-item"><a href="#">Hráči <i class="fa-solid fa-caret-down"></i></a>
                 <div class="dropdown">
