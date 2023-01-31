@@ -258,7 +258,7 @@ class ResultsAddForm(ModelForm):
 class TournamentForm(ModelForm):
     class Meta:
         model = Tournament
-        fields = ['name', 'description', 'propositions']
+        fields = ['name', 'description', 'propositions', 'category']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

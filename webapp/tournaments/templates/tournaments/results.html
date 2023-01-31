@@ -7,7 +7,7 @@
   <ul class="list">
     {% for tournament in tournaments_list %}
     <li class="list-item">
-      <a href="{% url 'results_detail' tournament.pk %}">{{ tournament }} ({{ tournament.propositions.season }})</a>
+      <a href="{% url 'results_detail' tournament.pk %}">{{ tournament }} ({{ tournament.category }})</a>
     </li>
     {% endfor %}
   </ul>

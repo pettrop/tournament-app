@@ -134,6 +134,7 @@ class Tournament(Model):
     name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
     propositions = models.ForeignKey(Propositions, on_delete=models.PROTECT, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT,blank=True, null=True)
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.propositions)
