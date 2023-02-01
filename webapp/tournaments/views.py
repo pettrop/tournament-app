@@ -536,28 +536,120 @@ def results_view(request):
 
 
 def results_detail(request, pk=None):
-    tournament = Tournament.objects.filter(id=pk).values('category__category_name')
-    tournament_cat = tournament[0]['category__category_name']
-    results_players = Result.objects.filter(tournament_id=pk).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
-    club_names = Result.objects.filter(tournament_id=pk).values('player__club__club_name').distinct()
-    print(club_names)
-    results_club = []
-    for club_name in club_names:
-        club = club_name["player__club__club_name"]
-        top_three_players = Result.objects.filter(tournament_id=pk,
-                                                  player__club__club_name=club_name["player__club__club_name"]).values(
-            'player_id', 'player__name', 'player__lastname').annotate(points=Sum('result')).order_by('-points')[:3]
-        sum_points_club = sum([player['points'] for player in top_three_players])
-        results_club.extend([(club, sum_points_club)])
+    # vycet vsetkych hracov turnaja
+    results_players = Result.objects.filter(tournament_id=pk)
 
-    results_club_ordered = sorted(results_club, key=lambda item: item[1], reverse=True)[:4] #doriesit ak su dva kluby na 4.mieste, cize maju rovnaky pocet bodov
+    # nacitanie kategorie turnaja
+    tournament = Tournament.objects.get(id=pk)
+
+    # vypis poctu hracov v jednotlivych kluboch
+    player_count_in_club = Result.objects.filter(tournament_id=pk).values('player__club__id').annotate(player_count=Count('player')).filter(player_count__gte=2)
+    #print(player_count_in_club)
+
+    club_ids = set()
+    for club in player_count_in_club:
+        club_ids.add(club['player__club__id'])
+    #print(club_ids)
+
+    clubs_score = dict()
+    for club_id in club_ids:
+        club = Club.objects.get(id=club_id)
+        #print("CLUB:", club)
+
+        scores_players_club = []
+        # toto vypise vsetkych hracov z klubu
+        # print(club.player_set.all())
+        # prejdenie cyklom for pre zistenie, ci dany hrac hral na danom turnaji, ak ano zapise jeho vysledky do pola
+        for player in club.player_set.all():
+            try:
+                player_result = Result.objects.get(player=player, tournament_id=pk)
+            except Result.DoesNotExist:
+                continue
+            scores_players_club.append((player, player_result.result))
+        #print("SCORE before sort:", scores_players_club)
+
+        # zoradenie a vyber prvych troch najlepsich hracov z klubu
+        top_3_players = sorted(scores_players_club, key=lambda x: x[1], reverse=True)[:3]
+        #print("BEST 3 PLAYERS:", top_3_players)
+
+        # sucet bodov troch najlepsich hracov z klubu
+        tournament_club_score = sum(map(lambda x: x[1], top_3_players))
+        #print("CLUB Score:", tournament_club_score)
+
+        # zapisanie vysledkov do slovnika s klucom nazvom klubu napr. POZOR nezoradene! {'TTC Spartak Poprad': 352, 'TJ Dunajec Spišská Stará Ves': 216, '1. PPC Fortuna Kežmarok': 173, 'STO Mladý pinpongista Slovenská Ves': 159, 'STO Slovenská Ves': 120}
+        if club.club_name in clubs_score:
+            clubs_score[club.club_name] += tournament_club_score
+        else:
+            clubs_score[club.club_name] = tournament_club_score
+
+        # zoradenie hodnot vysledkov klubov
+        clubs_score_sorted = dict(sorted(clubs_score.items(), key=lambda item: item[1], reverse=True))
+        #print(clubs_score_sorted)
 
     context = {
-        'tournament_cat': tournament_cat,
-        "results_club_ordered": results_club_ordered,
-        "results_players": results_players
+        'results_players': results_players,
+        'tournament': tournament,
+        'clubs_score_sorted': clubs_score_sorted
     }
     return render(request, template_name="tournaments/results_detail.html", context=context)
+
+
+
+def results_total(request, season_pk=None, category_pk=None):
+    season = Season.objects.get(pk=season_pk) #vypise sezonu podla pk => 2022/2023
+    category_name = Category.objects.get(id=category_pk) #starší žiaci
+    tournaments = Tournament.objects.filter(propositions__season__season_name=season, category=category_pk) #<QuerySet [<Tournament: Turnaj 1 - starší žiaci (2022-10-15 - Telocvičňa ZŠ Spišský Štvrtok (2022/2023))>]>
+    #print("Tournaments:", tournaments)
+    tournaments_count = int(len(tournaments)) #vypise pocet turnajov cislom, napr. 1, 2
+    #print("POCET TURNAJOV:", tournaments_count)
+
+    season_sum_score_category = dict()
+    for tournament in tournaments:
+
+        #print("TURNAMENTY:", tournament) #postupne vypisuej nazvy turnajov: Turnaj 1 - starší žiaci (2022-10-15 - Telocvičňa ZŠ Spišský Štvrtok (2022/2023))
+        result_data = Result.objects.filter(tournament=tournament).values('player__club__id', 'tournament').annotate(player_count=Count('player')).filter(player_count__gte=2)
+        print("Result data:", result_data)
+        club_ids = set()
+
+        for result in result_data:
+            #print("RESULT", result)
+            club_id = result['player__club__id']
+            club_ids.add(club_id)
+        print("IDcka KLUBOV:", club_ids)
+
+        for club_id in club_ids:
+            club = Club.objects.get(id=club_id)
+            #print("CLUB:", club)
+
+            scores = []
+            for player in club.player_set.all():
+                #print("Player:", player)
+                try:
+                    tresult = Result.objects.get(player=player, tournament=tournament)
+                    #print("tresult", tresult)
+                except Exception: #upravit zachytenie iba chyby DoesNotExist!
+                    continue
+                #print("TRESULT", tresult.result)
+                scores.append((player, tresult.result))
+            top_3_players = sorted(scores, key=lambda x: x[1], reverse=True)[:3]
+            print("TOP", top_3_players)
+            tournament_sum_score = sum( map(lambda x: x[1], top_3_players) )
+            print("SUMA", tournament_sum_score)
+            if club.club_name in season_sum_score_category:
+                season_sum_score_category[club.club_name] += tournament_sum_score
+            else:
+                season_sum_score_category[club.club_name] = tournament_sum_score
+    print(season_sum_score_category)
+    season_sum_score_category_sorted = dict(sorted(season_sum_score_category.items(), key=lambda item: item[1], reverse=True))
+
+    context = {
+        'category_name': category_name,
+        'tournaments_count': tournaments_count,
+        'tournaments': tournaments,
+        'season_sum_score_category': season_sum_score_category_sorted,
+        'season': season,
+    }
+    return render(request, template_name="tournaments/results_total_category.html", context=context)
 
 
 def seasons_views(request):
@@ -582,65 +674,6 @@ def season_category_view(request, season_pk=None):
         'category_season': category_season
     }
     return render(request, template_name='tournaments/season_category.html', context=context)
-
-def results_total(request, season_pk=None, category_pk=None):
-    season = Season.objects.get(pk=season_pk) #vypise sezonu podla pk => 2022/2023
-    tournaments = Tournament.objects.filter(propositions__season__season_name=season)
-    category_name = Category.objects.get(id=category_pk)
-
-    tournaments_count = int(len(tournaments))
-    #print("POCET TURNAJOV:", tournaments_count)
-
-    season_sum_score_category = dict()
-    for tournament in tournaments:
-        #print("TURNAMENTY:", tournament)
-        result_data = Result.objects.filter(tournament=tournament).values('player__club__id',
-                                                                               'tournament').annotate(player_count=Count('player')).filter(player_count__gte=2)
-
-        club_ids = set()
-
-        for result in result_data:
-            #print("RESULT", result)
-            club_id = result['player__club__id']
-            club_ids.add(club_id)
-        #print("IDcka KLUBOV:", club_ids)
-
-        for club_id in club_ids:
-            club = Club.objects.get(id=club_id)
-            print("CLUB", club)
-
-            scores = []
-            for player in club.player_set.all():
-                try:
-                    tresult = Result.objects.get(player=player, tournament=tournament)
-                except Exception: #upravit zachytenie iba chyby DoesNotExist!
-                    continue
-                print("PLAYER", player, tresult)
-                scores.append((player, tresult.result))
-            top_3_players = sorted(scores, key=lambda x: x[1], reverse=True)[:3]
-            tournament_sum_score = sum( map(lambda x: x[1], top_3_players) )
-            print("SUMA", tournament_sum_score)
-            if club.club_name in season_sum_score_category:
-                season_sum_score_category[club.club_name] += tournament_sum_score
-            else:
-                season_sum_score_category[club.club_name] = tournament_sum_score
-
-    print(season_sum_score_category)
-
-    ###
-    results_players = Result.objects.filter(tournament_id__in=tournaments).values('player_id', 'player__name', 'player__lastname', 'player__year_of_birth', 'tournament__name', 'player__club__club_name').annotate(points=Sum('result')).order_by('-points')
-
-
-    context = {
-        'category_name': category_name,
-        'tournaments_count': tournaments_count,
-        'tournaments': tournaments,
-        'results_players': results_players,
-        'season_sum_score_category': season_sum_score_category,
-        'season': season,
-    }
-    return render(request, template_name="tournaments/results_total_category.html", context=context)
-
 
 
 def handler403(request, exception):

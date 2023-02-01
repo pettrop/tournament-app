@@ -1,13 +1,13 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="page-header">
-  <h1>Výsledky turnaja - {{ tournament_cat }}</h1>
+  <h1>Výsledky - {{ tournament.name }} - {{tournament.category}} ({{ tournament.propositions.season }})</h1>
 </div>
 <div class="page-tables">
   <h2>Výsledky klubov</h2>
   <ul class="list">
-    {% for result_club in results_club_ordered %}
-        <li class="list-item"><a>{{ result_club.0 }} - {{ result_club.1 }} bodov</a></li>
+    {% for club_name, club_score in clubs_score_sorted.items %}
+        <li class="list-item"><a>{{ club_name }} - {{ club_score }} bodov</a></li>
     {% endfor %}
   </ul><br>
   <h2>Poradie jednotlivcov</h2>
@@ -24,11 +24,11 @@
     <tbody>
       {% for player in results_players %}
       <tr>
-        <td><a></a></td>
-        <td><a>{{ player.player__lastname }} {{ player.player__name }}</a></td>
-        <td><a>{{ player.player__club__club_name}}</a></td>
-        <td><a>{{ player.player__year_of_birth }}</a></td>
-        <td><a>{{ player.points }}</a></td>
+        <td></td>
+        <td><a>{{ player.player.lastname }} {{ player.player.name }}</a></td>
+        <td><a>{{ player.player.club.club_name}}</a></td>
+        <td><a>{{ player.player.year_of_birth }}</a></td>
+        <td><a>{{ player.result }}</a></td>
       </tr>
       {% endfor %}
     </tbody>
