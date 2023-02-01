@@ -546,12 +546,14 @@ def results_detail(request, pk=None):
     player_count_in_club = Result.objects.filter(tournament_id=pk).values('player__club__id').annotate(player_count=Count('player')).filter(player_count__gte=2)
     #print(player_count_in_club)
 
+    # vytvorenie zoznamu zucastnenych klubov na turnaji
     club_ids = set()
     for club in player_count_in_club:
         club_ids.add(club['player__club__id'])
     #print(club_ids)
 
     clubs_score = dict()
+    clubs_score_sorted = dict()
     for club_id in club_ids:
         club = Club.objects.get(id=club_id)
         #print("CLUB:", club)
@@ -604,6 +606,7 @@ def results_total(request, season_pk=None, category_pk=None):
     #print("POCET TURNAJOV:", tournaments_count)
 
     season_sum_score_category = dict()
+    season_sum_score_category_sorted = dict()
     for tournament in tournaments:
 
         #print("TURNAMENTY:", tournament) #postupne vypisuej nazvy turnajov: Turnaj 1 - starší žiaci (2022-10-15 - Telocvičňa ZŠ Spišský Štvrtok (2022/2023))
