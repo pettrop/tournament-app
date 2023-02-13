@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import Model, Sum
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.forms import forms
 from django.urls import reverse
 import datetime
@@ -153,3 +155,13 @@ class Result(Model):
 
     def __str__(self):
         return '{}'.format(self.player)
+
+@receiver(post_save, sender=Result)
+def update_player_rank(sender, instance, **kwargs):
+    tournament = instance.tournament
+    results = Result.objects.filter(tournament=tournament).order_by('-result')
+    rank = 1
+    for result in results:
+        result.player.rank = rank
+        result.player.save()
+        rank += 1

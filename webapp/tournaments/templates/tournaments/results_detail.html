@@ -11,28 +11,33 @@
     {% endfor %}
   </ul><br>
   <h2>Poradie jednotlivcov</h2>
+
   <table class="table-list results-detail">
-    <thead>
-      <tr>
-        <th>Poradie</th>
-        <th>Meno hráča</th>
-        <th>Klub</th>
-        <th>Nar.</th>
-        <th>Body</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for player in results_players %}
-      <tr>
-        <td></td>
-        <td><a>{{ player.player.lastname }} {{ player.player.name }}</a></td>
-        <td><a>{{ player.player.club.club_name}}</a></td>
-        <td><a>{{ player.player.year_of_birth }}</a></td>
-        <td><a>{{ player.result }}</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <thead>
+    <tr>
+      <th>Umiestnenie</th>
+      <th>Meno a priezvisko hráča</th>
+      <th>Rok narodenia</th>
+      <th>Klub</th>
+      <th>Počet bodov</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rank in ranking %}
+    {% for player in rank.2 %}
+    <tr>
+      <td><a>{{ rank.0 }}. {% if rank.1 != rank.0 %} - {{ rank.1 }}.{% endif %}</a></td>
+      <td><a>{{ player.name }} {{ player.lastname }}</a></td>
+      <td><a>{{ player.year_of_birth }}</a></td>
+      <td><a>{{ player.club.club_name }}</a></td>
+      <td><a>{{ rank.3 }}</a></td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+  </tbody>
+</table>
+
+
   <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 {% endblock %}

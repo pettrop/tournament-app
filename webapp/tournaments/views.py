@@ -536,9 +536,39 @@ def results_view(request):
 
 
 def results_detail(request, pk=None):
-    # vycet vsetkych hracov turnaja
-    results_players = Result.objects.filter(tournament_id=pk)
+    tournament = Tournament.objects.get(pk=pk)
+    results = Result.objects.filter(tournament=pk).annotate(points=Sum('result')).order_by('-points', 'player__lastname', 'player__name')
+    clubs = Club.objects.filter(player__result__tournament=pk).distinct()
+    players = Player.objects.filter(club__in=clubs)
 
+    previous_points = None
+    position = 0
+    range_start = 0
+    players = []
+    ranking = []
+
+    for i, result in enumerate(results, start=1):
+        if result.points != previous_points:
+            if i > 1:
+                if len(players) > 1:
+                    ranking.append((range_start, i - 1, [p.player for p in players], previous_points))
+                else:
+                    ranking.append((position, position, [players[0].player], previous_points))
+                players = []
+            position = i
+            range_start = i
+        players.append(result)
+        previous_points = result.points
+
+    if players:
+        if len(players) > 1:
+            ranking.append((range_start, i, [p.player for p in players], previous_points))
+        else:
+            ranking.append((position, position, [players[0].player], previous_points))
+
+
+
+    ############################################
     # nacitanie kategorie turnaja
     tournament = Tournament.objects.get(id=pk)
 
@@ -589,7 +619,7 @@ def results_detail(request, pk=None):
         #print(clubs_score_sorted)
 
     context = {
-        'results_players': results_players,
+        'ranking': ranking,
         'tournament': tournament,
         'clubs_score_sorted': clubs_score_sorted
     }
