@@ -9,7 +9,51 @@
     {% for club, score in season_sum_score_category.items %}
         <li class="list-item"><a>{{ club }}: {{ score }} bodov</a></li>
     {% endfor %}
-  </ul>
+  </ul><br>
+<h2>Poradie jednotlivcov</h2>
+<table class="table-list results-detail">
+  <tr>
+    <th>Priezvisko, meno</th>
+    <th>Rok narodenia</th>
+    <th>Klub</th>
+
+    {% for tournament in tournaments %}
+
+      <th>{{ tournament.name }}</th>
+    {% endfor %}
+    <th>Total points</th>
+  </tr>
+      {% for player_info in player_scores %}
+    {% with player=player_info.0 %}
+      <tr>
+        <td>{{ player.lastname }} {{ player.name }}</td>
+        <td>{{ player.year_of_birth }}</td>
+        <td>{{ player.club.club_name }}</td>
+
+        {% for tournament in tournaments %}
+
+          <td>
+            {% for tour, player_res in player_info.1.results.items %}
+
+              {% if tournament.name in tour %}
+                {{ player_res }}
+              {% endif %}
+            {% endfor %}
+          </td>
+
+        {% endfor %}
+
+        <td>{{ player_info.1.total_points }}</td>
+      </tr>
+    {% endwith %}
+  {% endfor %}
+</table>
+
+
+
+
+
+
   <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-left-long"></i> Späť</button>
 </div>
 {% endblock %}
