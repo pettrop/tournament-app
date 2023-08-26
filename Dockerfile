@@ -7,4 +7,4 @@ RUN apt-get update && apt-get install -y gcc libpq-dev
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY webapp /app/
-CMD ["gunicorn", "manage.wsgi:application", "--bind", "0.0.0.0:80"]
+CMD ["gunicorn", "webapp.wsgi:application", "--bind", "0.0.0.0:80"]
