@@ -1,14 +1,4 @@
 {
   "schemaVersion": 2,
-  "dockerfileLines": [
-    "FROM python:3.8-slim",
-    "ENV PYTHONUNBUFFERED 1",
-    "RUN mkdir /app",
-    "WORKDIR /app",
-    "COPY requirements.txt /app/",
-    "RUN apt-get update && apt-get install -y gcc libpq-dev && pip install --upgrade pip && pip install -r requirements.txt",
-    "COPY webapp /app/",
-    "CMD [\"gunicorn\", \"webapp.wsgi:application\", \"--bind\", \"0.0.0.0:80\"]"
-
-  ]
+  "dockerfilePath": "./Dockerfile"
 }
